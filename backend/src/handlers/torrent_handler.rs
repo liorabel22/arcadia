@@ -90,7 +90,7 @@ pub async fn download_dottorrent_file(
         &arc.pool,
         &current_user,
         query.id,
-        &arc.tracker_name,
+        &arc.site_name,
         arc.frontend_url.as_ref(),
         arc.tracker_url.as_ref(),
     )

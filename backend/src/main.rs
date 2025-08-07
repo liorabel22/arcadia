@@ -47,7 +47,7 @@ async fn main() -> std::io::Result<()> {
 
     let jwt_secret = env::var("JWT_SECRET").expect("JWT_SECRET env var is not set");
 
-    let tracker_name = env::var("ARCADIA_SITE_NAME").expect("ARCADIA_SITE_NAME env var is not set");
+    let site_name = env::var("ARCADIA_SITE_NAME").expect("ARCADIA_SITE_NAME env var is not set");
 
     let frontend_url = env::var("ARCADIA_FRONTEND_URL")
         .ok()
@@ -121,7 +121,7 @@ async fn main() -> std::io::Result<()> {
         pool: pool.clone(),
         open_signups,
         jwt_secret: jwt_secret.clone(),
-        tracker_name: tracker_name.clone(),
+        site_name: site_name.clone(),
         frontend_url: frontend_url.clone(),
         tracker_url: tracker_url.clone(),
         tracker_api_key: tracker_api_key.clone(),

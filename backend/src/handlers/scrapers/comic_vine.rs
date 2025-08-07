@@ -72,9 +72,7 @@ async fn fetch_comic_vine_data<T: for<'de> Deserialize<'de>>(
 ) -> Result<T> {
     let api_key = env::var("COMIC_VINCE_API_KEY").ok().unwrap();
 
-    let url = format!(
-        "{COMICVINE_API_BASE_URL}/{endpoint}/?api_key={api_key}&format=json"
-    );
+    let url = format!("{COMICVINE_API_BASE_URL}/{endpoint}/?api_key={api_key}&format=json");
     let response = client.get(&url).send().await;
     println!("{response:?}");
 
@@ -166,7 +164,7 @@ pub async fn get_comic_vine_data(
     let client = Client::builder()
         .user_agent(format!(
             "{} ({} {})",
-            arc.tracker_name, arc.frontend_url, "contact@example.com"
+            arc.site_name, arc.frontend_url, "contact@example.com"
         ))
         .build()
         .expect("Failed to build reqwest client");
