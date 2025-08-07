@@ -95,9 +95,14 @@ services:
       args:
         - RELEASE_NAME=extracker
     ports:
+      # announce ports
       - 6969:6969/tcp # HTTP port
       - 6969:6969/udp # UDP port
       - 7070:7070/tcp # HTTPS port
+      # tracker api ports
+      - 8081:8081
+    # TODO: remove the next line
+    network_mode: host
     volumes:
       - extracker_backups:/backups
       - extracker_config:/config
