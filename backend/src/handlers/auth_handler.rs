@@ -171,7 +171,11 @@ pub async fn authenticate_user(
         validate_bearer_auth(req, bearer).await
     } else if let Some(api_key) = req.headers().get("api_key") {
         let api_key = api_key.to_str().expect("api_key malformed").to_owned();
-        validate_api_key(req, &api_key).await
+        if matches!(req.path(), "/api/registered-torrents") {
+            validate_tracker_auth(req, api_key).await
+        } else {
+            validate_api_key(req, &api_key).await
+        }
     } else {
         Err((
             actix_web::error::ErrorUnauthorized(
@@ -248,6 +252,26 @@ pub async fn validate_api_key(
 
     req.extensions_mut()
         .insert(crate::handlers::UserId(user_id));
+
+    Ok(req)
+}
+
+pub async fn validate_tracker_auth(
+    req: ServiceRequest,
+    api_key: String,
+) -> std::result::Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
+    let Some(arc) = req.app_data::<web::Data<Arcadia>>() else {
+        return Err((
+            actix_web::error::ErrorUnauthorized("authentication error"),
+            req,
+        ));
+    };
+
+    if arc.tracker_api_key != api_key {
+        return Err((actix_web::error::ErrorUnauthorized("invalid api key"), req));
+    };
+
+    req.extensions_mut().insert(crate::handlers::UserId(0));
 
     Ok(req)
 }

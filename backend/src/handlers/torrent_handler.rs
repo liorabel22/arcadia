@@ -236,13 +236,7 @@ Handled by: [url={}]{}[/url]",
         (status = 200, description = "All registered torrents", body=Vec<TorrentMinimal>),
     )
 )]
-pub async fn get_registered_torrents(
-    arc: web::Data<Arcadia>,
-    current_user: User,
-) -> Result<HttpResponse> {
-    if current_user.class != "tracker" {
-        return Err(Error::InsufficientPrivileges);
-    };
+pub async fn get_registered_torrents(arc: web::Data<Arcadia>) -> Result<HttpResponse> {
     let torrents = find_registered_torrents(&arc.pool).await?;
 
     Ok(HttpResponse::Ok().json(torrents))

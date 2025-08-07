@@ -47,8 +47,7 @@ async fn main() -> std::io::Result<()> {
 
     let jwt_secret = env::var("JWT_SECRET").expect("JWT_SECRET env var is not set");
 
-    let tracker_name =
-        env::var("ARCADIA_TRACKER_NAME").expect("ARCADIA_TRACKER_NAME env var is not set");
+    let tracker_name = env::var("ARCADIA_SITE_NAME").expect("ARCADIA_SITE_NAME env var is not set");
 
     let frontend_url = env::var("ARCADIA_FRONTEND_URL")
         .ok()
@@ -59,6 +58,9 @@ async fn main() -> std::io::Result<()> {
         .ok()
         .and_then(|s| Url::parse(&s).ok())
         .expect("ARCADIA_TRACKER_URL malformed or missing");
+
+    let tracker_api_key =
+        env::var("ARCADIA_TRACKER_API_KEY").expect("ARCADIA_TRACKER_API_KEY env var is not set");
 
     let tracker_announce_interval: u32 = env::var("ARCADIA_TRACKER_ANNOUNCE_INTERVAL")
         .expect("ARCADIA_TRACKER_ANNOUNCE_INTERVAL env var is not set")
@@ -122,6 +124,7 @@ async fn main() -> std::io::Result<()> {
         tracker_name: tracker_name.clone(),
         frontend_url: frontend_url.clone(),
         tracker_url: tracker_url.clone(),
+        tracker_api_key: tracker_api_key.clone(),
         tracker_announce_interval,
         tracker_announce_interval_grace_period,
         allowed_torrent_clients: allowed_torrent_clients.clone(),
