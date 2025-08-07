@@ -170,14 +170,7 @@ pub async fn edit_user(
         (status = 200, description = "All registered users", body=Vec<UserMinimal>),
     )
 )]
-pub async fn get_registered_users(
-    arc: web::Data<Arcadia>,
-    current_user: User,
-) -> Result<HttpResponse> {
-    // TODO: change on extracker integration
-    if current_user.class != "tracker" {
-        return Err(Error::InsufficientPrivileges);
-    };
+pub async fn get_registered_users(arc: web::Data<Arcadia>) -> Result<HttpResponse> {
     let users = find_registered_users(&arc.pool).await?;
 
     Ok(HttpResponse::Ok().json(users))

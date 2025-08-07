@@ -171,7 +171,10 @@ pub async fn authenticate_user(
         validate_bearer_auth(req, bearer).await
     } else if let Some(api_key) = req.headers().get("api_key") {
         let api_key = api_key.to_str().expect("api_key malformed").to_owned();
-        if matches!(req.path(), "/api/registered-torrents") {
+        if matches!(
+            req.path(),
+            "/api/registered-torrents" | "/api/registered-users"
+        ) {
             validate_tracker_auth(req, api_key).await
         } else {
             validate_api_key(req, &api_key).await
