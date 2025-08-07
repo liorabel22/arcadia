@@ -213,3 +213,10 @@ pub struct UserCreatedUserWarning {
     pub reason: String,
     pub ban: bool,
 }
+
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct UserMinimal {
+    pub id: i64,
+    pub passkey_upper: i64,
+    pub passkey_lower: i64,
+}

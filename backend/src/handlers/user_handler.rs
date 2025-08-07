@@ -5,14 +5,18 @@ use crate::{
             TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup,
             TorrentSearchTorrent,
         },
-        user::{EditedUser, Profile, PublicProfile, User, UserCreatedUserWarning, UserWarning},
+        user::{
+            EditedUser, Profile, PublicProfile, User, UserCreatedUserWarning, UserMinimal,
+            UserWarning,
+        },
     },
     repositories::{
         conversation_repository::find_unread_conversations_amount,
         peer_repository,
         torrent_repository::search_torrents,
         user_repository::{
-            create_user_warning, find_user_profile, find_user_warnings, update_user,
+            create_user_warning, find_registered_users, find_user_profile, find_user_warnings,
+            update_user,
         },
     },
 };
@@ -157,4 +161,24 @@ pub async fn edit_user(
     update_user(&arc.pool, current_user.id, &form).await?;
 
     Ok(HttpResponse::Ok().json(json!({"status": "success"})))
+}
+
+#[utoipa::path(
+    get,
+    path = "/api/registered-users",
+    responses(
+        (status = 200, description = "All registered users", body=Vec<UserMinimal>),
+    )
+)]
+pub async fn get_registered_users(
+    arc: web::Data<Arcadia>,
+    current_user: User,
+) -> Result<HttpResponse> {
+    // TODO: change on extracker integration
+    if current_user.class != "tracker" {
+        return Err(Error::InsufficientPrivileges);
+    };
+    let users = find_registered_users(&arc.pool).await?;
+
+    Ok(HttpResponse::Ok().json(users))
 }
