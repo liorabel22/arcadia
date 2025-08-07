@@ -28,6 +28,7 @@ pub async fn create_user(
     user: &Register,
     from_ip: IpNetwork,
     password_hash: &str,
+    // TODO: instead, take Option<Invitation> and check if is_some to set the receiver_id in the db
     invitation: &Invitation,
     open_signups: &bool,
 ) -> Result<User> {

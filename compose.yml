@@ -20,7 +20,7 @@ services:
       - backend/.env.docker
       - backend/.env
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U arcadia" ]
+      test: ["CMD-SHELL", "pg_isready -U arcadia"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -40,6 +40,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
   backend:
     container_name: arcadia_backend
     volumes:
@@ -49,7 +50,7 @@ services:
       context: backend
       dockerfile: Dockerfile
     ports:
-      - '8080:8080'
+      - "8080:8080"
     env_file:
       - backend/.env.docker
       - backend/.env
@@ -67,7 +68,6 @@ services:
           include:
             - .env
             - .env.docker
-
 
   frontend:
     container_name: arcadia_frontend
@@ -87,7 +87,23 @@ services:
           action: sync+restart
           target: /etc/nginx/conf.d/default.conf
 
+  tracker:
+    container_name: extracker
+    image: ghcr.io/dahrkael/extracker:latest
+    ports:
+      - 6969:6969/tcp # HTTP port
+      - 6969:6969/udp # UDP port
+      - 7070:7070/tcp # HTTPS port
+    volumes:
+      - extracker_backups:/backups
+      - extracker_config:/config
+    env_file:
+      - tracker/extracker/.env.docker
+      - tracker/extracker/.env
+
 volumes:
   db_data:
   cargo-registry:
   cargo-target:
+  extracker_backups:
+  extracker_config:
