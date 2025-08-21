@@ -1,8 +1,8 @@
-use crate::Arcadia;
+use crate::{handlers::User, Arcadia};
 use actix_web::{HttpResponse, web};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::{
-  models::{gift::{Gift, UserCreatedGift}, user::User},
+  models::gift::{Gift, UserCreatedGift},
   repositories::gift_repository::create_gift,
 };
 

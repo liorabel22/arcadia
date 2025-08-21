@@ -1,8 +1,8 @@
-use crate::{services::email_service::EmailService, Arcadia};
+use crate::{handlers::User, services::email_service::EmailService, Arcadia};
 use actix_web::{HttpResponse, web};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::{
-    models::{invitation::{Invitation, SentInvitation}, user::User},
+    models::{invitation::{Invitation, SentInvitation}},
     repositories::invitation_repository::create_invitation,
 };
 

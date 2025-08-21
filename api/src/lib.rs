@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::{ops::Deref, sync::Arc};
 use arcadia_storage::connection_pool::ConnectionPool;
 
 use crate::env::Env;
@@ -27,7 +27,7 @@ impl From<bool> for OpenSignups {
 }
 
 pub struct Arcadia {
-    pub pool: ConnectionPool,
+    pub pool: Arc<ConnectionPool>,
     env: Env,
 }
 
@@ -40,7 +40,7 @@ impl Deref for Arcadia {
 }
 
 impl Arcadia {
-    pub fn new(pool: ConnectionPool, env: Env) -> Self {
+    pub fn new(pool: Arc<ConnectionPool>, env: Env) -> Self {
         Self {pool, env}
     }
     #[inline]

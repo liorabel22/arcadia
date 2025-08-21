@@ -22,9 +22,10 @@ pub mod user_application_handler;
 pub mod user_handler;
 pub mod wiki_handler;
 
-use crate::models::user::User;
-use crate::repositories::auth_repository::find_user_with_id;
+use std::{ops::Deref, sync::Arc};
+
 use actix_web::HttpMessage as _;
+use arcadia_storage::{models::user, repositories::auth_repository::find_user_with_id};
 
 // Populated by the authentication middleware.
 #[derive(Debug, Copy, Clone)]
@@ -44,6 +45,22 @@ impl actix_web::FromRequest for UserId {
     }
 }
 
+pub struct User(user::User);
+
+impl User {
+  pub fn id(&self) -> i64 {
+    self.0.id
+  }
+}
+
+impl Deref for User {
+    type Target = user::User;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
 impl actix_web::FromRequest for User {
     type Error = actix_web::Error;
     type Future = futures::future::LocalBoxFuture<'static, Result<Self, Self::Error>>;
@@ -59,11 +76,12 @@ impl actix_web::FromRequest for User {
             .expect("user id should be setup")
             .0;
 
-        let pool = arc.pool.clone();
+        let pool = Arc::clone(&arc.pool);
 
         Box::pin(async move {
-            find_user_with_id(&pool, user_id)
+            find_user_with_id(pool.borrow(), user_id)
                 .await
+                .map(|u| User(u))
                 .map_err(|e| actix_web::error::ErrorInternalServerError(e.to_string()))
         })
     }

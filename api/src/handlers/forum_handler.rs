@@ -1,4 +1,4 @@
-use crate::Arcadia;
+use crate::{handlers::User, Arcadia};
 use actix_web::{HttpResponse, web};
 use arcadia_storage::{
     models::{
@@ -6,7 +6,6 @@ use arcadia_storage::{
             ForumOverview, ForumPost, ForumSubCategoryHierarchy, ForumThread, ForumThreadHierarchy,
             UserCreatedForumPost, UserCreatedForumThread
         },
-        user::User
     },
     repositories::forum_repository::{
         create_forum_post, create_forum_thread, find_forum_overview, find_forum_sub_category_threads,

@@ -1,14 +1,12 @@
-use crate::{
-    Arcadia, Result,
-    models::{
-        series::{Series, SeriesAndTitleGroupHierarchyLite, UserCreatedSeries},
-        user::User,
-    },
+use crate::{handlers::User, Arcadia};
+use actix_web::{HttpResponse, web};
+use arcadia_storage::{
+    models::series::{Series, SeriesAndTitleGroupHierarchyLite, UserCreatedSeries},
     repositories::series_repository::{create_series, find_series},
 };
-use actix_web::{HttpResponse, web};
 use serde::Deserialize;
 use utoipa::IntoParams;
+use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -22,7 +20,7 @@ pub async fn add_series(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let series = create_series(&arc.pool, &serie, &current_user).await?;
+    let series = create_series(arc.pool.borrow(), &serie, &current_user).await?;
 
     Ok(HttpResponse::Created().json(series))
 }
@@ -44,7 +42,7 @@ pub async fn get_series(
     arc: web::Data<Arcadia>,
     query: web::Query<GetSeriesQuery>,
 ) -> Result<HttpResponse> {
-    let series = find_series(&arc.pool, &query.id).await?;
+    let series = find_series(arc.pool.borrow(), &query.id).await?;
 
     Ok(HttpResponse::Ok().json(series))
 }

@@ -1,5 +1,5 @@
 use crate::{
-    Arcadia, handlers::UserId,
+    handlers::{User, UserId}, Arcadia
 };
 use actix_web::{HttpResponse, web};
 use arcadia_storage::{
@@ -8,7 +8,6 @@ use arcadia_storage::{
           Conversation, ConversationHierarchy, ConversationMessage, ConversationsOverview, UserCreatedConversation,
           UserCreatedConversationMessage
         },
-        user::User
     },
     repositories::conversation_repository::{
         create_conversation, create_conversation_message, find_conversation, find_user_conversations
