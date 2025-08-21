@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n            INSERT INTO master_groups (name,created_by_id)\n            VALUES ($1, $2)\n            RETURNING *\n        ",
+  "query": "\n                INSERT INTO master_groups (name,created_by_id)\n                VALUES ($1, $2)\n                RETURNING *\n            ",
   "describe": {
     "columns": [
       {
@@ -43,5 +43,5 @@
       false
     ]
   },
-  "hash": "1ec536ddffbcc8303bba8ca5aa4c8ff658a5db5665fa130923e247cb0631d7c4"
+  "hash": "8b8150b88e99b7cd93eb9f7ca0aab778ccf21f823e30d96acb6d5c6a19b62a4f"
 }

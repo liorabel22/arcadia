@@ -1,6 +1,6 @@
 use sqlx::{Postgres, Transaction};
 use arcadia_common::error::{Error, Result};
-use crate::models::notification::NotificationReason;
+use crate::{connection_pool::ConnectionPool, models::notification::NotificationReason};
 
 pub struct NotificationItemsIds {
     pub title_group_id: Option<i64>,
@@ -13,12 +13,13 @@ pub struct NotificationItemsIds {
     pub forum_thread_id: Option<i64>,
 }
 
-pub async fn notify_users(
-    tx: &mut Transaction<'_, Postgres>,
-    reason: &NotificationReason,
-    message: Option<&String>,
-    notification_items_ids: NotificationItemsIds,
-) -> Result<()> {
+impl ConnectionPool {
+    pub async fn notify_users(
+        tx: &mut Transaction<'_, Postgres>,
+        reason: &NotificationReason,
+        message: Option<&String>,
+        notification_items_ids: NotificationItemsIds,
+    ) -> Result<()> {
     match reason {
         NotificationReason::TorrentUploadedInSubscribedTitleGroup => {
             sqlx::query!(
@@ -73,4 +74,5 @@ pub async fn notify_users(
     }
 
     Ok(())
+}
 }

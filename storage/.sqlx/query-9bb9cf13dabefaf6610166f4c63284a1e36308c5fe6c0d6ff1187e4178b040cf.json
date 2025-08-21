@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        UPDATE torrents\n        SET snatched = snatched + 1\n        WHERE id = $1\n        RETURNING\n            info_dict,\n            EXTRACT(EPOCH FROM created_at)::BIGINT AS \"created_at_secs!\",\n            release_name;\n        ",
+  "query": "\n            UPDATE torrents\n            SET snatched = snatched + 1\n            WHERE id = $1\n            RETURNING\n                info_dict,\n                EXTRACT(EPOCH FROM created_at)::BIGINT AS \"created_at_secs!\",\n                release_name;\n            ",
   "describe": {
     "columns": [
       {
@@ -30,5 +30,5 @@
       false
     ]
   },
-  "hash": "f502ab117e2f03da3eddbb2eb7c409d3c79ea7e848b62c3cd005ec8619fe189d"
+  "hash": "9bb9cf13dabefaf6610166f4c63284a1e36308c5fe6c0d6ff1187e4178b040cf"
 }
