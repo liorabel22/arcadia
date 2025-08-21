@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n            SELECT * FROM user_warnings\n            WHERE user_id = $1\n        ",
+  "query": "\n                INSERT INTO user_warnings (user_id, expires_at, reason, created_by_id, ban)\n                VALUES ($1, $2, $3, $4, $5)\n                RETURNING *\n            ",
   "describe": {
     "columns": [
       {
@@ -41,7 +41,11 @@
     ],
     "parameters": {
       "Left": [
-        "Int8"
+        "Int8",
+        "Timestamptz",
+        "Text",
+        "Int8",
+        "Bool"
       ]
     },
     "nullable": [
@@ -54,5 +58,5 @@
       false
     ]
   },
-  "hash": "32cf8aaba7959281199b0250378281e05d2b36fc2b0cc3e8af39e70f5cfcce70"
+  "hash": "b62bb941050cba68e28a3897729bdbe294a3998e134239d7934cf580df7f11b0"
 }
