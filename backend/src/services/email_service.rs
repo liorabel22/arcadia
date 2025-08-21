@@ -15,22 +15,22 @@ pub struct EmailService {
 impl EmailService {
     pub fn new(config: &Arcadia) -> Result<Self> {
         // Check if all required SMTP configuration is present
-        let smtp_host = config.smtp_host.as_ref().ok_or_else(|| {
+        let smtp_host = config.smtp.host.as_ref().ok_or_else(|| {
             Error::EmailConfigurationError("SMTP_HOST not configured".to_string())
         })?;
-        let smtp_port = config.smtp_port.ok_or_else(|| {
+        let smtp_port = config.smtp.port.ok_or_else(|| {
             Error::EmailConfigurationError("SMTP_PORT not configured".to_string())
         })?;
-        let smtp_username = config.smtp_username.as_ref().ok_or_else(|| {
+        let smtp_username = config.smtp.username.as_ref().ok_or_else(|| {
             Error::EmailConfigurationError("SMTP_USERNAME not configured".to_string())
         })?;
-        let smtp_password = config.smtp_password.as_ref().ok_or_else(|| {
+        let smtp_password = config.smtp.password.as_ref().ok_or_else(|| {
             Error::EmailConfigurationError("SMTP_PASSWORD not configured".to_string())
         })?;
-        let smtp_from_email = config.smtp_from_email.as_ref().ok_or_else(|| {
+        let smtp_from_email = config.smtp.from_email.as_ref().ok_or_else(|| {
             Error::EmailConfigurationError("SMTP_FROM_EMAIL not configured".to_string())
         })?;
-        let smtp_from_name = config.smtp_from_name.as_ref().ok_or_else(|| {
+        let smtp_from_name = config.smtp.from_name.as_ref().ok_or_else(|| {
             Error::EmailConfigurationError("SMTP_FROM_NAME not configured".to_string())
         })?;
 
@@ -46,7 +46,7 @@ impl EmailService {
             mailer,
             from_email: smtp_from_email.clone(),
             from_name: smtp_from_name.clone(),
-            tracker_name: config.tracker_name.clone(),
+            tracker_name: config.tracker.name.clone(),
             frontend_url: config.frontend_url.to_string(),
         })
     }

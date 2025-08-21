@@ -42,9 +42,12 @@ impl Deref for Arcadia {
 }
 
 impl Arcadia {
+    pub fn new(pool: sqlx::PgPool, env: Env) -> Self {
+        Self {pool, env}
+    }
     #[inline]
     pub fn is_open_signups(&self) -> bool {
-        self.env.open_signups.into() == OpenSignups::Enabled
+        Into::<OpenSignups>::into(self.env.open_signups) == OpenSignups::Enabled
     }
 }
 

@@ -34,7 +34,8 @@ async fn main() -> std::io::Result<()> {
         .await
         .expect("Error building a connection pool");
 
-    println!("Server running at http://{}:{}", env.actix.host, env.actix.port);
+    let server_url = format!("{}:{}", env.actix.host, env.actix.port);
+    println!("Server running at http://{}", server_url);
 
     if env.tmdb_api_key.is_none() {
         println!("TMDB_API_KEY env var is not set. TMDB data fetching won't be available")
@@ -53,10 +54,7 @@ async fn main() -> std::io::Result<()> {
         println!("Email service not configured - emails will be skipped");
     }
 
-    let arc = Data::new(Arcadia {
-        pool: pool.clone(),
-        env,
-    });
+    let arc = Data::new(Arcadia::new(pool, env));
     let arc_periodic_tasks = arc.clone();
 
     let server = HttpServer::new(move || {
@@ -71,7 +69,7 @@ async fn main() -> std::io::Result<()> {
                     .url("/swagger-json/openapi.json", ApiDoc::openapi()),
             )
     })
-    .bind(format!("{}:{}", env.actix.host, env.actix.port))?
+    .bind(server_url)?
     .run();
 
     tokio::spawn(async {
