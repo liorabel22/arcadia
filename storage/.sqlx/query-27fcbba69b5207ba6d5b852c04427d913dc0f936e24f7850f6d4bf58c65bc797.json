@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT DISTINCT ON (ft.id)\n            fp.id,\n            fp.forum_thread_id,\n            fp.created_at as \"created_at!\",\n            fp.updated_at as \"updated_at!\",\n            fp.created_by_id,\n            fp.content,\n            fp.sticky,\n            ft.name as \"forum_thread_name\"\n        FROM\n            forum_threads AS ft\n        JOIN\n            forum_posts AS fp ON ft.id = fp.forum_thread_id\n        WHERE\n            ft.forum_sub_category_id = $1\n        ORDER BY\n            ft.id DESC, fp.created_at ASC\n        LIMIT $2\n        ",
+  "query": "\n                INSERT INTO forum_posts (content, created_by_id, forum_thread_id)\n                VALUES ($1, $2, $3)\n                RETURNING *\n            ",
   "describe": {
     "columns": [
       {
@@ -15,12 +15,12 @@
       },
       {
         "ordinal": 2,
-        "name": "created_at!",
+        "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
         "ordinal": 3,
-        "name": "updated_at!",
+        "name": "updated_at",
         "type_info": "Timestamptz"
       },
       {
@@ -37,16 +37,12 @@
         "ordinal": 6,
         "name": "sticky",
         "type_info": "Bool"
-      },
-      {
-        "ordinal": 7,
-        "name": "forum_thread_name",
-        "type_info": "Text"
       }
     ],
     "parameters": {
       "Left": [
-        "Int4",
+        "Text",
+        "Int8",
         "Int8"
       ]
     },
@@ -57,9 +53,8 @@
       false,
       false,
       false,
-      false,
       false
     ]
   },
-  "hash": "cebe3295bfca225b4d3a0e7e1d23e6f269585366a59c6dc269626c90e2122a7e"
+  "hash": "27fcbba69b5207ba6d5b852c04427d913dc0f936e24f7850f6d4bf58c65bc797"
 }

@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n           SELECT * FROM invitations\n           WHERE invitation_key = $1\n           AND expires_at > NOW()\n        ",
+  "query": "\n              SELECT * FROM invitations\n              WHERE invitation_key = $1\n              AND expires_at > NOW()\n            ",
   "describe": {
     "columns": [
       {
@@ -66,5 +66,5 @@
       true
     ]
   },
-  "hash": "6f41bc94e15de652bd3b0301551caf95fe7ceac3922ee58cca69049c65515b2d"
+  "hash": "e243db487035338c91d6d4eb9fe2ac022275bd285549a09893f7e6c35b0f89ad"
 }
