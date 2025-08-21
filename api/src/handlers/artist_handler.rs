@@ -5,10 +5,12 @@ use crate::{
 use actix_web::{HttpResponse, web};
 use arcadia_storage::{
     models::artist::{
-        AffiliatedArtistHierarchy, ArtistAndTitleGroupsLite, ArtistLite, UserCreatedAffiliatedArtist, UserCreatedArtist
+        AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite, ArtistLite,
+        UserCreatedAffiliatedArtist, UserCreatedArtist,
     },
     repositories::artist_repository::{
-        create_artists, create_artists_affiliation, delete_artists_affiliation, find_artist_publications, find_artists_lite
+        create_artists, create_artists_affiliation, delete_artists_affiliation,
+        find_artist_publications,find_artists_lite,
     },
 };
 use serde::Deserialize;

@@ -47,12 +47,6 @@ impl actix_web::FromRequest for UserId {
 
 pub struct User(user::User);
 
-impl User {
-  pub fn id(&self) -> i64 {
-    self.0.id
-  }
-}
-
 impl Deref for User {
     type Target = user::User;
 

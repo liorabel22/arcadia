@@ -2,7 +2,6 @@ mod handlers;
 mod periodic_tasks;
 mod routes;
 mod services;
-mod tracker;
 
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware, web::Data};
@@ -10,12 +9,10 @@ use arcadia_storage::connection_pool::ConnectionPool;
 use envconfig::Envconfig;
 use periodic_tasks::scheduler::run_periodic_tasks;
 use routes::init;
-use sqlx::postgres::PgPoolOptions;
-use std::env;
+use std::{env, sync::Arc};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-
-use arcadia_api::{api_doc::ApiDoc, env::Env, Arcadia, Error, Result};
+use arcadia_api::{api_doc::ApiDoc, env::Env, Arcadia};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -27,7 +24,7 @@ async fn main() -> std::io::Result<()> {
 
     let env = Env::init_from_env().unwrap();
 
-    let pool = ConnectionPool::try_new(&env.postgres_uri).await.expect("db connection");
+    let pool = Arc::new(ConnectionPool::try_new(&env.postgres_uri).await.expect("db connection"));
 
     let server_url = format!("{}:{}", env.actix.host, env.actix.port);
     println!("Server running at http://{}", server_url);
@@ -49,7 +46,7 @@ async fn main() -> std::io::Result<()> {
         println!("Email service not configured - emails will be skipped");
     }
 
-    let arc = Data::new(Arcadia::new(pool, env));
+    let arc = Data::new(Arcadia::new(Arc::clone(&pool), env));
     let arc_periodic_tasks = arc.clone();
 
     let server = HttpServer::new(move || {

@@ -1,8 +1,9 @@
-use crate::{Arcadia, Error, Result};
+use crate::Arcadia;
 use lettre::message::Mailbox;
 use lettre::message::header::ContentType;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
+use arcadia_common::error::{Error, Result};
 
 pub struct EmailService {
     mailer: SmtpTransport,

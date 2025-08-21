@@ -10,16 +10,18 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
 
-use crate::Arcadia;
+use crate::{handlers::User, Arcadia};
 use arcadia_common::{error::{Error, Result}, services::torrent_service::get_announce_url};
 use arcadia_storage::{
     models::{
         torrent::{
             EditedTorrent, Torrent, TorrentMinimal, TorrentSearch, TorrentSearchResults, TorrentToDelete, UploadedTorrent,
         },
-        user::User
     },
-    repositories::torrent_repository::{create_torrent, find_registered_torrents, find_top_torrents, find_torrent, get_torrent, remove_torrent, search_torrents, update_torrent},
+    repositories::torrent_repository::{
+        create_torrent, find_registered_torrents, find_top_torrents, find_torrent, get_torrent, remove_torrent,
+        search_torrents, update_torrent,
+    },
 };
 
 
