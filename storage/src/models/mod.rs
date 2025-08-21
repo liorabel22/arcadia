@@ -21,3 +21,4 @@ pub mod torrent_request_vote;
 pub mod user;
 pub mod user_application;
 pub mod wiki;
+pub mod home_stats;

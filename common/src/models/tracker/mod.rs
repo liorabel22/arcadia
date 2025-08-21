@@ -1,2 +1,2 @@
 pub mod announce;
-// pub mod peer;
+pub mod peer;

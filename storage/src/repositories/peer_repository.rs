@@ -1,10 +1,10 @@
+use arcadia_common::models::tracker::announce::{Announce, Peer};
 use sqlx::{PgPool, types::ipnetwork::IpNetwork};
 use arcadia_common::error::Result;
 use crate::{models::peer::PeerStatus};
 
 use crate::{
     models,
-    tracker::announce::{self, Announce, Peer},
 };
 
 pub async fn get_user_peers(pool: &PgPool, user_id: i64) -> Vec<models::peer::Peer> {
@@ -138,7 +138,7 @@ pub async fn find_torrent_peers(pool: &PgPool, torrent_id: &i64, user_id: &i64) 
                 panic!("oops");
             };
 
-            announce::Peer {
+            Peer {
                 ip: ipv4,
                 port: p.port as u16,
             }
