@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 use reqwest::Url;
+pub mod env;
 pub mod api_doc;
 pub mod handlers;
 pub mod models;
