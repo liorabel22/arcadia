@@ -1,20 +1,21 @@
-use crate::{
-    Arcadia, Result,
+use crate::Arcadia;
+use actix_web::{HttpResponse, web};
+use arcadia_storage::{
     models::{
         forum::{
             ForumOverview, ForumPost, ForumSubCategoryHierarchy, ForumThread, ForumThreadHierarchy,
-            UserCreatedForumPost, UserCreatedForumThread,
+            UserCreatedForumPost, UserCreatedForumThread
         },
-        user::User,
+        user::User
     },
     repositories::forum_repository::{
-        create_forum_post, create_forum_thread, find_forum_overview,
-        find_forum_sub_category_threads, find_forum_thread, search_forum,
-    },
+        create_forum_post, create_forum_thread, find_forum_overview, find_forum_sub_category_threads,
+        find_forum_thread, search_forum,
+    }
 };
-use actix_web::{HttpResponse, web};
 use serde::Deserialize;
 use utoipa::IntoParams;
+use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -28,7 +29,7 @@ pub async fn add_forum_post(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let forum_post = create_forum_post(&arc.pool, &forum_post, current_user.id).await?;
+    let forum_post = create_forum_post(arc.pool.borrow(), &forum_post, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(forum_post))
 }
@@ -45,7 +46,7 @@ pub async fn add_forum_thread(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let forum_thread = create_forum_thread(&arc.pool, &mut forum_thread, current_user.id).await?;
+    let forum_thread = create_forum_thread(arc.pool.borrow(), &mut forum_thread, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(forum_thread))
 }
@@ -59,7 +60,7 @@ pub async fn add_forum_thread(
 )]
 pub async fn get_forum(arc: web::Data<Arcadia>) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
-    let forum_overview = find_forum_overview(&arc.pool).await?;
+    let forum_overview = find_forum_overview(arc.pool.borrow()).await?;
 
     Ok(HttpResponse::Ok().json(forum_overview))
 }
@@ -82,7 +83,7 @@ pub async fn get_forum_sub_category_threads(
     query: web::Query<GetForumSubCategoryThreadsQuery>,
 ) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
-    let threads = find_forum_sub_category_threads(&arc.pool, query.id).await?;
+    let threads = find_forum_sub_category_threads(arc.pool.borrow(), query.id).await?;
 
     Ok(HttpResponse::Ok().json(threads))
 }
@@ -113,7 +114,7 @@ pub async fn get_forum_thread(
 ) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
 
-    let thread = find_forum_thread(&arc.pool, query_id.0.id).await?;
+    let thread = find_forum_thread(arc.pool.borrow(), query_id.0.id).await?;
 
     Ok(HttpResponse::Ok().json(thread))
 }
@@ -135,7 +136,7 @@ pub async fn search_forum_thread(
     let offset = query.0.offset.unwrap_or(0);
     let limit = query.0.limit.unwrap_or(10);
 
-    let threads = search_forum(&arc.pool, query.0.title, offset, limit).await?;
+    let threads = search_forum(arc.pool.borrow(), query.0.title, offset, limit).await?;
 
     Ok(HttpResponse::Ok().json(threads))
 }
