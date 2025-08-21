@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n            INSERT INTO wiki_articles (title, body, created_by_id, updated_by_id)\n            VALUES ($1, $2, $3, $4)\n            RETURNING *\n        ",
+  "query": "\n                INSERT INTO wiki_articles (title, body, created_by_id, updated_by_id)\n                VALUES ($1, $2, $3, $4)\n                RETURNING *\n            ",
   "describe": {
     "columns": [
       {
@@ -57,5 +57,5 @@
       false
     ]
   },
-  "hash": "970c8938dd230f26abd73c15c23b4df61e060ed2fbb980bec15760a7013cef72"
+  "hash": "ea7b2298a7c07885d073aef716d9fbab0a47fcd1532bff262917c0457707f18c"
 }
