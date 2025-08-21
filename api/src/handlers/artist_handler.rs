@@ -1,19 +1,13 @@
 use crate::{
-    Arcadia, Result,
+    Arcadia,
     handlers::UserId,
-    models::artist::{
-        AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite, ArtistLite,
-        UserCreatedAffiliatedArtist, UserCreatedArtist,
-    },
-    repositories::artist_repository::{
-        create_artists, create_artists_affiliation, delete_artists_affiliation,
-        find_artist_publications, find_artists_lite,
-    },
 };
 use actix_web::{HttpResponse, web};
+use arcadia_storage::{models::artist::{AffiliatedArtistHierarchy, ArtistAndTitleGroupsLite, ArtistLite, UserCreatedAffiliatedArtist, UserCreatedArtist}, repositories::artist_repository::{create_artists, create_artists_affiliation, delete_artists_affiliation, find_artist_publications, find_artists_lite}};
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
+use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -28,7 +22,7 @@ pub async fn add_artists(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let artists = create_artists(&arc.pool, &artists, current_user_id.0).await?;
+    let artists = create_artists(arc.pool.borrow(), &artists, current_user_id.0).await?;
 
     Ok(HttpResponse::Created().json(artists))
 }
@@ -45,7 +39,7 @@ pub async fn add_affiliated_artists(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let affiliations = create_artists_affiliation(&arc.pool, &artists, current_user_id.0).await?;
+    let affiliations = create_artists_affiliation(arc.pool.borrow(), &artists, current_user_id.0).await?;
 
     Ok(HttpResponse::Created().json(affiliations))
 }
@@ -67,7 +61,7 @@ pub async fn remove_affiliated_artists(
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
     // TODO: add protection based on user class
-    delete_artists_affiliation(&arc.pool, &query.affiliation_ids).await?;
+    delete_artists_affiliation(arc.pool.borrow(), &query.affiliation_ids).await?;
 
     Ok(HttpResponse::Ok().json(json!({"result": "success"})))
 }
@@ -89,7 +83,7 @@ pub async fn get_artist_publications(
     query: web::Query<GetArtistPublicationsQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    let artist_publication = find_artist_publications(&arc.pool, &query.id).await?;
+    let artist_publication = find_artist_publications(arc.pool.borrow(), &query.id).await?;
 
     Ok(HttpResponse::Ok().json(artist_publication))
 }
@@ -112,7 +106,7 @@ pub async fn get_artists_lite(
     query: web::Query<GetArtistLiteQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    let artists = find_artists_lite(&arc.pool, &query.name).await?;
+    let artists = find_artists_lite(arc.pool.borrow(), &query.name).await?;
 
     Ok(HttpResponse::Ok().json(artists))
 }
