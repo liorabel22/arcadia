@@ -1,7 +1,7 @@
 use bip_metainfo::{Info, InfoBuilder, InfoHash, Metainfo, MetainfoBuilder, PieceLength};
 use serde_json::{Value, json};
 use sqlx::PgPool;
-use arcadia_common::error::{Error, Result};
+use arcadia_common::{error::{Error, Result}, services::torrent_service::{get_announce_url, looks_like_url}};
 use std::str::FromStr;
 use crate::{
     models::{
@@ -13,11 +13,8 @@ use crate::{
         user::User,
     },
     repositories::notification_repository::NotificationItemsIds,
-    services::torrent_service::get_announce_url,
 };
 
-
-use super::super::services::torrent_service::looks_like_url;
 use super::notification_repository::notify_users;
 
 #[derive(sqlx::FromRow)]
