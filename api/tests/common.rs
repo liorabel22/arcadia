@@ -9,7 +9,7 @@ use actix_web::{
     },
     test, web,
 };
-use arcadia_backend::{Arcadia, OpenSignups, models::user::LoginResponse};
+use arcadia_api::{Arcadia, OpenSignups, models::user::LoginResponse};
 use reqwest::Url;
 use serde::de::DeserializeOwned;
 use sqlx::PgPool;
@@ -45,7 +45,7 @@ pub async fn create_test_app(
     test::init_service(
         App::new()
             .app_data(web::Data::new(arc))
-            .configure(arcadia_backend::routes::init),
+            .configure(arcadia_api::routes::init),
     )
     .await
 }

@@ -16,7 +16,7 @@ use std::env;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
-use arcadia_backend::{api_doc::ApiDoc, env::Env, Arcadia, Error, Result};
+use arcadia_api::{api_doc::ApiDoc, env::Env, Arcadia, Error, Result};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
