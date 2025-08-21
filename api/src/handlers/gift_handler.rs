@@ -1,12 +1,10 @@
-use crate::{
-    Arcadia, Error, Result,
-    models::{
-        gift::{Gift, UserCreatedGift},
-        user::User,
-    },
-    repositories::gift_repository::create_gift,
-};
+use crate::Arcadia;
 use actix_web::{HttpResponse, web};
+use arcadia_common::error::{Error, Result};
+use arcadia_storage::{
+  models::{gift::{Gift, UserCreatedGift}, user::User},
+  repositories::gift_repository::create_gift,
+};
 
 #[utoipa::path(
     post,
@@ -27,7 +25,7 @@ pub async fn send_gift(
         return Err(Error::NotEnoughFreeleechTokensAvailable);
     }
 
-    let gift = create_gift(&arc.pool, &gift, current_user.id).await?;
+    let gift = create_gift(arc.pool.borrow(), &gift, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(gift))
 }
