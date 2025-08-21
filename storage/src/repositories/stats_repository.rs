@@ -1,8 +1,5 @@
-use rand::distr::uniform::SampleBorrow;
-use sqlx::PgPool;
 use arcadia_common::error::Result;
-
-use crate::models::home_stats::HomeStats;
+use crate::{connection_pool::ConnectionPool, models::home_stats::HomeStats};
 
 impl ConnectionPool {
     pub async fn find_home_stats(&self) -> Result<HomeStats> {

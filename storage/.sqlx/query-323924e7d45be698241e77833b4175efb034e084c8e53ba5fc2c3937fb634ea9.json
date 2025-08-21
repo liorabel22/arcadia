@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT\n            id, master_group_id, name, name_aliases AS \"name_aliases!: _\",\n            created_at, updated_at, created_by_id, description,\n            platform AS \"platform: _\", original_language, original_release_date,\n            tagline, tags AS \"tags!: _\", country_from, covers AS \"covers!: _\",\n            external_links AS \"external_links!: _\", embedded_links,\n            category AS \"category: _\", content_type AS \"content_type: _\",\n            public_ratings, screenshots AS \"screenshots!: _\", series_id\n        FROM title_groups\n        WHERE id = $1\n        ",
+  "query": "\n            SELECT\n                id, master_group_id, name, name_aliases AS \"name_aliases!: _\",\n                created_at, updated_at, created_by_id, description,\n                platform AS \"platform: _\", original_language, original_release_date,\n                tagline, tags AS \"tags!: _\", country_from, covers AS \"covers!: _\",\n                external_links AS \"external_links!: _\", embedded_links,\n                category AS \"category: _\", content_type AS \"content_type: _\",\n                public_ratings, screenshots AS \"screenshots!: _\", series_id\n            FROM title_groups\n            WHERE id = $1\n            ",
   "describe": {
     "columns": [
       {
@@ -201,5 +201,5 @@
       true
     ]
   },
-  "hash": "b72b61742d274fd82ab16aca03dc41e85c73ff3687de8cbb644c6854a53cd517"
+  "hash": "323924e7d45be698241e77833b4175efb034e084c8e53ba5fc2c3937fb634ea9"
 }

@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT\n            (SELECT COUNT(*) FROM users)::BIGINT AS \"enabled_users!\",\n            (SELECT COUNT(*) FROM users WHERE last_seen >= NOW() - INTERVAL '1 day')::BIGINT AS \"users_active_today!\",\n            (SELECT COUNT(*) FROM users WHERE last_seen >= date_trunc('week', NOW()))::BIGINT AS \"users_active_this_week!\",\n            (SELECT COUNT(*) FROM users WHERE last_seen >= date_trunc('month', NOW()))::BIGINT AS \"users_active_this_month!\",\n            (SELECT COUNT(*) FROM title_groups)::BIGINT AS \"titles!\",\n            (SELECT COUNT(*) FROM torrents)::BIGINT AS \"torrents!\",\n            (SELECT COUNT(*) FROM torrents WHERE created_at >= NOW() - INTERVAL '1 day')::BIGINT AS \"torrents_uploaded_today!\",\n            (SELECT COUNT(*) FROM artists)::BIGINT AS \"artists!\",\n            (SELECT COUNT(*) FROM entities)::BIGINT AS \"entities!\"\n        ",
+  "query": "\n            SELECT\n                (SELECT COUNT(*) FROM users)::BIGINT AS \"enabled_users!\",\n                (SELECT COUNT(*) FROM users WHERE last_seen >= NOW() - INTERVAL '1 day')::BIGINT AS \"users_active_today!\",\n                (SELECT COUNT(*) FROM users WHERE last_seen >= date_trunc('week', NOW()))::BIGINT AS \"users_active_this_week!\",\n                (SELECT COUNT(*) FROM users WHERE last_seen >= date_trunc('month', NOW()))::BIGINT AS \"users_active_this_month!\",\n                (SELECT COUNT(*) FROM title_groups)::BIGINT AS \"titles!\",\n                (SELECT COUNT(*) FROM torrents)::BIGINT AS \"torrents!\",\n                (SELECT COUNT(*) FROM torrents WHERE created_at >= NOW() - INTERVAL '1 day')::BIGINT AS \"torrents_uploaded_today!\",\n                (SELECT COUNT(*) FROM artists)::BIGINT AS \"artists!\",\n                (SELECT COUNT(*) FROM entities)::BIGINT AS \"entities!\"\n            ",
   "describe": {
     "columns": [
       {
@@ -64,5 +64,5 @@
       null
     ]
   },
-  "hash": "3af5276138013798b3e7f20e12969fc606cf7989bfbaf1acf60abbb37f5be679"
+  "hash": "f20890a1579f04e1592484b8049ca4efa4fe98fb8e7944d5a4d81af67d811578"
 }
