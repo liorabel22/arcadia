@@ -6,13 +6,6 @@ edition = "2024"
 [dependencies]
 actix-web = "4"
 actix-web-lab = "0.24.1"
-# there is a possibility to add TLS support (https://github.com/launchbadge/sqlx?tab=readme-ov-file#install)
-sqlx = { version = "0.8", features = [
-    "runtime-async-std",
-    "postgres",
-    "chrono",
-    "ipnetwork"
-] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = {version = "1.0", features = ["preserve_order"]}
 chrono = { version = "0.4", features = ["serde"] }
@@ -46,6 +39,8 @@ musicbrainz_rs = "0.9.1"
 tmdb-api = "1.0.0-alpha.4"
 envconfig = "0.11.0"
 dotenv = "0.15.0"
+arcadia-common = { path = "../common"}
+arcadia-storage = { path = "../storage"}
 
 [patch.crates-io]
 bip_metainfo = { path = "vendored/bip_metainfo" }

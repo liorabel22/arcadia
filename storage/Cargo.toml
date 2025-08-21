@@ -6,3 +6,5 @@ edition = "2024"
 [dependencies]
 eyre = "0.6.12"
 sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-native-tls", "postgres", "chrono", "bigdecimal", "ipnetwork" ] }
+thiserror = "2.0.12"
+musicbrainz_rs = "0.9.1"
