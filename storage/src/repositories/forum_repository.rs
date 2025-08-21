@@ -1,11 +1,7 @@
 use serde_json::Value;
 use sqlx::PgPool;
-
-use crate::{
-    Error, Result,
-    handlers::home_handler::ForumPostAndThreadName,
-    models::forum::{ForumPost, ForumThread, UserCreatedForumPost, UserCreatedForumThread},
-};
+use arcadia_common::error::{Error, Result};
+use crate::models::forum::{ForumPost, ForumPostAndThreadName, ForumThread, UserCreatedForumPost, UserCreatedForumThread};
 
 pub async fn create_forum_post(
     pool: &PgPool,

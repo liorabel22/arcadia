@@ -14,20 +14,6 @@ use sqlx::prelude::FromRow;
 use utoipa::ToSchema;
 
 #[derive(Debug, Deserialize, Serialize, FromRow, ToSchema)]
-pub struct ForumPostAndThreadName {
-    pub id: i64,
-    pub forum_thread_id: i64,
-    #[schema(value_type = String, format = DateTime)]
-    pub created_at: DateTime<Local>,
-    #[schema(value_type = String, format = DateTime)]
-    pub updated_at: DateTime<Local>,
-    pub created_by_id: i64,
-    pub content: String,
-    pub sticky: bool,
-    pub forum_thread_name: String,
-}
-
-#[derive(Debug, Deserialize, Serialize, FromRow, ToSchema)]
 pub struct HomeStats {
     pub enabled_users: i64,
     pub users_active_today: i64,

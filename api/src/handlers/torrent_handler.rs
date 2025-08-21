@@ -15,7 +15,7 @@ use crate::{
     models::{
         torrent::{
             EditedTorrent, Torrent, TorrentMinimal, TorrentSearch, TorrentSearchResults,
-            TorrentToDelete, UploadedTorrent,
+            TorrentToDelete,
         },
         user::User,
     },
@@ -25,6 +25,8 @@ use crate::{
     },
     services::torrent_service::get_announce_url,
 };
+use arcadia_storage::models::torrent::UploadedTorrent;
+
 
 #[utoipa::path(
     post,
