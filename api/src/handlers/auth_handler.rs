@@ -1,17 +1,20 @@
 use crate::{
-    Arcadia, Error, Result,
+    Arcadia, services::email_service::EmailService,
+};
+use actix_web::{HttpMessage as _, HttpRequest, HttpResponse, dev::ServiceRequest, web};
+use actix_web_httpauth::extractors::bearer::BearerAuth;
+use arcadia_storage::{
     models::{
         invitation::Invitation,
-        user::{Claims, Login, LoginResponse, RefreshToken, Register, User},
+        user::{Claims, Login, LoginResponse, RefreshToken, Register, User}
     },
     repositories::{
         auth_repository::{create_user, find_user_id_with_api_key, find_user_with_password},
         invitation_repository::does_unexpired_invitation_exist,
+        user_repository::{is_user_banned, update_last_seen}
     },
-    services::email_service::EmailService,
+    sqlx::types::ipnetwork::IpNetwork
 };
-use actix_web::{HttpMessage as _, HttpRequest, HttpResponse, dev::ServiceRequest, web};
-use actix_web_httpauth::extractors::bearer::BearerAuth;
 use argon2::{
     Argon2,
     password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
@@ -22,8 +25,8 @@ use jsonwebtoken::{
     DecodingKey, EncodingKey, Header, Validation, decode, encode, errors::ErrorKind,
 };
 use serde::Deserialize;
-use sqlx::types::ipnetwork::IpNetwork;
 use utoipa::ToSchema;
+use arcadia_common::error::{Error, Result};
 
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct RegisterQuery {
@@ -50,7 +53,7 @@ pub async fn register(
             .as_ref()
             .ok_or(Error::InvitationKeyRequired)?;
 
-        invitation = does_unexpired_invitation_exist(&arc.pool, invitation_key).await?;
+        invitation = does_unexpired_invitation_exist(arc.pool.borrow(), invitation_key).await?;
 
         // TODO: push check to db
         if invitation.receiver_id.is_some() {
@@ -78,7 +81,7 @@ pub async fn register(
         .to_string();
 
     let user = create_user(
-        &arc.pool,
+        arc.pool.borrow(),
         &new_user,
         client_ip,
         &password_hash,
@@ -111,7 +114,7 @@ pub async fn register(
     )
 )]
 pub async fn login(arc: web::Data<Arcadia>, user_login: web::Json<Login>) -> Result<HttpResponse> {
-    let user = find_user_with_password(&arc.pool, &user_login).await?;
+    let user = find_user_with_password(arc.pool.borrow(), &user_login).await?;
 
     if user.banned {
         return Err(Error::AccountBanned);
@@ -214,13 +217,13 @@ pub async fn validate_bearer_auth(
 
     let user_id = token_data.claims.sub;
 
-    let banned = crate::repositories::user_repository::is_user_banned(&arc.pool, user_id).await;
+    let banned = is_user_banned(arc.pool.borrow(), user_id).await;
 
     if banned {
         return Err((actix_web::error::ErrorUnauthorized("account banned"), req));
     }
 
-    let _ = crate::repositories::user_repository::update_last_seen(&arc.pool, user_id).await;
+    let _ = update_last_seen(arc.pool.borrow(), user_id).await;
 
     req.extensions_mut()
         .insert(crate::handlers::UserId(user_id));
@@ -239,7 +242,7 @@ pub async fn validate_api_key(
         ));
     };
 
-    let user_id = match find_user_id_with_api_key(&arc.pool, api_key).await {
+    let user_id = match find_user_id_with_api_key(arc.pool.borrow(), api_key).await {
         Ok(id) => id,
         Err(e) => {
             return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req));
