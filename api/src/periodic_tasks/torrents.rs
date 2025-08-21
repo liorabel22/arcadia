@@ -1,7 +1,6 @@
-use sqlx::PgPool;
+use std::sync::Arc;
+use arcadia_storage::{connection_pool::ConnectionPool, repositories::torrent_repository};
 
-use crate::repositories::torrent_repository;
-
-pub async fn update_torrent_seeders_leechers(pool: PgPool) {
-    let _ = torrent_repository::update_torrent_seeders_leechers(&pool).await;
+pub async fn update_torrent_seeders_leechers(pool: Arc<ConnectionPool>) {
+    let _ = torrent_repository::update_torrent_seeders_leechers(pool.borrow()).await;
 }

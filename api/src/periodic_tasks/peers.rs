@@ -1,14 +1,13 @@
-use sqlx::PgPool;
-
-use crate::repositories::peer_repository;
+use std::sync::Arc;
+use arcadia_storage::{connection_pool::ConnectionPool, repositories::peer_repository};
 
 pub async fn remove_inactive_peers(
-    pool: PgPool,
+    pool: Arc<ConnectionPool>,
     announce_interval: u32,
     announce_grace_period: u32,
 ) {
     let removed_peers_amount = peer_repository::remove_inactive_peers(
-        &pool,
+        &pool.borrow(),
         (announce_interval + announce_grace_period) as f64,
     )
     .await;
