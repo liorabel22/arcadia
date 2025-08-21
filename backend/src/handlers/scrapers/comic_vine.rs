@@ -164,7 +164,7 @@ pub async fn get_comic_vine_data(
     let client = Client::builder()
         .user_agent(format!(
             "{} ({} {})",
-            arc.tracker_name, arc.frontend_url, "contact@example.com"
+            arc.tracker.name, arc.frontend_url, "contact@example.com"
         ))
         .build()
         .expect("Failed to build reqwest client");

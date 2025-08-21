@@ -138,7 +138,7 @@ async fn handle_announce(
     ann: announce::Announce,
     conn: dev::ConnectionInfo,
 ) -> Result<HttpResponse> {
-    if !is_torrent_client_allowed(&ann.peer_id, &arc.allowed_torrent_clients) {
+    if !is_torrent_client_allowed(&ann.peer_id, &arc.tracker.allowed_torrent_clients.clients) {
         return Err(Error::TorrentClientNotInWhitelist);
     }
 
@@ -181,8 +181,8 @@ async fn handle_announce(
     // assuming that the client either sends both downloaded/uploaded
     // or none of them
     if let (Some(real_uploaded), Some(real_downloaded)) = (ann.uploaded, ann.downloaded) {
-        let upload_factor = if arc.global_upload_factor != 1.0 {
-            arc.global_upload_factor
+        let upload_factor = if arc.tracker.global_upload_factor != 1.0 {
+            arc.tracker.global_upload_factor
         } else {
             torrent.upload_factor
         };
@@ -190,8 +190,8 @@ async fn handle_announce(
             * upload_factor as f64)
             .ceil() as i64;
 
-        let download_factor = if arc.global_download_factor != 1.0 {
-            arc.global_download_factor
+        let download_factor = if arc.tracker.global_download_factor != 1.0 {
+            arc.tracker.global_download_factor
         } else {
             torrent.download_factor
         };
@@ -221,15 +221,15 @@ async fn handle_announce(
             &arc.pool,
             current_user.id,
             torrent.id,
-            arc.tracker_announce_interval,
-            arc.tracker_announce_interval_grace_period,
+            arc.tracker.announce_interval,
+            arc.tracker.announce_interval_grace_period,
         )
         .await;
     }
 
     let resp = announce::AnnounceResponse {
         peers,
-        interval: arc.tracker_announce_interval,
+        interval: arc.tracker.announce_interval,
         ..Default::default()
     };
 

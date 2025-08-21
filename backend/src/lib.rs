@@ -1,6 +1,6 @@
-use std::collections::HashSet;
+use std::ops::Deref;
+use crate::env::Env;
 
-use reqwest::Url;
 pub mod env;
 pub mod api_doc;
 pub mod handlers;
@@ -30,29 +30,21 @@ impl From<bool> for OpenSignups {
 #[derive(Clone)]
 pub struct Arcadia {
     pub pool: sqlx::PgPool,
-    pub jwt_secret: String,
-    pub open_signups: OpenSignups,
-    pub tracker_name: String,
-    pub frontend_url: Url,
-    pub tracker_url: Url,
-    pub tracker_announce_interval: u32,
-    pub tracker_announce_interval_grace_period: u32,
-    pub allowed_torrent_clients: HashSet<Vec<u8>>,
-    pub global_upload_factor: f64,
-    pub global_download_factor: f64,
-    pub tmdb_api_key: Option<String>,
-    pub smtp_host: Option<String>,
-    pub smtp_port: Option<u16>,
-    pub smtp_username: Option<String>,
-    pub smtp_password: Option<String>,
-    pub smtp_from_email: Option<String>,
-    pub smtp_from_name: Option<String>,
+    env: Env,
+}
+
+impl Deref for Arcadia {
+    type Target = Env;
+
+    fn deref(&self) -> &Self::Target {
+        &self.env
+    }
 }
 
 impl Arcadia {
     #[inline]
     pub fn is_open_signups(&self) -> bool {
-        self.open_signups == OpenSignups::Enabled
+        self.env.open_signups.into() == OpenSignups::Enabled
     }
 }
 

@@ -39,8 +39,8 @@ pub async fn run_periodic_tasks(arc: web::Data<Arcadia>) -> Result<(), Box<dyn s
     let job2 = match Job::new_async(remove_inactive_peers_interval.as_str(), move |_uuid, _l| {
         Box::pin(remove_inactive_peers(
             arc_for_job2.pool.clone(),
-            arc_for_job2.tracker_announce_interval,
-            arc_for_job2.tracker_announce_interval_grace_period,
+            arc_for_job2.tracker.announce_interval,
+            arc_for_job2.tracker.announce_interval_grace_period,
         ))
     }) {
         Ok(job) => job,

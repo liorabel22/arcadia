@@ -90,9 +90,9 @@ pub async fn download_dottorrent_file(
         &arc.pool,
         &current_user,
         query.id,
-        &arc.tracker_name,
+        &arc.tracker.name,
         arc.frontend_url.as_ref(),
-        arc.tracker_url.as_ref(),
+        arc.tracker.url.as_ref(),
     )
     .await?;
 
@@ -134,7 +134,7 @@ pub async fn get_upload_information(
     let announce_url = get_announce_url(
         current_user.passkey_upper,
         current_user.passkey_lower,
-        arc.tracker_url.as_ref(),
+        arc.tracker.url.as_ref(),
     );
 
     Ok(HttpResponse::Ok().json(UploadInformation { announce_url }))
