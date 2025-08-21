@@ -1,18 +1,14 @@
 use actix_web::{HttpResponse, web};
+use arcadia_storage::models::title_group::{create_default_title_group, ContentType, TitleGroupCategory, UserCreatedTitleGroup};
 use chrono::{NaiveDate, Utc};
 use regex::Regex;
 use reqwest::Client;
 use serde::Deserialize;
 use std::env;
 use utoipa::IntoParams;
-
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Arcadia, Error, Result,
-    handlers::scrapers::ExternalDBData,
-    models::title_group::{
-        ContentType, TitleGroupCategory, UserCreatedTitleGroup, create_default_title_group,
-    },
-    services::common_service::naive_date_to_utc_midnight,
+    handlers::scrapers::ExternalDBData, services::common_service::naive_date_to_utc_midnight, Arcadia
 };
 
 #[derive(Debug, Deserialize)]
