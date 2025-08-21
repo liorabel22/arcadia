@@ -6,7 +6,6 @@ use crate::env::Env;
 pub mod env;
 pub mod api_doc;
 pub mod handlers;
-pub mod periodic_tasks;
 pub mod routes;
 pub mod services;
 

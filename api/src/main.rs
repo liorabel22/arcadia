@@ -1,5 +1,4 @@
 mod handlers;
-mod periodic_tasks;
 mod routes;
 mod services;
 
@@ -45,8 +44,6 @@ async fn main() -> std::io::Result<()> {
     }
 
     let arc = Data::new(Arcadia::new(Arc::clone(&pool), env));
-    let arc_periodic_tasks = arc.clone();
-
     let server = HttpServer::new(move || {
         let cors = Cors::permissive();
         App::new()
