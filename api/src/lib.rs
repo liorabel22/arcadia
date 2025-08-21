@@ -1,4 +1,6 @@
 use std::ops::Deref;
+use arcadia_storage::connection_pool::ConnectionPool;
+
 use crate::env::Env;
 
 pub mod env;
@@ -7,7 +9,6 @@ pub mod handlers;
 pub mod periodic_tasks;
 pub mod routes;
 pub mod services;
-pub mod tracker;
 
 #[derive(PartialEq, Debug, Copy, Clone)]
 pub enum OpenSignups {
@@ -25,9 +26,8 @@ impl From<bool> for OpenSignups {
     }
 }
 
-#[derive(Clone)]
 pub struct Arcadia {
-    pub pool: sqlx::PgPool,
+    pub pool: ConnectionPool,
     env: Env,
 }
 
@@ -40,7 +40,7 @@ impl Deref for Arcadia {
 }
 
 impl Arcadia {
-    pub fn new(pool: sqlx::PgPool, env: Env) -> Self {
+    pub fn new(pool: ConnectionPool, env: Env) -> Self {
         Self {pool, env}
     }
     #[inline]

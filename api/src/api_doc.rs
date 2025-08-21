@@ -10,49 +10,49 @@ use crate::{
         torrent_request_handler::SearchTorrentRequestsQuery,
         user_application_handler::{GetUserApplicationsQuery, UpdateUserApplication},
     },
-    models::{
-        artist::{
-            AffiliatedArtist, AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite,
-            ArtistLite,
-        },
-        conversation::{
-            Conversation, ConversationHierarchy, ConversationMessage, ConversationMessageHierarchy,
-            ConversationOverview, ConversationsOverview, UserCreatedConversation,
-            UserCreatedConversationMessage,
-        },
-        edition_group::EditionGroup,
-        forum::{
-            ForumOverview, ForumPost, ForumSubCategoryHierarchy, ForumThreadAndPosts,
-            UserCreatedForumPost, UserCreatedForumThread,
-        },
-        gift::{Gift, UserCreatedGift},
-        invitation::{Invitation, SentInvitation},
-        master_group::{MasterGroup, UserCreatedMasterGroup},
-        series::{Series, SeriesAndTitleGroupHierarchyLite, SeriesLite, UserCreatedSeries},
-        title_group::{
-            EditedTitleGroup, PublicRating, TitleGroupAndAssociatedData, TitleGroupLite,
-        },
-        title_group_comment::{TitleGroupComment, UserCreatedTitleGroupComment},
-        torrent::{
-            EditedTorrent, Extras, Torrent, TorrentSearch, TorrentSearchResults, TorrentToDelete,
-            UploadedTorrent,
-        },
-        torrent_report::{TorrentReport, UserCreatedTorrentReport},
-        torrent_request::{
-            TorrentRequest, TorrentRequestAndAssociatedData, TorrentRequestFill,
-            TorrentRequestHierarchyLite, TorrentRequestWithTitleGroupLite,
-            UserCreatedTorrentRequest,
-        },
-        torrent_request_vote::{
-            TorrentRequestVote, TorrentRequestVoteHierarchy, UserCreatedTorrentRequestVote,
-        },
-        user::{
-            EditedUser, Login, LoginResponse, Profile, PublicProfile, PublicUser, RefreshToken,
-            Register, User, UserCreatedUserWarning, UserLite, UserWarning,
-        },
-        user_application::{UserApplication, UserApplicationStatus, UserCreatedUserApplication},
-        wiki::{UserCreatedWikiArticle, WikiArticle, WikiArticleHierarchy},
+};
+use arcadia_storage::models::{
+    artist::{
+        AffiliatedArtist, AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite,
+        ArtistLite,
     },
+    conversation::{
+        Conversation, ConversationHierarchy, ConversationMessage, ConversationMessageHierarchy,
+        ConversationOverview, ConversationsOverview, UserCreatedConversation,
+        UserCreatedConversationMessage,
+    },
+    edition_group::EditionGroup,
+    forum::{
+        ForumOverview, ForumPost, ForumSubCategoryHierarchy, ForumThreadAndPosts,
+        UserCreatedForumPost, UserCreatedForumThread,
+    },
+    gift::{Gift, UserCreatedGift},
+    invitation::{Invitation, SentInvitation},
+    master_group::{MasterGroup, UserCreatedMasterGroup},
+    series::{Series, SeriesAndTitleGroupHierarchyLite, SeriesLite, UserCreatedSeries},
+    title_group::{
+        EditedTitleGroup, PublicRating, TitleGroupAndAssociatedData, TitleGroupLite,
+    },
+    title_group_comment::{TitleGroupComment, UserCreatedTitleGroupComment},
+    torrent::{
+        EditedTorrent, Extras, Torrent, TorrentSearch, TorrentSearchResults, TorrentToDelete,
+        UploadedTorrent,
+    },
+    torrent_report::{TorrentReport, UserCreatedTorrentReport},
+    torrent_request::{
+        TorrentRequest, TorrentRequestAndAssociatedData, TorrentRequestFill,
+        TorrentRequestHierarchyLite, TorrentRequestWithTitleGroupLite,
+        UserCreatedTorrentRequest,
+    },
+    torrent_request_vote::{
+        TorrentRequestVote, TorrentRequestVoteHierarchy, UserCreatedTorrentRequestVote,
+    },
+    user::{
+        EditedUser, Login, LoginResponse, Profile, PublicProfile, PublicUser, RefreshToken,
+        Register, User, UserCreatedUserWarning, UserLite, UserWarning,
+    },
+    user_application::{UserApplication, UserApplicationStatus, UserCreatedUserApplication},
+    wiki::{UserCreatedWikiArticle, WikiArticle, WikiArticleHierarchy},
 };
 
 #[derive(OpenApi)]

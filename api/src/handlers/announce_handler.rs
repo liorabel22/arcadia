@@ -1,18 +1,11 @@
-use crate::repositories::announce_repository::{
-    credit_user_upload_download, find_torrent_with_id, update_total_seedtime,
-};
-use crate::repositories::peer_repository::{
-    find_torrent_peers, insert_or_update_peer, remove_peer,
-};
-use crate::repositories::torrent_repository::increment_torrent_completed;
+
 use crate::services::announce_service::is_torrent_client_allowed;
 use crate::tracker::announce;
-use crate::{Arcadia, repositories::announce_repository::find_user_with_passkey};
+use crate::Arcadia;
 use actix_web::{
-    FromRequest, HttpRequest, HttpResponse, HttpResponseBuilder, ResponseError, dev, get, web,
+    FromRequest, HttpRequest, HttpResponse, ResponseError, dev, get, web,
 };
-use serde::Serialize;
-use sqlx::types::ipnetwork::IpNetwork;
+use arcadia_storage::{repositories::{announce_repository::{credit_user_upload_download, find_torrent_with_id, find_user_with_passkey, update_total_seedtime}, peer_repository::{insert_or_update_peer, remove_peer}, torrent_repository::increment_torrent_completed}, sqlx::types::ipnetwork::IpNetwork};
 use std::future::{self, Ready};
 use arcadia_common::error::announce::Error as AnnounceError;
 
@@ -89,10 +82,10 @@ async fn handle_announce(
     conn: dev::ConnectionInfo,
 ) -> Result<HttpResponse> {
     if !is_torrent_client_allowed(&ann.peer_id, &arc.tracker.allowed_torrent_clients.clients) {
-        return Err(Error::TorrentClientNotInWhitelist);
+        return Err(AnnounceError::TorrentClientNotInWhitelist);
     }
 
-    let passkey = u128::from_str_radix(&passkey, 16).map_err(|_| Error::InvalidPassKey)?;
+    let passkey = u128::from_str_radix(&passkey, 16).map_err(|_| AnnounceError::InvalidPassKey)?;
 
     let passkey_upper = (passkey >> 64) as i64;
     let passkey_lower = passkey as i64;

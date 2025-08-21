@@ -1,13 +1,12 @@
 mod handlers;
-mod models;
 mod periodic_tasks;
-mod repositories;
 mod routes;
 mod services;
 mod tracker;
 
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware, web::Data};
+use arcadia_storage::connection_pool::ConnectionPool;
 use envconfig::Envconfig;
 use periodic_tasks::scheduler::run_periodic_tasks;
 use routes::init;
@@ -28,11 +27,7 @@ async fn main() -> std::io::Result<()> {
 
     let env = Env::init_from_env().unwrap();
 
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .connect(&env.postgres_uri)
-        .await
-        .expect("Error building a connection pool");
+    let pool = ConnectionPool::try_new(&env.postgres_uri).await.expect("db connection");
 
     let server_url = format!("{}:{}", env.actix.host, env.actix.port);
     println!("Server running at http://{}", server_url);
