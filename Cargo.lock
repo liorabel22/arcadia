@@ -512,7 +512,6 @@ dependencies = [
  "thiserror 2.0.16",
  "tmdb-api",
  "tokio",
- "tokio-cron-scheduler",
  "utoipa",
  "utoipa-actix-web",
  "utoipa-swagger-ui",
@@ -535,6 +534,19 @@ dependencies = [
  "serde_json",
  "sqlx",
  "thiserror 2.0.16",
+]
+
+[[package]]
+name = "arcadia-cron-jobs"
+version = "0.1.0"
+dependencies = [
+ "arcadia-storage",
+ "dotenv",
+ "env_logger",
+ "envconfig",
+ "log",
+ "tokio",
+ "tokio-cron-scheduler",
 ]
 
 [[package]]

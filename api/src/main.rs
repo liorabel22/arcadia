@@ -7,7 +7,6 @@ use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware, web::Data};
 use arcadia_storage::connection_pool::ConnectionPool;
 use envconfig::Envconfig;
-use periodic_tasks::scheduler::run_periodic_tasks;
 use routes::init;
 use std::{env, sync::Arc};
 use utoipa::OpenApi;
@@ -17,13 +16,12 @@ use arcadia_api::{api_doc::ApiDoc, env::Env, Arcadia};
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     if env::var("ENV").unwrap() == "development" {
-      dotenv::from_filename(".env").expect("cannot load env from a file");
+        dotenv::from_filename(".env").expect("cannot load env from a file");
     }
 
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
 
     let env = Env::init_from_env().unwrap();
-
     let pool = Arc::new(ConnectionPool::try_new(&env.postgres_uri).await.expect("db connection"));
 
     let server_url = format!("{}:{}", env.actix.host, env.actix.port);
@@ -63,12 +61,6 @@ async fn main() -> std::io::Result<()> {
     })
     .bind(server_url)?
     .run();
-
-    tokio::spawn(async {
-        if let Err(e) = run_periodic_tasks(arc_periodic_tasks).await {
-            eprintln!("Error running cron tasks: {e:?}");
-        }
-    });
 
     server.await
 }

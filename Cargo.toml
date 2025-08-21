@@ -1,6 +1,6 @@
 [workspace]
 members = [
-  "api", "common", "storage",
+  "api", "common", "cron-jobs", "storage",
 ]
 
 resolver = "2"
