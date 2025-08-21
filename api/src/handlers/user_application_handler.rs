@@ -1,11 +1,13 @@
 use crate::{
-    Arcadia, Error, Result,
-    handlers::User,
-    models::user_application::UserApplicationStatus,
-    repositories::user_application_repository::{self},
+    Arcadia, handlers::User,
 };
 use actix_web::{HttpResponse, web};
+use arcadia_storage::{
+    models::user_application::{UserApplication, UserApplicationStatus, UserCreatedUserApplication},
+    repositories::user_application_repository,
+};
 use serde::{Deserialize, Serialize};
+use arcadia_common::error::{Error, Result};
 
 #[derive(Deserialize, Serialize, utoipa::ToSchema)]
 pub struct GetUserApplicationsQuery {
@@ -18,15 +20,15 @@ pub struct GetUserApplicationsQuery {
     post,
     path = "/api/apply",
     responses(
-        (status = 201, description = "Successfully created user application", body = crate::models::user_application::UserApplication)
+        (status = 201, description = "Successfully created user application", body = UserApplication)
     )
 )]
 pub async fn add_user_application(
-    data: web::Data<Arcadia>,
-    application: web::Json<crate::models::user_application::UserCreatedUserApplication>,
+    arc: web::Data<Arcadia>,
+    application: web::Json<UserCreatedUserApplication>,
 ) -> Result<HttpResponse> {
     let created_application =
-        user_application_repository::create_user_application(&data.pool, &application.into_inner())
+        user_application_repository::create_user_application(arc.pool.borrow(), &application.into_inner())
             .await?;
 
     Ok(HttpResponse::Created().json(created_application))
@@ -42,7 +44,7 @@ pub async fn add_user_application(
         ("checked" = Option<bool>, Query, description = "Filter by checked status: true for checked (accepted/rejected), false for unchecked (pending)")
     ),
     responses(
-        (status = 200, description = "Successfully retrieved user applications", body = Vec<crate::models::user_application::UserApplication>),
+        (status = 200, description = "Successfully retrieved user applications", body = Vec<UserApplication>),
         (status = 400, description = "Bad Request - Invalid status parameter"),
         (status = 403, description = "Forbidden - Only staff members can view user applications")
     )
@@ -58,7 +60,7 @@ pub async fn get_user_applications(
     }
 
     let applications = user_application_repository::find_user_applications(
-        &data.pool,
+        &data.pool.borrow(),
         query.limit.unwrap_or(50),
         query.page.unwrap_or(1),
         query.status.clone(),
@@ -79,13 +81,13 @@ pub struct UpdateUserApplication {
     path = "/api/user-application",
     request_body = UpdateUserApplication,
     responses(
-        (status = 200, description = "Successfully updated user application status", body = crate::models::user_application::UserApplication),
+        (status = 200, description = "Successfully updated user application status", body = UserApplication),
         (status = 403, description = "Forbidden - Only staff members can update user applications"),
         (status = 404, description = "User application not found")
     )
 )]
 pub async fn update_user_application_status(
-    data: web::Data<Arcadia>,
+    arc: web::Data<Arcadia>,
     user: User,
     form: web::Json<UpdateUserApplication>,
 ) -> Result<HttpResponse> {
@@ -95,7 +97,7 @@ pub async fn update_user_application_status(
     }
 
     let updated_application = user_application_repository::update_user_application_status(
-        &data.pool,
+        arc.pool.borrow(),
         form.user_application_id,
         form.status.clone(),
     )
