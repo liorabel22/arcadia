@@ -1,5 +1,7 @@
-use std::borrow::Cow;
+use std::future::Ready;
+use std::{borrow::Cow, future};
 use std::str::FromStr;
+use actix_web::{dev, FromRequest, HttpRequest, HttpResponse, ResponseError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, PartialEq)]
@@ -48,6 +50,19 @@ pub struct Announce {
     pub numwant: Option<u64>,
 }
 
+impl FromRequest for Announce {
+    type Error = Error;
+    type Future = Ready<std::result::Result<Self, Self::Error>>;
+
+    fn from_request(req: &HttpRequest, _: &mut dev::Payload) -> Self::Future {
+        let query_string = req.query_string();
+
+        let announce = decode_from_query_str(query_string);
+
+        future::ready(announce)
+    }
+}
+
 #[derive(Debug, PartialEq, thiserror::Error)]
 pub enum Error {
     #[error("missing info_hash")]
@@ -91,6 +106,13 @@ pub enum Error {
 
     #[error("only compact=1 supported")]
     UnsupportedCompact,
+}
+
+impl ResponseError for Error {
+    fn error_response(&self) -> HttpResponse {
+        log::error!("The request generated this error: {self}");
+        HttpResponse::BadRequest().body(format!("{self}"))
+    }
 }
 
 struct QueryPairs<'a> {

@@ -1,33 +1,22 @@
 
 use crate::services::announce_service::is_torrent_client_allowed;
-use crate::tracker::announce;
 use crate::Arcadia;
 use actix_web::{
     FromRequest, HttpRequest, HttpResponse, ResponseError, dev, get, web,
 };
-use arcadia_storage::{repositories::{announce_repository::{credit_user_upload_download, find_torrent_with_id, find_user_with_passkey, update_total_seedtime}, peer_repository::{insert_or_update_peer, remove_peer}, torrent_repository::increment_torrent_completed}, sqlx::types::ipnetwork::IpNetwork};
+use arcadia_storage::{
+  repositories::{
+      announce_repository::{credit_user_upload_download, find_torrent_with_id, find_user_with_passkey, update_total_seedtime},
+      peer_repository::{find_torrent_peers, insert_or_update_peer, remove_peer},
+      torrent_repository::increment_torrent_completed
+  },
+  sqlx::types::ipnetwork::IpNetwork,
+};
 use std::future::{self, Ready};
-use arcadia_common::error::announce::Error as AnnounceError;
+use arcadia_common::{
+  actix::HttpResponseBuilderExt, error::announce::Error as AnnounceError, models::tracker::announce::{Announce, AnnounceResponse, TorrentEvent}
+};
 
-impl ResponseError for announce::Error {
-    fn error_response(&self) -> HttpResponse {
-        log::error!("The request generated this error: {self}");
-        HttpResponse::BadRequest().body(format!("{self}"))
-    }
-}
-
-impl FromRequest for announce::Announce {
-    type Error = announce::Error;
-    type Future = Ready<std::result::Result<Self, Self::Error>>;
-
-    fn from_request(req: &HttpRequest, _: &mut dev::Payload) -> Self::Future {
-        let query_string = req.query_string();
-
-        let announce = announce::decode_from_query_str(query_string);
-
-        future::ready(announce)
-    }
-}
 
 type Result<T> = std::result::Result<T, AnnounceError>;
 
@@ -78,7 +67,7 @@ async fn handle_announce(
     arc: web::Data<Arcadia>,
     passkey: web::Path<String>,
     user_agent: Option<UserAgent>,
-    ann: announce::Announce,
+    ann: Announce,
     conn: dev::ConnectionInfo,
 ) -> Result<HttpResponse> {
     if !is_torrent_client_allowed(&ann.peer_id, &arc.tracker.allowed_torrent_clients.clients) {
@@ -90,27 +79,27 @@ async fn handle_announce(
     let passkey_upper = (passkey >> 64) as i64;
     let passkey_lower = passkey as i64;
 
-    let current_user = find_user_with_passkey(&arc.pool, passkey_upper, passkey_lower).await?;
+    let current_user = find_user_with_passkey(arc.pool.borrow(), passkey_upper, passkey_lower).await?;
 
-    let torrent = find_torrent_with_id(&arc.pool, &ann.info_hash).await?;
+    let torrent = find_torrent_with_id(arc.pool.borrow(), &ann.info_hash).await?;
 
     let ip = conn
         .realip_remote_addr()
         .and_then(|ip| ip.parse::<IpNetwork>().ok())
         .unwrap();
 
-    if let Some(announce::TorrentEvent::Stopped) = ann.event {
-        remove_peer(&arc.pool, &torrent.id, &ann.peer_id, &ip, ann.port).await;
+    if let Some(TorrentEvent::Stopped) = ann.event {
+        remove_peer(arc.pool.borrow(), &torrent.id, &ann.peer_id, &ip, ann.port).await;
         //return HttpResponse::Ok().into();
         todo!();
     }
 
-    if let Some(announce::TorrentEvent::Completed) = ann.event {
-        let _ = increment_torrent_completed(&arc.pool, torrent.id).await;
+    if let Some(TorrentEvent::Completed) = ann.event {
+        let _ = increment_torrent_completed(arc.pool.borrow(), torrent.id).await;
     }
 
     let (old_real_uploaded, old_real_downloaded) = insert_or_update_peer(
-        &arc.pool,
+        arc.pool.borrow(),
         &torrent.id,
         &ip,
         &current_user.id,
@@ -119,7 +108,7 @@ async fn handle_announce(
     )
     .await;
 
-    let peers = find_torrent_peers(&arc.pool, &torrent.id, &current_user.id).await;
+    let peers = find_torrent_peers(arc.pool.borrow(), &torrent.id, &current_user.id).await;
 
     // assuming that the client either sends both downloaded/uploaded
     // or none of them
@@ -148,7 +137,7 @@ async fn handle_announce(
         // calculated upload/download might be negative
         if real_uploaded_to_credit >= 0 && real_downloaded_to_credit >= 0 {
             let _ = credit_user_upload_download(
-                &arc.pool,
+                arc.pool.borrow(),
                 upload_to_credit,
                 download_to_credit,
                 real_uploaded_to_credit,
@@ -161,7 +150,7 @@ async fn handle_announce(
 
     if ann.left == Some(0u64) {
         let _ = update_total_seedtime(
-            &arc.pool,
+            arc.pool.borrow(),
             current_user.id,
             torrent.id,
             arc.tracker.announce_interval,
@@ -170,7 +159,7 @@ async fn handle_announce(
         .await;
     }
 
-    let resp = announce::AnnounceResponse {
+    let resp = AnnounceResponse {
         peers,
         interval: arc.tracker.announce_interval,
         ..Default::default()

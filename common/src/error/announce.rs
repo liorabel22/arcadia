@@ -1,5 +1,6 @@
-use actix_web::{HttpResponse, HttpResponseBuilder};
 use serde::Serialize;
+
+use crate::actix::HttpResponseBuilderExt;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -36,18 +37,5 @@ impl actix_web::ResponseError for Error {
         actix_web::HttpResponse::build(self.status_code()).bencode(WrappedError {
             failure_reason: self.to_string(),
         })
-    }
-}
-
-trait HttpResponseBuilderExt {
-    fn bencode(&mut self, val: impl Serialize) -> HttpResponse;
-}
-
-impl HttpResponseBuilderExt for HttpResponseBuilder {
-    fn bencode(&mut self, val: impl Serialize) -> HttpResponse {
-        match serde_bencode::to_bytes(&val) {
-            Ok(data) => self.body(data),
-            Err(_) => HttpResponse::BadRequest().body("Failed to bencode"),
-        }
     }
 }
