@@ -1,5 +1,6 @@
-use crate::{Result, models::peer::PeerStatus};
 use sqlx::{PgPool, types::ipnetwork::IpNetwork};
+use arcadia_common::error::Result;
+use crate::{models::peer::PeerStatus};
 
 use crate::{
     models,

@@ -1,5 +1,9 @@
+use bip_metainfo::{Info, InfoBuilder, InfoHash, Metainfo, MetainfoBuilder, PieceLength};
+use serde_json::{Value, json};
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
+use std::str::FromStr;
 use crate::{
-    Error, Result,
     models::{
         notification::NotificationReason,
         torrent::{
@@ -12,10 +16,6 @@ use crate::{
     services::torrent_service::get_announce_url,
 };
 
-use bip_metainfo::{Info, InfoBuilder, InfoHash, Metainfo, MetainfoBuilder, PieceLength};
-use serde_json::{Value, json};
-use sqlx::PgPool;
-use std::str::FromStr;
 
 use super::super::services::torrent_service::looks_like_url;
 use super::notification_repository::notify_users;

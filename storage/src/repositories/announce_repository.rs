@@ -1,6 +1,5 @@
 use sqlx::{PgPool, postgres::PgQueryResult};
-
-use crate::handlers::announce_handler::Error;
+use arcadia_common::error::announce::Error;
 
 #[derive(sqlx::FromRow)]
 pub struct UserCompact {

@@ -1,5 +1,7 @@
+use serde_json::{Value, json};
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::{
         title_group::{
             ContentType, EditedTitleGroup, PublicRating, TitleGroup, UserCreatedTitleGroup,
@@ -7,8 +9,6 @@ use crate::{
         user::User,
     },
 };
-use serde_json::{Value, json};
-use sqlx::PgPool;
 
 fn sanitize_title_group_tags(tags: Vec<String>) -> Vec<String> {
     tags.into_iter()

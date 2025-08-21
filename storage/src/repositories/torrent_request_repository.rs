@@ -1,13 +1,13 @@
+use serde_json::Value;
+use sqlx::{PgPool, query_as, query_scalar};
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::{
         torrent_request::{TorrentRequest, UserCreatedTorrentRequest},
         user::User,
     },
     repositories::torrent_request_vote_repository::create_torrent_request_vote,
 };
-use serde_json::Value;
-use sqlx::{PgPool, query_as, query_scalar};
 
 pub async fn create_torrent_request(
     pool: &PgPool,

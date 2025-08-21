@@ -1,8 +1,7 @@
 use serde_json::Value;
 use sqlx::PgPool;
-
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::conversation::{
         Conversation, ConversationMessage, UserCreatedConversation, UserCreatedConversationMessage,
     },

@@ -1,11 +1,11 @@
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::{
         title_group_comment::{TitleGroupComment, UserCreatedTitleGroupComment},
         user::User,
     },
 };
-use sqlx::PgPool;
 
 pub async fn create_title_group_comment(
     pool: &PgPool,

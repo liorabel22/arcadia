@@ -1,8 +1,8 @@
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::user::{EditedUser, PublicUser, UserCreatedUserWarning, UserMinimal, UserWarning},
 };
-use sqlx::PgPool;
 
 pub async fn find_user_profile(pool: &PgPool, id: &i64) -> Result<PublicUser> {
     sqlx::query_as!(

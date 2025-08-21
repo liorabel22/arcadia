@@ -1,7 +1,6 @@
 use sqlx::PgPool;
-
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::user_application::{
         UserApplication, UserApplicationStatus, UserCreatedUserApplication,
     },

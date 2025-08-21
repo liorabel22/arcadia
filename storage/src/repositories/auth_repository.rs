@@ -1,5 +1,4 @@
 use crate::{
-    Error, Result,
     models::{
         invitation::Invitation,
         user::{APIKey, Login, Register, User, UserCreatedAPIKey},
@@ -15,6 +14,7 @@ use rand::{
     rng,
 };
 use sqlx::{PgPool, types::ipnetwork::IpNetwork};
+use arcadia_common::error::{Error, Result};
 
 pub async fn does_username_exist(pool: &PgPool, username: &str) -> Result<bool> {
     let result = sqlx::query!(

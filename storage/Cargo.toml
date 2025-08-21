@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-eyre = "0.6.12"
-sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-native-tls", "postgres", "chrono", "bigdecimal", "ipnetwork" ] }
+arcadia-common = { path = "../common"}
+argon2 = "0.5.3"
+sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-native-tls", "postgres", "chrono", "ipnetwork" ] }
 thiserror = "2.0.12"
-musicbrainz_rs = "0.9.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = {version = "1.0", features = ["preserve_order"]}
+rand = "0.9.0"

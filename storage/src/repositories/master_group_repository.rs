@@ -1,8 +1,8 @@
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::master_group::{MasterGroup, UserCreatedMasterGroup},
 };
-use sqlx::PgPool;
 
 pub async fn create_master_group(
     pool: &PgPool,

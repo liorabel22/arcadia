@@ -1,12 +1,12 @@
+use serde_json::Value;
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::{
         series::{Series, UserCreatedSeries},
         user::User,
     },
 };
-use serde_json::Value;
-use sqlx::PgPool;
 
 pub async fn create_series(
     pool: &PgPool,

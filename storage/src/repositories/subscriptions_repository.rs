@@ -1,5 +1,5 @@
-use crate::{Error, Result};
 use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 
 pub async fn create_subscription(
     pool: &PgPool,

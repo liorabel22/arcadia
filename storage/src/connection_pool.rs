@@ -1,10 +1,9 @@
 use sqlx::PgPool;
-use eyre::Result;
 
 pub struct ConnectionPool(PgPool);
 
 impl ConnectionPool {
-  pub async fn try_new(db_uri: &str) -> Result<Self> {
+  pub async fn try_new(db_uri: &str) -> Result<Self, sqlx::Error> {
     let pool = PgPool::connect(db_uri).await?;
     Ok(Self(pool))
   }

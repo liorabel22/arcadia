@@ -1,11 +1,11 @@
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::{
         torrent_report::{TorrentReport, UserCreatedTorrentReport},
         user::User,
     },
 };
-use sqlx::PgPool;
 
 pub async fn report_torrent(
     pool: &PgPool,

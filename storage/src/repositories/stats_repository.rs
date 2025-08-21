@@ -1,6 +1,6 @@
 use sqlx::PgPool;
-
-use crate::{Result, handlers::home_handler::HomeStats};
+use arcadia_common::error::Result;
+use crate::{handlers::home_handler::HomeStats};
 
 pub async fn find_home_stats(pool: &PgPool) -> Result<HomeStats> {
     let stats = sqlx::query_as!(

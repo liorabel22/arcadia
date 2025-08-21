@@ -1,5 +1,6 @@
-use crate::{Error, Result, models::notification::NotificationReason};
 use sqlx::{Postgres, Transaction};
+use arcadia_common::error::{Error, Result};
+use crate::models::notification::NotificationReason;
 
 pub struct NotificationItemsIds {
     pub title_group_id: Option<i64>,

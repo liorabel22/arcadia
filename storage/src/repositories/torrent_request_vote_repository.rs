@@ -1,11 +1,11 @@
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::{
         torrent_request_vote::{TorrentRequestVote, UserCreatedTorrentRequestVote},
         user::User,
     },
 };
-use sqlx::PgPool;
 
 pub async fn create_torrent_request_vote(
     pool: &PgPool,

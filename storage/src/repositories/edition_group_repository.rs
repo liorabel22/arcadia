@@ -1,8 +1,8 @@
+use sqlx::PgPool;
+use arcadia_common::error::{Error, Result};
 use crate::{
-    Error, Result,
     models::edition_group::{EditionGroup, UserCreatedEditionGroup},
 };
-use sqlx::PgPool;
 
 pub async fn create_edition_group(
     pool: &PgPool,
