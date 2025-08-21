@@ -1,0 +1,3 @@
+CREATE USER arcadia;
+CREATE DATABASE arcadia;
+GRANT ALL PRIVILEGES ON DATABASE arcadia TO arcadia;
