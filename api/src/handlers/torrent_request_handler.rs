@@ -1,16 +1,15 @@
-use crate::{
-    Arcadia, Result,
-    models::{
-        torrent_request::{TorrentRequest, TorrentRequestFill, UserCreatedTorrentRequest},
-        torrent_request::{TorrentRequestAndAssociatedData, TorrentRequestWithTitleGroupLite},
-        user::User,
-    },
-    repositories::torrent_request_repository::{
-        self, create_torrent_request, find_torrent_request_hierarchy,
-    },
-};
+use crate::handlers::User;
+use crate::Arcadia;
 use actix_web::{HttpResponse, web};
+use arcadia_storage::{
+    models::torrent_request::{
+        TorrentRequest, TorrentRequestAndAssociatedData, TorrentRequestFill, TorrentRequestWithTitleGroupLite,
+        UserCreatedTorrentRequest,
+    },
+    repositories::torrent_request_repository::{self, create_torrent_request, find_torrent_request_hierarchy},
+};
 use serde_json::json;
+use arcadia_common::error::Result;
 
 use serde::Deserialize;
 use utoipa::IntoParams;
@@ -29,7 +28,7 @@ pub async fn add_torrent_request(
     current_user: User,
 ) -> Result<HttpResponse> {
     let torrent_request =
-        create_torrent_request(&arc.pool, &mut torrent_request, &current_user).await?;
+        create_torrent_request(arc.pool.borrow(), &mut torrent_request, &current_user).await?;
 
     Ok(HttpResponse::Created().json(torrent_request))
 }
@@ -47,7 +46,7 @@ pub async fn fill_torrent_request(
     current_user: User,
 ) -> Result<HttpResponse> {
     torrent_request_repository::fill_torrent_request(
-        &arc.pool,
+        arc.pool.borrow(),
         torrent_request_fill.torrent_id,
         torrent_request_fill.torrent_request_id,
         current_user.id,
@@ -85,7 +84,7 @@ pub async fn search_torrent_requests(
     let page = query.page.unwrap_or(1);
     let page_size = query.page_size.unwrap_or(50);
     let results = torrent_request_repository::search_torrent_requests(
-        &arc.pool,
+        arc.pool.borrow(),
         query.title_group_name.as_deref(),
         query.tags.as_deref(),
         page,
@@ -113,7 +112,7 @@ pub async fn get_torrent_request(
     query: web::Query<GetTorrentRequestQuery>,
     _current_user: User,
 ) -> Result<HttpResponse> {
-    let torrent_request = find_torrent_request_hierarchy(&arc.pool, query.id).await?;
+    let torrent_request = find_torrent_request_hierarchy(arc.pool.borrow(), query.id).await?;
 
     Ok(HttpResponse::Ok().json(torrent_request))
 }
