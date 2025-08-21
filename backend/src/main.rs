@@ -20,6 +20,11 @@ use arcadia_backend::{Arcadia, Error, OpenSignups, Result, api_doc::ApiDoc};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    if env::var("ENV").unwrap() == "development" {
+      dotenv::from_filename(".env").expect("cannot load env from a file");
+    }
+
+
     if let Ok(env_path) = dotenvy::dotenv() {
         println!("Loading environment from {}", env_path.display());
     } else {
@@ -35,8 +40,6 @@ async fn main() -> std::io::Result<()> {
         .await
         .expect("Error building a connection pool");
 
-    let host = env::var("ACTIX_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
-    let port = env::var("ACTIX_PORT").unwrap_or_else(|_| "8080".to_string());
     println!("Server running at http://{host}:{port}");
 
     let open_signups = if env::var("ARCADIA_OPEN_SIGNUPS").unwrap() == "true" {

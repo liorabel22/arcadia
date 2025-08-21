@@ -17,6 +17,16 @@ pub enum OpenSignups {
     Enabled,
 }
 
+impl From<bool> for OpenSignups {
+    fn from(value: bool) -> Self {
+        if value {
+            OpenSignups::Enabled
+        } else {
+            OpenSignups::Disabled
+        }
+    }
+}
+
 #[derive(Clone)]
 pub struct Arcadia {
     pub pool: sqlx::PgPool,
