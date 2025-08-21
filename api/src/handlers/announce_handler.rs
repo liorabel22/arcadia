@@ -5,11 +5,6 @@ use actix_web::{
     FromRequest, HttpRequest, HttpResponse, ResponseError, dev, get, web,
 };
 use arcadia_storage::{
-  repositories::{
-      announce_repository::{credit_user_upload_download, find_torrent_with_id, find_user_with_passkey, update_total_seedtime},
-      peer_repository::{find_torrent_peers, insert_or_update_peer, remove_peer},
-      torrent_repository::increment_torrent_completed
-  },
   sqlx::types::ipnetwork::IpNetwork,
 };
 use std::future::{self, Ready};
@@ -79,9 +74,9 @@ async fn handle_announce(
     let passkey_upper = (passkey >> 64) as i64;
     let passkey_lower = passkey as i64;
 
-    let current_user = find_user_with_passkey(arc.pool.borrow(), passkey_upper, passkey_lower).await?;
+    let current_user = arc.pool.find_user_with_passkey(passkey_upper, passkey_lower).await?;
 
-    let torrent = find_torrent_with_id(arc.pool.borrow(), &ann.info_hash).await?;
+    let torrent = arc.pool.find_torrent_with_id(&ann.info_hash).await?;
 
     let ip = conn
         .realip_remote_addr()
@@ -89,17 +84,16 @@ async fn handle_announce(
         .unwrap();
 
     if let Some(TorrentEvent::Stopped) = ann.event {
-        remove_peer(arc.pool.borrow(), &torrent.id, &ann.peer_id, &ip, ann.port).await;
+        arc.pool.remove_peer(&torrent.id, &ann.peer_id, &ip, ann.port).await;
         //return HttpResponse::Ok().into();
         todo!();
     }
 
     if let Some(TorrentEvent::Completed) = ann.event {
-        let _ = increment_torrent_completed(arc.pool.borrow(), torrent.id).await;
+        let _ = arc.pool.increment_torrent_completed(torrent.id).await;
     }
 
-    let (old_real_uploaded, old_real_downloaded) = insert_or_update_peer(
-        arc.pool.borrow(),
+    let (old_real_uploaded, old_real_downloaded) = arc.pool.insert_or_update_peer(
         &torrent.id,
         &ip,
         &current_user.id,
@@ -108,7 +102,7 @@ async fn handle_announce(
     )
     .await;
 
-    let peers = find_torrent_peers(arc.pool.borrow(), &torrent.id, &current_user.id).await;
+    let peers = arc.pool.find_torrent_peers(&torrent.id, &current_user.id).await;
 
     // assuming that the client either sends both downloaded/uploaded
     // or none of them
@@ -136,8 +130,7 @@ async fn handle_announce(
         // if the client restarted, without sending a "stop" event, keeping the same ip/port
         // calculated upload/download might be negative
         if real_uploaded_to_credit >= 0 && real_downloaded_to_credit >= 0 {
-            let _ = credit_user_upload_download(
-                arc.pool.borrow(),
+            let _ = arc.pool.credit_user_upload_download(
                 upload_to_credit,
                 download_to_credit,
                 real_uploaded_to_credit,
@@ -149,8 +142,7 @@ async fn handle_announce(
     }
 
     if ann.left == Some(0u64) {
-        let _ = update_total_seedtime(
-            arc.pool.borrow(),
+        let _ = arc.pool.update_total_seedtime(
             current_user.id,
             torrent.id,
             arc.tracker.announce_interval,

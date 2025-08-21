@@ -4,12 +4,6 @@ use arcadia_storage::{
         ContentType, EditedTitleGroup, PublicRating, TitleGroup, TitleGroupAndAssociatedData,
         TitleGroupLite, UserCreatedTitleGroup,
     },
-    repositories::{
-        artist_repository::create_artists_affiliation,
-        title_group_repository::{
-            create_title_group, find_title_group, find_title_group_hierarchy, find_title_group_info_lite, update_title_group,
-        }
-    }
 };
 use futures::future::join_all;
 use serde::Deserialize;
@@ -44,14 +38,14 @@ pub async fn add_title_group(
         .filter_map(Result::ok)
         .collect();
 
-    let created_title_group = create_title_group(arc.pool.borrow(), &form, &ratings, &current_user).await?;
+    let created_title_group = arc.pool.create_title_group(&form, &ratings, &current_user).await?;
 
     if !form.affiliated_artists.is_empty() {
         for artist in &mut form.affiliated_artists {
             artist.title_group_id = created_title_group.id
         }
 
-        let _ = create_artists_affiliation(arc.pool.borrow(), &form.affiliated_artists, current_user.id)
+        let _ = arc.pool.create_artists_affiliation(&form.affiliated_artists, current_user.id)
             .await?;
     }
 
@@ -70,10 +64,10 @@ pub async fn edit_title_group(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let title_group = find_title_group(arc.pool.borrow(), form.id).await?;
+    let title_group = arc.pool.find_title_group(form.id).await?;
 
     if title_group.created_by_id == current_user.id || current_user.class == "staff" {
-        let updated_title_group = update_title_group(arc.pool.borrow(), &form, title_group.id).await?;
+        let updated_title_group = arc.pool.update_title_group(&form, title_group.id).await?;
         Ok(HttpResponse::Ok().json(updated_title_group))
     } else {
         Err(Error::InsufficientPrivileges)
@@ -98,7 +92,7 @@ pub async fn get_title_group(
     query: web::Query<GetTitleGroupQuery>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let title_group = find_title_group_hierarchy(arc.pool.borrow(), query.id, &current_user).await?;
+    let title_group = arc.pool.find_title_group_hierarchy(query.id, &current_user).await?;
 
     Ok(HttpResponse::Ok().json(title_group))
 }
@@ -117,7 +111,7 @@ pub async fn get_title_group_info_lite(
     arc: web::Data<Arcadia>,
     query: web::Query<GetTitleGroupLiteQuery>,
 ) -> Result<HttpResponse> {
-    let title_group = find_title_group_info_lite(arc.pool.borrow(), Some(query.id), None, &None, 1).await?;
+    let title_group = arc.pool.find_title_group_info_lite(Some(query.id), None, &None, 1).await?;
 
     Ok(HttpResponse::Ok().json(title_group))
 }
@@ -141,7 +135,7 @@ pub async fn search_title_group_info_lite(
     query: web::Query<SearchTitleGroupLiteQuery>,
 ) -> Result<HttpResponse> {
     let title_groups =
-        find_title_group_info_lite(arc.pool.borrow(), None, Some(&query.name), &query.content_type, 5)
+        arc.pool.find_title_group_info_lite(None, Some(&query.name), &query.content_type, 5)
             .await?;
 
     Ok(HttpResponse::Ok().json(title_groups))

@@ -3,7 +3,6 @@ use actix_web::{HttpResponse, web};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::{
   models::gift::{Gift, UserCreatedGift},
-  repositories::gift_repository::create_gift,
 };
 
 #[utoipa::path(
@@ -25,7 +24,7 @@ pub async fn send_gift(
         return Err(Error::NotEnoughFreeleechTokensAvailable);
     }
 
-    let gift = create_gift(arc.pool.borrow(), &gift, current_user.id).await?;
+    let gift = arc.pool.create_gift(&gift, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(gift))
 }

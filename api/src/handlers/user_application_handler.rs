@@ -4,7 +4,6 @@ use crate::{
 use actix_web::{HttpResponse, web};
 use arcadia_storage::{
     models::user_application::{UserApplication, UserApplicationStatus, UserCreatedUserApplication},
-    repositories::user_application_repository,
 };
 use serde::{Deserialize, Serialize};
 use arcadia_common::error::{Error, Result};
@@ -28,7 +27,7 @@ pub async fn add_user_application(
     application: web::Json<UserCreatedUserApplication>,
 ) -> Result<HttpResponse> {
     let created_application =
-        user_application_repository::create_user_application(arc.pool.borrow(), &application.into_inner())
+        arc.pool.create_user_application(&application.into_inner())
             .await?;
 
     Ok(HttpResponse::Created().json(created_application))
@@ -50,7 +49,7 @@ pub async fn add_user_application(
     )
 )]
 pub async fn get_user_applications(
-    data: web::Data<Arcadia>,
+    arc: web::Data<Arcadia>,
     user: User,
     query: web::Query<GetUserApplicationsQuery>,
 ) -> Result<HttpResponse> {
@@ -59,8 +58,7 @@ pub async fn get_user_applications(
         return Err(Error::InsufficientPrivileges);
     }
 
-    let applications = user_application_repository::find_user_applications(
-        &data.pool.borrow(),
+    let applications = arc.pool.find_user_applications(
         query.limit.unwrap_or(50),
         query.page.unwrap_or(1),
         query.status.clone(),
@@ -96,8 +94,7 @@ pub async fn update_user_application_status(
         return Err(Error::InsufficientPrivileges);
     }
 
-    let updated_application = user_application_repository::update_user_application_status(
-        arc.pool.borrow(),
+    let updated_application = arc.pool.update_user_application_status(
         form.user_application_id,
         form.status.clone(),
     )

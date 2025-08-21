@@ -3,7 +3,6 @@ use actix_web::{HttpResponse, web};
 use arcadia_common::error::Result;
 use arcadia_storage::{
     models::title_group_comment::{TitleGroupComment, UserCreatedTitleGroupComment},
-    repositories::title_group_comment_repository::create_title_group_comment,
 };
 
 #[utoipa::path(
@@ -19,7 +18,7 @@ pub async fn add_title_group_comment(
     current_user: User,
 ) -> Result<HttpResponse> {
     let title_group_comment =
-        create_title_group_comment(arc.pool.borrow(), &comment, &current_user).await?;
+        arc.pool.create_title_group_comment(&comment, &current_user).await?;
 
     Ok(HttpResponse::Created().json(title_group_comment))
 }

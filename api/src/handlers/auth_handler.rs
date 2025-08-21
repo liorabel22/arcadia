@@ -8,11 +8,6 @@ use arcadia_storage::{
         invitation::Invitation,
         user::{Claims, Login, LoginResponse, RefreshToken, Register, User}
     },
-    repositories::{
-        auth_repository::{create_user, find_user_id_with_api_key, find_user_with_password},
-        invitation_repository::does_unexpired_invitation_exist,
-        user_repository::{is_user_banned, update_last_seen}
-    },
     sqlx::types::ipnetwork::IpNetwork
 };
 use argon2::{
@@ -53,7 +48,7 @@ pub async fn register(
             .as_ref()
             .ok_or(Error::InvitationKeyRequired)?;
 
-        invitation = does_unexpired_invitation_exist(arc.pool.borrow(), invitation_key).await?;
+        invitation = arc.pool.does_unexpired_invitation_exist(invitation_key).await?;
 
         // TODO: push check to db
         if invitation.receiver_id.is_some() {
@@ -80,8 +75,7 @@ pub async fn register(
         .unwrap()
         .to_string();
 
-    let user = create_user(
-        arc.pool.borrow(),
+    let user = arc.pool.create_user(
         &new_user,
         client_ip,
         &password_hash,
@@ -114,7 +108,7 @@ pub async fn register(
     )
 )]
 pub async fn login(arc: web::Data<Arcadia>, user_login: web::Json<Login>) -> Result<HttpResponse> {
-    let user = find_user_with_password(arc.pool.borrow(), &user_login).await?;
+    let user = arc.pool.find_user_with_password(&user_login).await?;
 
     if user.banned {
         return Err(Error::AccountBanned);
@@ -217,13 +211,13 @@ pub async fn validate_bearer_auth(
 
     let user_id = token_data.claims.sub;
 
-    let banned = is_user_banned(arc.pool.borrow(), user_id).await;
+    let banned = arc.pool.is_user_banned(user_id).await;
 
     if banned {
         return Err((actix_web::error::ErrorUnauthorized("account banned"), req));
     }
 
-    let _ = update_last_seen(arc.pool.borrow(), user_id).await;
+    let _ = arc.pool.update_last_seen(user_id).await;
 
     req.extensions_mut()
         .insert(crate::handlers::UserId(user_id));
@@ -242,7 +236,7 @@ pub async fn validate_api_key(
         ));
     };
 
-    let user_id = match find_user_id_with_api_key(arc.pool.borrow(), api_key).await {
+    let user_id = match arc.pool.find_user_id_with_api_key(api_key).await {
         Ok(id) => id,
         Err(e) => {
             return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req));

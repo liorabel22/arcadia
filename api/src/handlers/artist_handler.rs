@@ -8,10 +8,6 @@ use arcadia_storage::{
         AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite, ArtistLite,
         UserCreatedAffiliatedArtist, UserCreatedArtist,
     },
-    repositories::artist_repository::{
-        create_artists, create_artists_affiliation, delete_artists_affiliation,
-        find_artist_publications,find_artists_lite,
-    },
 };
 use serde::Deserialize;
 use serde_json::json;
@@ -31,7 +27,7 @@ pub async fn add_artists(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let artists = create_artists(arc.pool.borrow(), &artists, current_user_id.0).await?;
+    let artists = arc.pool.create_artists(&artists, current_user_id.0).await?;
 
     Ok(HttpResponse::Created().json(artists))
 }
@@ -48,7 +44,7 @@ pub async fn add_affiliated_artists(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let affiliations = create_artists_affiliation(arc.pool.borrow(), &artists, current_user_id.0).await?;
+    let affiliations = arc.pool.create_artists_affiliation(&artists, current_user_id.0).await?;
 
     Ok(HttpResponse::Created().json(affiliations))
 }
@@ -70,7 +66,7 @@ pub async fn remove_affiliated_artists(
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
     // TODO: add protection based on user class
-    delete_artists_affiliation(arc.pool.borrow(), &query.affiliation_ids).await?;
+    arc.pool.delete_artists_affiliation(&query.affiliation_ids).await?;
 
     Ok(HttpResponse::Ok().json(json!({"result": "success"})))
 }
@@ -92,7 +88,7 @@ pub async fn get_artist_publications(
     query: web::Query<GetArtistPublicationsQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    let artist_publication = find_artist_publications(arc.pool.borrow(), &query.id).await?;
+    let artist_publication = arc.pool.find_artist_publications(&query.id).await?;
 
     Ok(HttpResponse::Ok().json(artist_publication))
 }
@@ -115,7 +111,7 @@ pub async fn get_artists_lite(
     query: web::Query<GetArtistLiteQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    let artists = find_artists_lite(arc.pool.borrow(), &query.name).await?;
+    let artists = arc.pool.find_artists_lite(&query.name).await?;
 
     Ok(HttpResponse::Ok().json(artists))
 }

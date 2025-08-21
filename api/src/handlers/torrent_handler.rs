@@ -18,10 +18,6 @@ use arcadia_storage::{
             EditedTorrent, Torrent, TorrentMinimal, TorrentSearch, TorrentSearchResults, TorrentToDelete, UploadedTorrent,
         },
     },
-    repositories::torrent_repository::{
-        create_torrent, find_registered_torrents, find_top_torrents, find_torrent, get_torrent, remove_torrent,
-        search_torrents, update_torrent,
-    },
 };
 
 
@@ -40,7 +36,7 @@ pub async fn upload_torrent(
 ) -> Result<HttpResponse> {
     // TODO : check if user can upload
 
-    let torrent = create_torrent(arc.pool.borrow(), &form, &current_user).await?;
+    let torrent = arc.pool.create_torrent(&form, &current_user).await?;
 
     Ok(HttpResponse::Created().json(torrent))
 }
@@ -57,10 +53,10 @@ pub async fn edit_torrent(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let torrent = find_torrent(arc.pool.borrow(), form.id).await?;
+    let torrent = arc.pool.find_torrent(form.id).await?;
 
     if torrent.created_by_id == current_user.id || current_user.class == "staff" {
-        let updated_torrent = update_torrent(arc.pool.borrow(), &form, torrent.id).await?;
+        let updated_torrent = arc.pool.update_torrent(&form, torrent.id).await?;
         Ok(HttpResponse::Ok().json(updated_torrent))
     } else {
         Err(Error::InsufficientPrivileges)
@@ -85,8 +81,7 @@ pub async fn download_dottorrent_file(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let torrent = get_torrent(
-        arc.pool.borrow(),
+    let torrent = arc.pool.get_torrent(
         &current_user,
         query.id,
         &arc.tracker.name,
@@ -151,7 +146,7 @@ pub async fn find_torrents(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let search_results = search_torrents(arc.pool.borrow(), &form, Some(current_user.id)).await?;
+    let search_results = arc.pool.search_torrents(&form, Some(current_user.id)).await?;
 
     Ok(HttpResponse::Ok().json(search_results))
 }
@@ -186,7 +181,7 @@ pub async fn get_top_torrents(
     query: web::Query<GetTopTorrentsQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    let search_results = find_top_torrents(arc.pool.borrow(), &query.period, query.amount).await?;
+    let search_results = arc.pool.find_top_torrents(&query.period, query.amount).await?;
 
     Ok(HttpResponse::Ok().json(search_results))
 }
@@ -223,7 +218,7 @@ Handled by: [url={}]{}[/url]",
     );
 
     form.displayed_reason = Some(displayed_reason);
-    remove_torrent(arc.pool.borrow(), &form, current_user.id).await?;
+    arc.pool.remove_torrent(&form, current_user.id).await?;
 
     Ok(HttpResponse::Ok().json(json!({"result": "success"})))
 }
@@ -242,7 +237,7 @@ pub async fn get_registered_torrents(
     if current_user.class != "tracker" {
         return Err(Error::InsufficientPrivileges);
     };
-    let torrents = find_registered_torrents(arc.pool.borrow()).await?;
+    let torrents = arc.pool.find_registered_torrents().await?;
 
     Ok(HttpResponse::Ok().json(torrents))
 }

@@ -1,6 +1,6 @@
 use std::sync::Arc;
-use arcadia_storage::{connection_pool::ConnectionPool, repositories::torrent_repository};
+use arcadia_storage::connection_pool::ConnectionPool;
 
 pub async fn update_torrent_seeders_leechers(pool: Arc<ConnectionPool>) {
-    let _ = torrent_repository::update_torrent_seeders_leechers(pool.borrow()).await;
+    let _ = pool.update_torrent_seeders_leechers().await;
 }

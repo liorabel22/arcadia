@@ -2,7 +2,6 @@ use crate::{handlers::User, Arcadia};
 use actix_web::{HttpResponse, web};
 use arcadia_storage::{
     models::wiki::{UserCreatedWikiArticle, WikiArticle},
-    repositories::wiki_repository::{create_wiki_article, find_wiki_article},
 };
 use serde::Deserialize;
 use utoipa::IntoParams;
@@ -24,7 +23,7 @@ pub async fn add_wiki_article(
         return Err(Error::InsufficientPrivileges);
     }
 
-    let article = create_wiki_article(arc.pool.borrow(), &article, current_user.id).await?;
+    let article = arc.pool.create_wiki_article(&article, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(article))
 }
@@ -46,7 +45,7 @@ pub async fn get_wiki_article(
     query: web::Query<GetWikiArticleQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    let article = find_wiki_article(arc.pool.borrow(), query.id).await?;
+    let article = arc.pool.find_wiki_article(query.id).await?;
 
     Ok(HttpResponse::Ok().json(article))
 }

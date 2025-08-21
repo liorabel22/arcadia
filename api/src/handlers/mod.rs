@@ -25,7 +25,7 @@ pub mod wiki_handler;
 use std::{ops::{Deref, DerefMut}, sync::Arc};
 
 use actix_web::HttpMessage as _;
-use arcadia_storage::{models::user, repositories::auth_repository::find_user_with_id};
+use arcadia_storage::models::user;
 
 // Populated by the authentication middleware.
 #[derive(Debug, Copy, Clone)]
@@ -79,7 +79,7 @@ impl actix_web::FromRequest for User {
         let pool = Arc::clone(&arc.pool);
 
         Box::pin(async move {
-            find_user_with_id(pool.borrow(), user_id)
+            pool.find_user_with_id(user_id)
                 .await
                 .map(|u| User(u))
                 .map_err(|e| actix_web::error::ErrorInternalServerError(e.to_string()))

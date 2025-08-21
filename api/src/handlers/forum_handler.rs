@@ -7,10 +7,6 @@ use arcadia_storage::{
             UserCreatedForumPost, UserCreatedForumThread
         },
     },
-    repositories::forum_repository::{
-        create_forum_post, create_forum_thread, find_forum_overview, find_forum_sub_category_threads,
-        find_forum_thread, search_forum,
-    }
 };
 use serde::Deserialize;
 use utoipa::IntoParams;
@@ -28,7 +24,7 @@ pub async fn add_forum_post(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let forum_post = create_forum_post(arc.pool.borrow(), &forum_post, current_user.id).await?;
+    let forum_post = arc.pool.create_forum_post(&forum_post, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(forum_post))
 }
@@ -45,7 +41,7 @@ pub async fn add_forum_thread(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let forum_thread = create_forum_thread(arc.pool.borrow(), &mut forum_thread, current_user.id).await?;
+    let forum_thread = arc.pool.create_forum_thread(&mut forum_thread, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(forum_thread))
 }
@@ -59,7 +55,7 @@ pub async fn add_forum_thread(
 )]
 pub async fn get_forum(arc: web::Data<Arcadia>) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
-    let forum_overview = find_forum_overview(arc.pool.borrow()).await?;
+    let forum_overview = arc.pool.find_forum_overview().await?;
 
     Ok(HttpResponse::Ok().json(forum_overview))
 }
@@ -82,7 +78,7 @@ pub async fn get_forum_sub_category_threads(
     query: web::Query<GetForumSubCategoryThreadsQuery>,
 ) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
-    let threads = find_forum_sub_category_threads(arc.pool.borrow(), query.id).await?;
+    let threads = arc.pool.find_forum_sub_category_threads(query.id).await?;
 
     Ok(HttpResponse::Ok().json(threads))
 }
@@ -113,7 +109,7 @@ pub async fn get_forum_thread(
 ) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
 
-    let thread = find_forum_thread(arc.pool.borrow(), query_id.0.id).await?;
+    let thread = arc.pool.find_forum_thread(query_id.0.id).await?;
 
     Ok(HttpResponse::Ok().json(thread))
 }
@@ -135,7 +131,7 @@ pub async fn search_forum_thread(
     let offset = query.0.offset.unwrap_or(0);
     let limit = query.0.limit.unwrap_or(10);
 
-    let threads = search_forum(arc.pool.borrow(), query.0.title, offset, limit).await?;
+    let threads = arc.pool.search_forum(query.0.title, offset, limit).await?;
 
     Ok(HttpResponse::Ok().json(threads))
 }

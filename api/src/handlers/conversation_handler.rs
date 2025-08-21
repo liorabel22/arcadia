@@ -9,9 +9,6 @@ use arcadia_storage::{
           UserCreatedConversationMessage
         },
     },
-    repositories::conversation_repository::{
-        create_conversation, create_conversation_message, find_conversation, find_user_conversations
-    }
   };
 use serde::Deserialize;
 use serde_json::json;
@@ -31,7 +28,7 @@ pub async fn add_conversation(
     current_user: User,
 ) -> Result<HttpResponse> {
     // creates a conversation and the first message, empty conversations should not be allowed
-    let conversation = create_conversation(arc.pool.borrow(), &mut conversation, current_user.id).await?;
+    let conversation = arc.pool.create_conversation(&mut conversation, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(conversation))
 }
@@ -55,7 +52,7 @@ pub async fn get_conversation(
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
     let conversation_with_messages =
-        find_conversation(arc.pool.borrow(), query.id, current_user_id.0, true).await?;
+        arc.pool.find_conversation(query.id, current_user_id.0, true).await?;
 
     Ok(HttpResponse::Ok().json(conversation_with_messages))
 }
@@ -71,7 +68,7 @@ pub async fn get_user_conversations(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let conversations = find_user_conversations(arc.pool.borrow(), current_user_id.0).await?;
+    let conversations = arc.pool.find_user_conversations(current_user_id.0).await?;
 
     Ok(HttpResponse::Ok().json(json!({"conversations": conversations})))
 }
@@ -88,7 +85,7 @@ pub async fn add_conversation_message(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let message = create_conversation_message(arc.pool.borrow(), &message, current_user.id).await?;
+    let message = arc.pool.create_conversation_message(&message, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(message))
 }

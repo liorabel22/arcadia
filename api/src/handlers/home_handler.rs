@@ -4,10 +4,6 @@ use arcadia_storage::{
     models::{
         forum::ForumPostAndThreadName, home_stats::HomeStats, title_group::TitleGroupLite
     },
-    repositories::{
-        forum_repository::find_first_thread_posts_in_sub_category, stats_repository::find_home_stats,
-        title_group_repository::find_title_group_info_lite
-    }
 };
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -29,10 +25,10 @@ pub struct HomePage {
     )
 )]
 pub async fn get_home(arc: web::Data<Arcadia>) -> Result<HttpResponse> {
-    let recent_announcements = find_first_thread_posts_in_sub_category(arc.pool.borrow(), 1, 5).await?;
-    let stats = find_home_stats(arc.pool.borrow()).await?;
+    let recent_announcements = arc.pool.find_first_thread_posts_in_sub_category(1, 5).await?;
+    let stats = arc.pool.find_home_stats().await?;
     let latest_uploads_in_title_groups =
-        find_title_group_info_lite(arc.pool.borrow(), None, Some(""), &None, 5).await?;
+        arc.pool.find_title_group_info_lite(None, Some(""), &None, 5).await?;
 
     Ok(HttpResponse::Created().json(json!({
         "recent_announcements":recent_announcements,
