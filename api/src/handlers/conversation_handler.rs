@@ -1,22 +1,23 @@
 use crate::{
-    Arcadia, Result,
-    handlers::UserId,
-    models::{
-        conversation::{
-            Conversation, ConversationHierarchy, ConversationMessage, ConversationsOverview,
-            UserCreatedConversation, UserCreatedConversationMessage,
-        },
-        user::User,
-    },
-    repositories::conversation_repository::{
-        create_conversation, create_conversation_message, find_conversation,
-        find_user_conversations,
-    },
+    Arcadia, handlers::UserId,
 };
 use actix_web::{HttpResponse, web};
+use arcadia_storage::{
+    models::{
+        conversation::{
+          Conversation, ConversationHierarchy, ConversationMessage, ConversationsOverview, UserCreatedConversation,
+          UserCreatedConversationMessage
+        },
+        user::User
+    },
+    repositories::conversation_repository::{
+        create_conversation, create_conversation_message, find_conversation, find_user_conversations
+    }
+  };
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::IntoParams;
+use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -31,7 +32,7 @@ pub async fn add_conversation(
     current_user: User,
 ) -> Result<HttpResponse> {
     // creates a conversation and the first message, empty conversations should not be allowed
-    let conversation = create_conversation(&arc.pool, &mut conversation, current_user.id).await?;
+    let conversation = create_conversation(arc.pool.borrow(), &mut conversation, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(conversation))
 }
@@ -55,7 +56,7 @@ pub async fn get_conversation(
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
     let conversation_with_messages =
-        find_conversation(&arc.pool, query.id, current_user_id.0, true).await?;
+        find_conversation(arc.pool.borrow(), query.id, current_user_id.0, true).await?;
 
     Ok(HttpResponse::Ok().json(conversation_with_messages))
 }
@@ -71,7 +72,7 @@ pub async fn get_user_conversations(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let conversations = find_user_conversations(&arc.pool, current_user_id.0).await?;
+    let conversations = find_user_conversations(arc.pool.borrow(), current_user_id.0).await?;
 
     Ok(HttpResponse::Ok().json(json!({"conversations": conversations})))
 }
@@ -88,7 +89,7 @@ pub async fn add_conversation_message(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let message = create_conversation_message(&arc.pool, &message, current_user.id).await?;
+    let message = create_conversation_message(arc.pool.borrow(), &message, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(message))
 }
