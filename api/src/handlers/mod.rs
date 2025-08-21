@@ -22,7 +22,7 @@ pub mod user_application_handler;
 pub mod user_handler;
 pub mod wiki_handler;
 
-use std::{ops::Deref, sync::Arc};
+use std::{ops::{Deref, DerefMut}, sync::Arc};
 
 use actix_web::HttpMessage as _;
 use arcadia_storage::{models::user, repositories::auth_repository::find_user_with_id};
@@ -58,6 +58,12 @@ impl Deref for User {
 
     fn deref(&self) -> &Self::Target {
         &self.0
+    }
+}
+
+impl DerefMut for User {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
     }
 }
 

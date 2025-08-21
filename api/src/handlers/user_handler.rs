@@ -1,30 +1,26 @@
-use crate::{
-    Arcadia, Error, Result,
+use std::ops::Deref;
+
+use crate::{handlers::User, Arcadia};
+use actix_web::{HttpResponse, web};
+use arcadia_storage::{
     models::{
         torrent::{
-            TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup,
-            TorrentSearchTorrent,
+            TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup, TorrentSearchTorrent
         },
         user::{
-            APIKey, EditedUser, Profile, PublicProfile, User, UserCreatedAPIKey,
-            UserCreatedUserWarning, UserMinimal, UserWarning,
-        },
+            APIKey, EditedUser, Profile, PublicProfile, UserCreatedAPIKey, UserCreatedUserWarning, UserMinimal, UserWarning
+        }
     },
     repositories::{
-        auth_repository::create_api_key,
-        conversation_repository::find_unread_conversations_amount,
-        peer_repository,
-        torrent_repository::search_torrents,
-        user_repository::{
-            create_user_warning, find_registered_users, find_user_profile, find_user_warnings,
-            update_user,
-        },
-    },
+        auth_repository::create_api_key, conversation_repository::find_unread_conversations_amount,
+        peer_repository, torrent_repository::search_torrents,
+        user_repository::{create_user_warning, find_registered_users, find_user_profile, find_user_warnings, update_user},
+    }
 };
-use actix_web::{HttpResponse, web};
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::IntoParams;
+use arcadia_common::error::{Error, Result};
 
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct GetUserQuery {
@@ -44,7 +40,7 @@ pub async fn get_user(
     query: web::Query<GetUserQuery>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let user = find_user_profile(&arc.pool, &query.id).await?;
+    let user = find_user_profile(arc.pool.borrow(), &query.id).await?;
 
     let search_title_group = TorrentSearchTitleGroup {
         name: String::from(""),
@@ -65,12 +61,12 @@ pub async fn get_user(
         order: TorrentSearchOrder::Desc,
     };
     let uploaded_torrents =
-        search_torrents(&arc.pool, &torrent_search, Some(current_user.id)).await?;
+        search_torrents(arc.pool.borrow(), &torrent_search, Some(current_user.id)).await?;
     torrent_search.torrent.snatched_by_id = Some(query.id);
     torrent_search.torrent.created_by_id = None;
     torrent_search.sort_by = TorrentSearchSortField::TorrentSnatchedAt;
     let snatched_torrents =
-        search_torrents(&arc.pool, &torrent_search, Some(current_user.id)).await?;
+        search_torrents(arc.pool.borrow(), &torrent_search, Some(current_user.id)).await?;
 
     Ok(HttpResponse::Created().json(json!({
         "user":user,
@@ -88,8 +84,8 @@ pub async fn get_user(
 )]
 pub async fn get_me(mut current_user: User, arc: web::Data<Arcadia>) -> Result<HttpResponse> {
     current_user.password_hash = String::from("");
-    let peers = peer_repository::get_user_peers(&arc.pool, current_user.id).await;
-    let user_warnings = find_user_warnings(&arc.pool, current_user.id).await;
+    let peers = peer_repository::get_user_peers(arc.pool.borrow(), current_user.id).await;
+    let user_warnings = find_user_warnings(arc.pool.borrow(), current_user.id).await;
     let search_title_group = TorrentSearchTitleGroup {
         name: String::from(""),
         include_empty_groups: false,
@@ -109,16 +105,16 @@ pub async fn get_me(mut current_user: User, arc: web::Data<Arcadia>) -> Result<H
         order: TorrentSearchOrder::Desc,
     };
     let uploaded_torrents =
-        search_torrents(&arc.pool, &torrent_search, Some(current_user.id)).await?;
+        search_torrents(arc.pool.borrow(), &torrent_search, Some(current_user.id)).await?;
     torrent_search.torrent.snatched_by_id = Some(current_user.id);
     torrent_search.torrent.created_by_id = None;
     torrent_search.sort_by = TorrentSearchSortField::TorrentSnatchedAt;
     let snatched_torrents =
-        search_torrents(&arc.pool, &torrent_search, Some(current_user.id)).await?;
+        search_torrents(arc.pool.borrow(), &torrent_search, Some(current_user.id)).await?;
     let unread_conversations_amount =
-        find_unread_conversations_amount(&arc.pool, current_user.id).await?;
+        find_unread_conversations_amount(arc.pool.borrow(), current_user.id).await?;
     Ok(HttpResponse::Ok().json(json!({
-            "user": current_user,
+            "user": current_user.deref(),
             "peers":peers,
             "user_warnings": user_warnings,
             "unread_conversations_amount": unread_conversations_amount,
@@ -142,7 +138,7 @@ pub async fn warn_user(
     if current_user.class != "staff" {
         return Err(Error::InsufficientPrivileges);
     }
-    let user_warning = create_user_warning(&arc.pool, current_user.id, &form).await?;
+    let user_warning = create_user_warning(arc.pool.borrow(), current_user.id, &form).await?;
 
     Ok(HttpResponse::Created().json(user_warning))
 }
@@ -159,7 +155,7 @@ pub async fn edit_user(
     current_user: User,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    update_user(&arc.pool, current_user.id, &form).await?;
+    update_user(arc.pool.borrow(), current_user.id, &form).await?;
 
     Ok(HttpResponse::Ok().json(json!({"status": "success"})))
 }
@@ -177,7 +173,7 @@ pub async fn add_api_key(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let created_api_key = create_api_key(&arc.pool, &form, current_user.id).await?;
+    let created_api_key = create_api_key(arc.pool.borrow(), &form, current_user.id).await?;
 
     Ok(HttpResponse::Created().json(created_api_key))
 }
@@ -197,7 +193,7 @@ pub async fn get_registered_users(
     if current_user.class != "tracker" {
         return Err(Error::InsufficientPrivileges);
     };
-    let users = find_registered_users(&arc.pool).await?;
+    let users = find_registered_users(arc.pool.borrow()).await?;
 
     Ok(HttpResponse::Ok().json(users))
 }
