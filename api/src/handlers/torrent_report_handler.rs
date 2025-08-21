@@ -1,13 +1,11 @@
 use actix_web::{HttpResponse, web};
-
-use crate::{
-    Arcadia, Result,
-    models::{
-        torrent_report::{TorrentReport, UserCreatedTorrentReport},
-        user::User,
-    },
+use arcadia_storage::{
+    models::torrent_report::{TorrentReport, UserCreatedTorrentReport},
     repositories::torrent_report_repository::report_torrent,
 };
+
+use crate::{handlers::User, Arcadia};
+use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -21,7 +19,7 @@ pub async fn add_torrent_report(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let report = report_torrent(&arc.pool, &form, &current_user).await?;
+    let report = report_torrent(arc.pool.borrow(), &form, &current_user).await?;
 
     Ok(HttpResponse::Ok().json(report))
 }
