@@ -1,9 +1,9 @@
-use crate::{
-    Result,
-    handlers::scrapers::ExternalDBData,
-    models::edition_group::{UserCreatedEditionGroup, create_default_edition_group},
-};
+use crate::handlers::scrapers::ExternalDBData;
 use actix_web::{HttpResponse, web};
+use arcadia_storage::models::{
+    edition_group::{create_default_edition_group, UserCreatedEditionGroup},
+    title_group::{create_default_title_group, ContentType, UserCreatedTitleGroup},
+};
 use chrono::Utc;
 // Datelike and Timelike are needed in the tests, even though they are not directly referenced
 #[allow(unused_imports)]
@@ -11,8 +11,7 @@ use chrono::{DateTime, Datelike, NaiveDate, Timelike};
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::IntoParams;
-
-use crate::models::title_group::{ContentType, UserCreatedTitleGroup, create_default_title_group};
+use arcadia_common::error::Result;
 
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
