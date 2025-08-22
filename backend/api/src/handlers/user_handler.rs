@@ -118,11 +118,17 @@ pub async fn get_me(mut current_user: User, arc: web::Data<Arcadia>) -> Result<H
         .pool
         .find_unread_conversations_amount(current_user.id)
         .await?;
+    let unread_notifications_amount = arc
+        .pool
+        .find_unread_notifications_amount(current_user.id)
+        .await?;
+
     Ok(HttpResponse::Ok().json(json!({
             "user": current_user.deref(),
             "peers":peers,
             "user_warnings": user_warnings,
             "unread_conversations_amount": unread_conversations_amount,
+            "unread_notifications_amount":unread_notifications_amount,
             "last_five_uploaded_torrents": uploaded_torrents.get("title_groups").unwrap(),
             "last_five_snatched_torrents": snatched_torrents.get("title_groups").unwrap()
     })))

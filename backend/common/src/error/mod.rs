@@ -47,6 +47,9 @@ pub enum Error {
     #[error("could not create notification")]
     CouldNotCreateNotification(#[source] sqlx::Error),
 
+    #[error("could not get unread notifications")]
+    CouldNotGetUnreadNotifications(#[source] sqlx::Error),
+
     #[error("could not create subscription")]
     CouldNotCreateSubscription(#[source] sqlx::Error),
 
