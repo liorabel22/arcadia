@@ -16,7 +16,7 @@ impl ConnectionPool {
     }
 
     pub fn with_pg_pool(pool: PgPool) -> Self {
-      Self(pool)
+        Self(pool)
     }
 }
 
