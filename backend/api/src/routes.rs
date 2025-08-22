@@ -13,7 +13,7 @@ use crate::handlers::{
         add_affiliated_artists, add_artists, get_artist_publications, get_artists_lite,
         remove_affiliated_artists,
     },
-    auth_handler::{login, refresh_token},
+    auth_handler::refresh_token,
     conversation_handler::{
         add_conversation, add_conversation_message, get_conversation, get_user_conversations,
     },
@@ -58,7 +58,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .wrap(HttpAuthentication::with_fn(authenticate_user))
             .service(scope("/auth").configure(AuthConfig))
             // .route("/register", web::post().to(register))
-            .route("/login", web::post().to(login))
+            // .route("/login", web::post().to(login))
             .route("/apply", web::post().to(add_user_application))
             .route("/api-key", web::post().to(add_api_key))
             .route("/user-application", web::get().to(get_user_applications))

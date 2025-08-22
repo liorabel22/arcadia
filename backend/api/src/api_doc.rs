@@ -54,7 +54,7 @@ use arcadia_storage::models::{
     info(title = "arcadia-backend API",),
     paths(
         crate::handlers::auth::register::exec,
-        crate::handlers::auth_handler::login,
+        crate::handlers::auth::login::exec,
         crate::handlers::user_application_handler::add_user_application,
         crate::handlers::user_application_handler::get_user_applications,
         crate::handlers::user_application_handler::update_user_application_status,
