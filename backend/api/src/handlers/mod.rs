@@ -1,3 +1,5 @@
+pub mod auth;
+
 pub mod announce_handler;
 pub mod artist_handler;
 pub mod auth_handler;

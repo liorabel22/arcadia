@@ -1,4 +1,5 @@
 use actix_web::web;
+use actix_web::web::scope;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::handlers::auth_handler::authenticate_user;
@@ -12,7 +13,7 @@ use crate::handlers::{
         add_affiliated_artists, add_artists, get_artist_publications, get_artists_lite,
         remove_affiliated_artists,
     },
-    auth_handler::{login, refresh_token, register},
+    auth_handler::{login, refresh_token},
     conversation_handler::{
         add_conversation, add_conversation_message, get_conversation, get_user_conversations,
     },
@@ -49,11 +50,14 @@ use crate::handlers::{
     wiki_handler::{add_wiki_article, get_wiki_article},
 };
 
+use crate::handlers::auth::config as AuthConfig;
+
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(handle_announce).service(
         web::scope("/api")
             .wrap(HttpAuthentication::with_fn(authenticate_user))
-            .route("/register", web::post().to(register))
+            .service(scope("/auth").configure(AuthConfig))
+            // .route("/register", web::post().to(register))
             .route("/login", web::post().to(login))
             .route("/apply", web::post().to(add_user_application))
             .route("/api-key", web::post().to(add_api_key))
