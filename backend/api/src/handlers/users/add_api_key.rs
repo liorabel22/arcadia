@@ -1,0 +1,22 @@
+use crate::{Arcadia, handlers::User};
+use actix_web::{HttpResponse, web};
+use arcadia_common::error::Result;
+use arcadia_storage::models::user::{APIKey, UserCreatedAPIKey};
+
+#[utoipa::path(
+    post,
+    path = "/api/api-key",
+    request_body(content = UserCreatedAPIKey, content_type = "application/json"),
+    responses(
+        (status = 201, description = "Successfully created the API key", body=APIKey),
+    )
+)]
+pub async fn exec(
+    form: web::Json<UserCreatedAPIKey>,
+    arc: web::Data<Arcadia>,
+    current_user: User,
+) -> Result<HttpResponse> {
+    let created_api_key = arc.pool.create_api_key(&form, current_user.id).await?;
+
+    Ok(HttpResponse::Created().json(created_api_key))
+}

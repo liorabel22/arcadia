@@ -3,10 +3,10 @@ use actix_web::web::scope;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::handlers::auth::config as AuthConfig;
+use crate::handlers::users::config as UsersConfig;
+
 use crate::handlers::title_group_handler::edit_title_group;
 use crate::handlers::torrent_request_handler::search_torrent_requests;
-use crate::handlers::user_handler::add_api_key;
-use crate::handlers::user_handler::get_registered_users;
 use crate::handlers::{
     announce_handler::handle_announce,
     artist_handler::{
@@ -45,7 +45,6 @@ use crate::handlers::{
     user_application_handler::{
         add_user_application, get_user_applications, update_user_application_status,
     },
-    user_handler::{edit_user, get_me, get_user, warn_user},
     wiki_handler::{add_wiki_article, get_wiki_article},
 };
 use crate::middlewares::jwt_middleware::authenticate_user;
@@ -55,18 +54,14 @@ pub fn init(cfg: &mut web::ServiceConfig) {
         web::scope("/api")
             .wrap(HttpAuthentication::with_fn(authenticate_user))
             .service(scope("/auth").configure(AuthConfig))
+            .service(scope("/users").configure(UsersConfig))
             .route("/apply", web::post().to(add_user_application))
-            .route("/api-key", web::post().to(add_api_key))
             .route("/user-application", web::get().to(get_user_applications))
             .route(
                 "/user-application",
                 web::put().to(update_user_application_status),
             )
             .route("/home", web::get().to(get_home))
-            .route("/user", web::get().to(get_user))
-            .route("/user", web::put().to(edit_user))
-            .route("/user/warn", web::post().to(warn_user))
-            .route("/me", web::get().to(get_me))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
             .route("/title-group", web::post().to(add_title_group))
@@ -88,7 +83,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
                 "/registered-torrents",
                 web::get().to(get_registered_torrents),
             )
-            .route("/registered-users", web::get().to(get_registered_users))
+            // .route("/registered-users", web::get().to(get_registered_users))
             .route("/upload", web::get().to(get_upload_information))
             .route("/torrent", web::delete().to(delete_torrent))
             .route("/torrent/top", web::get().to(get_top_torrents))
