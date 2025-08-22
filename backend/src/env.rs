@@ -1,13 +1,13 @@
-use std::{collections::HashSet, str::FromStr};
 use envconfig::Envconfig;
 use reqwest::Url;
+use std::{collections::HashSet, str::FromStr};
 
 #[derive(Envconfig, Clone)]
 pub struct Env {
     #[envconfig(nested)]
     pub actix: ActixConfig,
-    #[envconfig(from = "POSTGRES_URI")]
-    pub postgres_uri: String,
+    #[envconfig(from = "DATABASE_URL")]
+    pub database_url: String,
     #[envconfig(from = "JWT_SECRET")]
     pub jwt_secret: String,
     #[envconfig(from = "ARCADIA_OPEN_SIGNUPS")]
@@ -61,11 +61,12 @@ impl FromStr for AllowedTorrentClientSet {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-      let clients = s.split(',')
-          .map(|s| s.trim().as_bytes().to_vec())
-          .collect::<HashSet<Vec<u8>>>();
+        let clients = s
+            .split(',')
+            .map(|s| s.trim().as_bytes().to_vec())
+            .collect::<HashSet<Vec<u8>>>();
 
-      Ok(Self {clients})
+        Ok(Self { clients })
     }
 }
 

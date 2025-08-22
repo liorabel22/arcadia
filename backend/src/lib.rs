@@ -1,8 +1,8 @@
-use std::ops::Deref;
 use crate::env::Env;
+use std::ops::Deref;
 
-pub mod env;
 pub mod api_doc;
+pub mod env;
 pub mod handlers;
 pub mod models;
 pub mod periodic_tasks;
@@ -43,7 +43,7 @@ impl Deref for Arcadia {
 
 impl Arcadia {
     pub fn new(pool: sqlx::PgPool, env: Env) -> Self {
-        Self {pool, env}
+        Self { pool, env }
     }
     #[inline]
     pub fn is_open_signups(&self) -> bool {
