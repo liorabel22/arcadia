@@ -22,7 +22,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    container: rust:1.86-bullseye
+    container: rust:1.89-bullseye
 
     services:
       arcadiadb:
@@ -48,10 +48,10 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          cache-workspaces: ./backend/api
+          cache-workspaces: ./backend
       
       - name: Setup env
-        run: cp -f .env.ci .env
+        run: cp -f ./api/.env.ci .env
       
       - name: Build
         run: cargo build
@@ -98,7 +98,7 @@ jobs:
 
   schema-check:
     runs-on: ubuntu-latest
-    container: rust:1.86-bullseye
+    container: rust:1.89-bullseye
     defaults:
       run:
         working-directory: ./backend
@@ -123,10 +123,10 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          cache-workspaces: ./backend/api
+          cache-workspaces: ./backend
 
       - name: Setup env
-        run: cp -f .env.ci .env
+        run: cp -f ./api/.env.ci .env
 
       - name: Install sqlx
         run: cargo install sqlx-cli
