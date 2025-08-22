@@ -1,9 +1,9 @@
-use std::borrow::Borrow;
 use crate::connection_pool::ConnectionPool;
 use crate::models::peer::PeerStatus;
 use arcadia_common::error::Result;
 use arcadia_common::models::tracker::announce::{Announce, Peer};
 use sqlx::types::ipnetwork::IpNetwork;
+use std::borrow::Borrow;
 
 use crate::models;
 

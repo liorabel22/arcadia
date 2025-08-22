@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::conversation::{
@@ -7,6 +6,7 @@ use crate::{
 };
 use arcadia_common::error::{Error, Result};
 use serde_json::Value;
+use std::borrow::Borrow;
 
 impl ConnectionPool {
     pub async fn create_conversation(

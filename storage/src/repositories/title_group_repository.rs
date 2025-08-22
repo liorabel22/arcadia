@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::{
@@ -10,6 +9,7 @@ use crate::{
 };
 use arcadia_common::error::{Error, Result};
 use serde_json::{Value, json};
+use std::borrow::Borrow;
 
 impl ConnectionPool {
     fn sanitize_title_group_tags(tags: Vec<String>) -> Vec<String> {

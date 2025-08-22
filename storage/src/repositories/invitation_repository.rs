@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::invitation::{Invitation, SentInvitation},
@@ -9,6 +8,7 @@ use rand::{
     rng,
 };
 use sqlx::{PgPool, Postgres, Transaction};
+use std::borrow::Borrow;
 
 impl ConnectionPool {
     pub async fn create_invitation(
@@ -19,7 +19,9 @@ impl ConnectionPool {
         // TODO: retry if invitation_key already exists
         let invitation_key: String = Alphanumeric.sample_string(&mut rng(), 50);
 
-        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self)
+            .begin()
+            .await?;
 
         let _ = Self::decrement_invitations_available(&mut tx, current_user_id).await;
 

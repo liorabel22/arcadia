@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::user_application::{
@@ -6,6 +5,7 @@ use crate::{
     },
 };
 use arcadia_common::error::{Error, Result};
+use std::borrow::Borrow;
 
 impl ConnectionPool {
     pub async fn create_user_application(

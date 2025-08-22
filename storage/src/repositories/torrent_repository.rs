@@ -37,7 +37,9 @@ impl ConnectionPool {
         torrent_form: &UploadedTorrent,
         current_user: &User,
     ) -> Result<Torrent> {
-        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self)
+            .begin()
+            .await?;
 
         let create_torrent_query = r#"
             INSERT INTO torrents (
@@ -323,7 +325,9 @@ impl ConnectionPool {
         frontend_url: &str,
         tracker_url: &str,
     ) -> Result<GetTorrentResult> {
-        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self)
+            .begin()
+            .await?;
 
         let torrent = sqlx::query!(
             r#"
@@ -467,7 +471,9 @@ impl ConnectionPool {
         torrent_to_delete: &TorrentToDelete,
         current_user_id: i64,
     ) -> Result<()> {
-        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self)
+            .begin()
+            .await?;
 
         Self::notify_users(
             &mut tx,

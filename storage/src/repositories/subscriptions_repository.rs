@@ -1,6 +1,6 @@
-use std::borrow::Borrow;
-use arcadia_common::error::{Error, Result};
 use crate::connection_pool::ConnectionPool;
+use arcadia_common::error::{Error, Result};
+use std::borrow::Borrow;
 
 impl ConnectionPool {
     pub async fn create_subscription(

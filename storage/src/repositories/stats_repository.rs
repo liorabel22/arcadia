@@ -1,6 +1,6 @@
-use std::borrow::Borrow;
 use crate::{connection_pool::ConnectionPool, models::home_stats::HomeStats};
 use arcadia_common::error::Result;
+use std::borrow::Borrow;
 
 impl ConnectionPool {
     pub async fn find_home_stats(&self) -> Result<HomeStats> {

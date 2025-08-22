@@ -1,9 +1,9 @@
-use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::edition_group::{EditionGroup, UserCreatedEditionGroup},
 };
 use arcadia_common::error::{Error, Result};
+use std::borrow::Borrow;
 
 impl ConnectionPool {
     pub async fn create_edition_group(
