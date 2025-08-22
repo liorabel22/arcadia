@@ -1,6 +1,6 @@
-use sqlx::{Postgres, Transaction};
-use arcadia_common::error::{Error, Result};
 use crate::{connection_pool::ConnectionPool, models::notification::NotificationReason};
+use arcadia_common::error::{Error, Result};
+use sqlx::{Postgres, Transaction};
 
 pub struct NotificationItemsIds {
     pub title_group_id: Option<i64>,
@@ -20,10 +20,10 @@ impl ConnectionPool {
         message: Option<&String>,
         notification_items_ids: NotificationItemsIds,
     ) -> Result<()> {
-    match reason {
-        NotificationReason::TorrentUploadedInSubscribedTitleGroup => {
-            sqlx::query!(
-                r#"
+        match reason {
+            NotificationReason::TorrentUploadedInSubscribedTitleGroup => {
+                sqlx::query!(
+                    r#"
                     WITH subscribers_ids AS (
                         SELECT subscriber_id AS user_id
                         FROM subscriptions
@@ -37,16 +37,16 @@ impl ConnectionPool {
                         $1
                     FROM subscribers_ids
                 "#,
-                notification_items_ids.title_group_id,
-                notification_items_ids.torrent_id
-            )
-            .execute(&mut **tx)
-            .await
-            .map_err(Error::CouldNotCreateNotification)?;
-        }
-        NotificationReason::SeedingTorrentDeleted => {
-            sqlx::query!(
-                r#"
+                    notification_items_ids.title_group_id,
+                    notification_items_ids.torrent_id
+                )
+                .execute(&mut **tx)
+                .await
+                .map_err(Error::CouldNotCreateNotification)?;
+            }
+            NotificationReason::SeedingTorrentDeleted => {
+                sqlx::query!(
+                    r#"
                     WITH seeders_ids AS (
                         SELECT user_id
                         FROM torrent_activities
@@ -60,19 +60,19 @@ impl ConnectionPool {
                         $3
                     FROM seeders_ids
                 "#,
-                notification_items_ids.torrent_id,
-                message,
-                notification_items_ids.title_group_id
-            )
-            .execute(&mut **tx)
-            .await
-            .map_err(Error::CouldNotCreateNotification)?;
+                    notification_items_ids.torrent_id,
+                    message,
+                    notification_items_ids.title_group_id
+                )
+                .execute(&mut **tx)
+                .await
+                .map_err(Error::CouldNotCreateNotification)?;
+            }
+            _ => {
+                return Err(Error::UnsupportedNotification);
+            }
         }
-        _ => {
-            return Err(Error::UnsupportedNotification);
-        }
-    }
 
-    Ok(())
-}
+        Ok(())
+    }
 }

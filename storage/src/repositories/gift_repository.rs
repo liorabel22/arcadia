@@ -1,15 +1,12 @@
-use sqlx::{Postgres, Transaction};
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::gift::{Gift, UserCreatedGift}
+    connection_pool::ConnectionPool,
+    models::gift::{Gift, UserCreatedGift},
 };
+use arcadia_common::error::{Error, Result};
+use sqlx::{Postgres, Transaction};
 
 impl ConnectionPool {
-    pub async fn create_gift(
-        &self,
-        gift: &UserCreatedGift,
-        current_user_id: i64,
-    ) -> Result<Gift> {
+    pub async fn create_gift(&self, gift: &UserCreatedGift, current_user_id: i64) -> Result<Gift> {
         let mut tx = self.borrow().begin().await?;
 
         let _ = Self::decrement_bonus_points_and_freeleech_tokens(

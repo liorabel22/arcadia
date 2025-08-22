@@ -1,7 +1,8 @@
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::edition_group::{EditionGroup, UserCreatedEditionGroup}
+    connection_pool::ConnectionPool,
+    models::edition_group::{EditionGroup, UserCreatedEditionGroup},
 };
+use arcadia_common::error::{Error, Result};
 
 impl ConnectionPool {
     pub async fn create_edition_group(

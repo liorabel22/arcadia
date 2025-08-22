@@ -1,7 +1,8 @@
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::master_group::{MasterGroup, UserCreatedMasterGroup}
+    connection_pool::ConnectionPool,
+    models::master_group::{MasterGroup, UserCreatedMasterGroup},
 };
+use arcadia_common::error::{Error, Result};
 
 impl ConnectionPool {
     pub async fn create_master_group(

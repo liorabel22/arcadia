@@ -1,17 +1,22 @@
-use bip_metainfo::{Info, InfoBuilder, InfoHash, Metainfo, MetainfoBuilder, PieceLength};
-use serde_json::{Value, json};
-use arcadia_common::{error::{Error, Result}, services::torrent_service::{get_announce_url, looks_like_url}};
-use std::str::FromStr;
 use crate::{
-    connection_pool::ConnectionPool, models::{
+    connection_pool::ConnectionPool,
+    models::{
         notification::NotificationReason,
         torrent::{
             EditedTorrent, Features, Torrent, TorrentMinimal, TorrentSearch, TorrentToDelete,
             UploadedTorrent,
         },
         user::User,
-    }, repositories::notification_repository::NotificationItemsIds
+    },
+    repositories::notification_repository::NotificationItemsIds,
 };
+use arcadia_common::{
+    error::{Error, Result},
+    services::torrent_service::{get_announce_url, looks_like_url},
+};
+use bip_metainfo::{Info, InfoBuilder, InfoHash, Metainfo, MetainfoBuilder, PieceLength};
+use serde_json::{Value, json};
+use std::str::FromStr;
 
 #[derive(sqlx::FromRow)]
 struct TitleGroupInfoLite {

@@ -1,5 +1,5 @@
-use std::{env, sync::Arc};
 use arcadia_cron_jobs::{periodic_tasks::scheduler::run_periodic_tasks, store::Store};
+use std::{env, sync::Arc};
 
 #[tokio::main]
 async fn main() {

@@ -1,11 +1,12 @@
-use serde_json::Value;
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::{
+    connection_pool::ConnectionPool,
+    models::{
         series::{Series, UserCreatedSeries},
         user::User,
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
+use serde_json::Value;
 
 impl ConnectionPool {
     pub async fn create_series(

@@ -22,7 +22,10 @@ pub mod user_application_handler;
 pub mod user_handler;
 pub mod wiki_handler;
 
-use std::{ops::{Deref, DerefMut}, sync::Arc};
+use std::{
+    ops::{Deref, DerefMut},
+    sync::Arc,
+};
 
 use actix_web::HttpMessage as _;
 use arcadia_storage::models::user;

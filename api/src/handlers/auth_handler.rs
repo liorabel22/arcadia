@@ -1,14 +1,13 @@
-use crate::{
-    Arcadia, services::email_service::EmailService,
-};
+use crate::{Arcadia, services::email_service::EmailService};
 use actix_web::{HttpMessage as _, HttpRequest, HttpResponse, dev::ServiceRequest, web};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
+use arcadia_common::error::{Error, Result};
 use arcadia_storage::{
     models::{
         invitation::Invitation,
-        user::{Claims, Login, LoginResponse, RefreshToken, Register, User}
+        user::{Claims, Login, LoginResponse, RefreshToken, Register, User},
     },
-    sqlx::types::ipnetwork::IpNetwork
+    sqlx::types::ipnetwork::IpNetwork,
 };
 use argon2::{
     Argon2,
@@ -21,7 +20,6 @@ use jsonwebtoken::{
 };
 use serde::Deserialize;
 use utoipa::ToSchema;
-use arcadia_common::error::{Error, Result};
 
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct RegisterQuery {
@@ -48,7 +46,10 @@ pub async fn register(
             .as_ref()
             .ok_or(Error::InvitationKeyRequired)?;
 
-        invitation = arc.pool.does_unexpired_invitation_exist(invitation_key).await?;
+        invitation = arc
+            .pool
+            .does_unexpired_invitation_exist(invitation_key)
+            .await?;
 
         // TODO: push check to db
         if invitation.receiver_id.is_some() {
@@ -75,14 +76,16 @@ pub async fn register(
         .unwrap()
         .to_string();
 
-    let user = arc.pool.create_user(
-        &new_user,
-        client_ip,
-        &password_hash,
-        &invitation,
-        &arc.is_open_signups(),
-    )
-    .await?;
+    let user = arc
+        .pool
+        .create_user(
+            &new_user,
+            client_ip,
+            &password_hash,
+            &invitation,
+            &arc.is_open_signups(),
+        )
+        .await?;
 
     // Send welcome email
     if let Ok(email_service) = EmailService::new(&arc) {

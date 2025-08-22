@@ -1,10 +1,11 @@
-use serde_json::Value;
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::conversation::{
+    connection_pool::ConnectionPool,
+    models::conversation::{
         Conversation, ConversationMessage, UserCreatedConversation, UserCreatedConversationMessage,
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
+use serde_json::Value;
 
 impl ConnectionPool {
     pub async fn create_conversation(
@@ -29,7 +30,8 @@ impl ConnectionPool {
         .map_err(Error::CouldNotCreateConversation)?;
 
         conversation.first_message.conversation_id = created_conversation.id;
-        self.create_conversation_message(&conversation.first_message, current_user_id).await?;
+        self.create_conversation_message(&conversation.first_message, current_user_id)
+            .await?;
 
         Ok(created_conversation)
     }

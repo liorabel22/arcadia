@@ -1,13 +1,14 @@
-use serde_json::{Value, json};
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::{
+    connection_pool::ConnectionPool,
+    models::{
         title_group::{
             ContentType, EditedTitleGroup, PublicRating, TitleGroup, UserCreatedTitleGroup,
         },
         user::User,
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
+use serde_json::{Value, json};
 
 impl ConnectionPool {
     fn sanitize_title_group_tags(tags: Vec<String>) -> Vec<String> {
@@ -48,7 +49,9 @@ impl ConnectionPool {
             .bind(&title_group_form.category)
             .bind(&title_group_form.content_type)
             .bind(title_group_form.original_release_date)
-            .bind(Self::sanitize_title_group_tags(title_group_form.tags.clone()))
+            .bind(Self::sanitize_title_group_tags(
+                title_group_form.tags.clone(),
+            ))
             .bind(&title_group_form.tagline)
             .bind(&title_group_form.platform)
             .bind(&title_group_form.screenshots)

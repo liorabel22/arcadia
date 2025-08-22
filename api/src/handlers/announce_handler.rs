@@ -1,17 +1,13 @@
-
-use crate::services::announce_service::is_torrent_client_allowed;
 use crate::Arcadia;
-use actix_web::{
-    FromRequest, HttpRequest, HttpResponse, ResponseError, dev, get, web,
-};
-use arcadia_storage::{
-  sqlx::types::ipnetwork::IpNetwork,
-};
-use std::future::{self, Ready};
+use crate::services::announce_service::is_torrent_client_allowed;
+use actix_web::{FromRequest, HttpRequest, HttpResponse, ResponseError, dev, get, web};
 use arcadia_common::{
-  actix::HttpResponseBuilderExt, error::announce::Error as AnnounceError, models::tracker::announce::{Announce, AnnounceResponse, TorrentEvent}
+    actix::HttpResponseBuilderExt,
+    error::announce::Error as AnnounceError,
+    models::tracker::announce::{Announce, AnnounceResponse, TorrentEvent},
 };
-
+use arcadia_storage::sqlx::types::ipnetwork::IpNetwork;
+use std::future::{self, Ready};
 
 type Result<T> = std::result::Result<T, AnnounceError>;
 
@@ -74,7 +70,10 @@ async fn handle_announce(
     let passkey_upper = (passkey >> 64) as i64;
     let passkey_lower = passkey as i64;
 
-    let current_user = arc.pool.find_user_with_passkey(passkey_upper, passkey_lower).await?;
+    let current_user = arc
+        .pool
+        .find_user_with_passkey(passkey_upper, passkey_lower)
+        .await?;
 
     let torrent = arc.pool.find_torrent_with_id(&ann.info_hash).await?;
 
@@ -84,7 +83,9 @@ async fn handle_announce(
         .unwrap();
 
     if let Some(TorrentEvent::Stopped) = ann.event {
-        arc.pool.remove_peer(&torrent.id, &ann.peer_id, &ip, ann.port).await;
+        arc.pool
+            .remove_peer(&torrent.id, &ann.peer_id, &ip, ann.port)
+            .await;
         //return HttpResponse::Ok().into();
         todo!();
     }
@@ -93,16 +94,21 @@ async fn handle_announce(
         let _ = arc.pool.increment_torrent_completed(torrent.id).await;
     }
 
-    let (old_real_uploaded, old_real_downloaded) = arc.pool.insert_or_update_peer(
-        &torrent.id,
-        &ip,
-        &current_user.id,
-        &ann,
-        user_agent.as_deref(),
-    )
-    .await;
+    let (old_real_uploaded, old_real_downloaded) = arc
+        .pool
+        .insert_or_update_peer(
+            &torrent.id,
+            &ip,
+            &current_user.id,
+            &ann,
+            user_agent.as_deref(),
+        )
+        .await;
 
-    let peers = arc.pool.find_torrent_peers(&torrent.id, &current_user.id).await;
+    let peers = arc
+        .pool
+        .find_torrent_peers(&torrent.id, &current_user.id)
+        .await;
 
     // assuming that the client either sends both downloaded/uploaded
     // or none of them
@@ -130,25 +136,29 @@ async fn handle_announce(
         // if the client restarted, without sending a "stop" event, keeping the same ip/port
         // calculated upload/download might be negative
         if real_uploaded_to_credit >= 0 && real_downloaded_to_credit >= 0 {
-            let _ = arc.pool.credit_user_upload_download(
-                upload_to_credit,
-                download_to_credit,
-                real_uploaded_to_credit,
-                real_downloaded_to_credit,
-                current_user.id,
-            )
-            .await;
+            let _ = arc
+                .pool
+                .credit_user_upload_download(
+                    upload_to_credit,
+                    download_to_credit,
+                    real_uploaded_to_credit,
+                    real_downloaded_to_credit,
+                    current_user.id,
+                )
+                .await;
         }
     }
 
     if ann.left == Some(0u64) {
-        let _ = arc.pool.update_total_seedtime(
-            current_user.id,
-            torrent.id,
-            arc.tracker.announce_interval,
-            arc.tracker.announce_interval_grace_period,
-        )
-        .await;
+        let _ = arc
+            .pool
+            .update_total_seedtime(
+                current_user.id,
+                torrent.id,
+                arc.tracker.announce_interval,
+                arc.tracker.announce_interval_grace_period,
+            )
+            .await;
     }
 
     let resp = AnnounceResponse {

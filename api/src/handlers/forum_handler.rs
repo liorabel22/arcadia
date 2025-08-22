@@ -1,16 +1,12 @@
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::{
-        forum::{
-            ForumOverview, ForumPost, ForumSubCategoryHierarchy, ForumThread, ForumThreadHierarchy,
-            UserCreatedForumPost, UserCreatedForumThread
-        },
-    },
+use arcadia_common::error::Result;
+use arcadia_storage::models::forum::{
+    ForumOverview, ForumPost, ForumSubCategoryHierarchy, ForumThread, ForumThreadHierarchy,
+    UserCreatedForumPost, UserCreatedForumThread,
 };
 use serde::Deserialize;
 use utoipa::IntoParams;
-use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -24,7 +20,10 @@ pub async fn add_forum_post(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let forum_post = arc.pool.create_forum_post(&forum_post, current_user.id).await?;
+    let forum_post = arc
+        .pool
+        .create_forum_post(&forum_post, current_user.id)
+        .await?;
 
     Ok(HttpResponse::Created().json(forum_post))
 }
@@ -41,7 +40,10 @@ pub async fn add_forum_thread(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let forum_thread = arc.pool.create_forum_thread(&mut forum_thread, current_user.id).await?;
+    let forum_thread = arc
+        .pool
+        .create_forum_thread(&mut forum_thread, current_user.id)
+        .await?;
 
     Ok(HttpResponse::Created().json(forum_thread))
 }

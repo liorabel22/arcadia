@@ -1,9 +1,7 @@
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
 use arcadia_common::error::{Error, Result};
-use arcadia_storage::{
-  models::gift::{Gift, UserCreatedGift},
-};
+use arcadia_storage::models::gift::{Gift, UserCreatedGift};
 
 #[utoipa::path(
     post,

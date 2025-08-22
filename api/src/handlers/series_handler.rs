@@ -1,11 +1,11 @@
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::series::{Series, SeriesAndTitleGroupHierarchyLite, UserCreatedSeries},
+use arcadia_common::error::Result;
+use arcadia_storage::models::series::{
+    Series, SeriesAndTitleGroupHierarchyLite, UserCreatedSeries,
 };
 use serde::Deserialize;
 use utoipa::IntoParams;
-use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,

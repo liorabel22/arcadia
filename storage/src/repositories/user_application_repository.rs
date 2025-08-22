@@ -1,9 +1,10 @@
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::user_application::{
+    connection_pool::ConnectionPool,
+    models::user_application::{
         UserApplication, UserApplicationStatus, UserCreatedUserApplication,
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
 
 impl ConnectionPool {
     pub async fn create_user_application(

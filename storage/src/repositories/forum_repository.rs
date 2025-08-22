@@ -1,9 +1,12 @@
-use serde_json::Value;
-use arcadia_common::error::{Error, Result};
 use crate::{
     connection_pool::ConnectionPool,
-    models::forum::{ForumPost, ForumPostAndThreadName, ForumThread, UserCreatedForumPost, UserCreatedForumThread}
+    models::forum::{
+        ForumPost, ForumPostAndThreadName, ForumThread, UserCreatedForumPost,
+        UserCreatedForumThread,
+    },
 };
+use arcadia_common::error::{Error, Result};
+use serde_json::Value;
 
 impl ConnectionPool {
     pub async fn create_forum_post(
@@ -96,7 +99,8 @@ impl ConnectionPool {
         tx.commit().await?;
 
         // TODO: include this in the transaction
-        self.create_forum_post(&forum_thread.first_post, current_user_id).await?;
+        self.create_forum_post(&forum_thread.first_post, current_user_id)
+            .await?;
 
         Ok(created_forum_thread)
     }
@@ -256,12 +260,7 @@ impl ConnectionPool {
         Ok(forum_sub_category.result_json.unwrap())
     }
 
-    pub async fn search_forum(
-        &self,
-        name: String,
-        offset: i64,
-        limit: i64,
-    ) -> Result<Vec<Value>> {
+    pub async fn search_forum(&self, name: String, offset: i64, limit: i64) -> Result<Vec<Value>> {
         let forum_thread = sqlx::query!(
             r#"
             SELECT

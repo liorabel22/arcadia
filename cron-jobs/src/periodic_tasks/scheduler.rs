@@ -12,7 +12,7 @@ pub async fn run_periodic_tasks(store: Arc<Store>) -> Result<(), Box<dyn std::er
         env::var("TASK_INTERVAL_UPDATE_TORRENT_SEEDERS_LEECHERS")
             .expect("env var TASK_INTERVAL_UPDATE_TORRENT_SEEDERS_LEECHERS is missing");
 
-    let pool_1 = Arc::clone(&store.pool);      
+    let pool_1 = Arc::clone(&store.pool);
     let job1 = match Job::new_async(
         update_torrent_seeders_leechers_interval.as_str(),
         move |_uuid, _l| Box::pin(update_torrent_seeders_leechers(Arc::clone(&pool_1))),

@@ -1,10 +1,11 @@
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::{
+    connection_pool::ConnectionPool,
+    models::{
         torrent_report::{TorrentReport, UserCreatedTorrentReport},
         user::User,
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
 
 impl ConnectionPool {
     pub async fn report_torrent(

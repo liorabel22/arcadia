@@ -4,13 +4,13 @@ mod services;
 
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware, web::Data};
+use arcadia_api::{Arcadia, api_doc::ApiDoc, env::Env};
 use arcadia_storage::connection_pool::ConnectionPool;
 use envconfig::Envconfig;
 use routes::init;
 use std::{env, sync::Arc};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-use arcadia_api::{api_doc::ApiDoc, env::Env, Arcadia};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -21,7 +21,11 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
 
     let env = Env::init_from_env().unwrap();
-    let pool = Arc::new(ConnectionPool::try_new(&env.postgres_uri).await.expect("db connection"));
+    let pool = Arc::new(
+        ConnectionPool::try_new(&env.postgres_uri)
+            .await
+            .expect("db connection"),
+    );
 
     let server_url = format!("{}:{}", env.actix.host, env.actix.port);
     println!("Server running at http://{}", server_url);

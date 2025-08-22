@@ -1,12 +1,10 @@
-use crate::{
-    Arcadia, handlers::User,
-};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::user_application::{UserApplication, UserApplicationStatus, UserCreatedUserApplication},
+use arcadia_common::error::{Error, Result};
+use arcadia_storage::models::user_application::{
+    UserApplication, UserApplicationStatus, UserCreatedUserApplication,
 };
 use serde::{Deserialize, Serialize};
-use arcadia_common::error::{Error, Result};
 
 #[derive(Deserialize, Serialize, utoipa::ToSchema)]
 pub struct GetUserApplicationsQuery {
@@ -26,9 +24,10 @@ pub async fn add_user_application(
     arc: web::Data<Arcadia>,
     application: web::Json<UserCreatedUserApplication>,
 ) -> Result<HttpResponse> {
-    let created_application =
-        arc.pool.create_user_application(&application.into_inner())
-            .await?;
+    let created_application = arc
+        .pool
+        .create_user_application(&application.into_inner())
+        .await?;
 
     Ok(HttpResponse::Created().json(created_application))
 }
@@ -58,12 +57,14 @@ pub async fn get_user_applications(
         return Err(Error::InsufficientPrivileges);
     }
 
-    let applications = arc.pool.find_user_applications(
-        query.limit.unwrap_or(50),
-        query.page.unwrap_or(1),
-        query.status.clone(),
-    )
-    .await?;
+    let applications = arc
+        .pool
+        .find_user_applications(
+            query.limit.unwrap_or(50),
+            query.page.unwrap_or(1),
+            query.status.clone(),
+        )
+        .await?;
 
     Ok(HttpResponse::Ok().json(applications))
 }
@@ -94,11 +95,10 @@ pub async fn update_user_application_status(
         return Err(Error::InsufficientPrivileges);
     }
 
-    let updated_application = arc.pool.update_user_application_status(
-        form.user_application_id,
-        form.status.clone(),
-    )
-    .await?;
+    let updated_application = arc
+        .pool
+        .update_user_application_status(form.user_application_id, form.status.clone())
+        .await?;
 
     Ok(HttpResponse::Ok().json(updated_application))
 }

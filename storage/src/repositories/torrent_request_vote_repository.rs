@@ -1,10 +1,11 @@
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::{
+    connection_pool::ConnectionPool,
+    models::{
         torrent_request_vote::{TorrentRequestVote, UserCreatedTorrentRequestVote},
         user::User,
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
 
 impl ConnectionPool {
     pub async fn create_torrent_request_vote(
@@ -51,5 +52,5 @@ impl ConnectionPool {
         .map_err(Error::CouldNotCreateTorrentRequestVote)?;
 
         Ok(created_torrent_request_vote)
-}
+    }
 }

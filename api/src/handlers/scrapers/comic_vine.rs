@@ -1,15 +1,18 @@
+use crate::{
+    Arcadia, handlers::scrapers::ExternalDBData,
+    services::common_service::naive_date_to_utc_midnight,
+};
 use actix_web::{HttpResponse, web};
-use arcadia_storage::models::title_group::{create_default_title_group, ContentType, TitleGroupCategory, UserCreatedTitleGroup};
+use arcadia_common::error::{Error, Result};
+use arcadia_storage::models::title_group::{
+    ContentType, TitleGroupCategory, UserCreatedTitleGroup, create_default_title_group,
+};
 use chrono::{NaiveDate, Utc};
 use regex::Regex;
 use reqwest::Client;
 use serde::Deserialize;
 use std::env;
 use utoipa::IntoParams;
-use arcadia_common::error::{Error, Result};
-use crate::{
-    handlers::scrapers::ExternalDBData, services::common_service::naive_date_to_utc_midnight, Arcadia
-};
 
 #[derive(Debug, Deserialize)]
 struct ComicVineResponse<T> {

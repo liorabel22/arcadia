@@ -1,11 +1,9 @@
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::wiki::{UserCreatedWikiArticle, WikiArticle},
-};
+use arcadia_common::error::{Error, Result};
+use arcadia_storage::models::wiki::{UserCreatedWikiArticle, WikiArticle};
 use serde::Deserialize;
 use utoipa::IntoParams;
-use arcadia_common::error::{Error, Result};
 
 #[utoipa::path(
     post,
@@ -23,7 +21,10 @@ pub async fn add_wiki_article(
         return Err(Error::InsufficientPrivileges);
     }
 
-    let article = arc.pool.create_wiki_article(&article, current_user.id).await?;
+    let article = arc
+        .pool
+        .create_wiki_article(&article, current_user.id)
+        .await?;
 
     Ok(HttpResponse::Created().json(article))
 }

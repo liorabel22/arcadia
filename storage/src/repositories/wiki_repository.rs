@@ -1,8 +1,9 @@
-use serde_json::Value;
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::wiki::{UserCreatedWikiArticle, WikiArticle}
+    connection_pool::ConnectionPool,
+    models::wiki::{UserCreatedWikiArticle, WikiArticle},
 };
+use arcadia_common::error::{Error, Result};
+use serde_json::Value;
 
 impl ConnectionPool {
     pub async fn create_wiki_article(

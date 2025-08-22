@@ -1,11 +1,7 @@
-use crate::{
-    Arcadia, handlers::UserId,
-};
+use crate::{Arcadia, handlers::UserId};
 use actix_web::{HttpResponse, web};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::master_group::{MasterGroup, UserCreatedMasterGroup},
-};
+use arcadia_storage::models::master_group::{MasterGroup, UserCreatedMasterGroup};
 
 #[utoipa::path(
     post,
@@ -19,7 +15,10 @@ pub async fn add_master_group(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let master_group = arc.pool.create_master_group(&form, current_user_id.0).await?;
+    let master_group = arc
+        .pool
+        .create_master_group(&form, current_user_id.0)
+        .await?;
 
     Ok(HttpResponse::Created().json(master_group))
 }

@@ -10,16 +10,15 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
 
-use crate::{handlers::User, Arcadia};
-use arcadia_common::{error::{Error, Result}, services::torrent_service::get_announce_url};
-use arcadia_storage::{
-    models::{
-        torrent::{
-            EditedTorrent, Torrent, TorrentMinimal, TorrentSearch, TorrentSearchResults, TorrentToDelete, UploadedTorrent,
-        },
-    },
+use crate::{Arcadia, handlers::User};
+use arcadia_common::{
+    error::{Error, Result},
+    services::torrent_service::get_announce_url,
 };
-
+use arcadia_storage::models::torrent::{
+    EditedTorrent, Torrent, TorrentMinimal, TorrentSearch, TorrentSearchResults, TorrentToDelete,
+    UploadedTorrent,
+};
 
 #[utoipa::path(
     post,
@@ -81,14 +80,16 @@ pub async fn download_dottorrent_file(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let torrent = arc.pool.get_torrent(
-        &current_user,
-        query.id,
-        &arc.tracker.name,
-        arc.frontend_url.as_ref(),
-        arc.tracker.url.as_ref(),
-    )
-    .await?;
+    let torrent = arc
+        .pool
+        .get_torrent(
+            &current_user,
+            query.id,
+            &arc.tracker.name,
+            arc.frontend_url.as_ref(),
+            arc.tracker.url.as_ref(),
+        )
+        .await?;
 
     let cd = ContentDisposition {
         disposition: DispositionType::Attachment,
@@ -146,7 +147,10 @@ pub async fn find_torrents(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let search_results = arc.pool.search_torrents(&form, Some(current_user.id)).await?;
+    let search_results = arc
+        .pool
+        .search_torrents(&form, Some(current_user.id))
+        .await?;
 
     Ok(HttpResponse::Ok().json(search_results))
 }
@@ -181,7 +185,10 @@ pub async fn get_top_torrents(
     query: web::Query<GetTopTorrentsQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
-    let search_results = arc.pool.find_top_torrents(&query.period, query.amount).await?;
+    let search_results = arc
+        .pool
+        .find_top_torrents(&query.period, query.amount)
+        .await?;
 
     Ok(HttpResponse::Ok().json(search_results))
 }

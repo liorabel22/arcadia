@@ -1,8 +1,8 @@
-use std::future::Ready;
-use std::{borrow::Cow, future};
-use std::str::FromStr;
-use actix_web::{dev, FromRequest, HttpRequest, HttpResponse, ResponseError};
+use actix_web::{FromRequest, HttpRequest, HttpResponse, ResponseError, dev};
 use serde::{Deserialize, Serialize};
+use std::future::Ready;
+use std::str::FromStr;
+use std::{borrow::Cow, future};
 
 #[derive(Debug, PartialEq)]
 pub enum TorrentEvent {

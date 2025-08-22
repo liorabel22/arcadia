@@ -1,8 +1,8 @@
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::torrent_request_vote::{TorrentRequestVote, UserCreatedTorrentRequestVote},
+use arcadia_storage::models::torrent_request_vote::{
+    TorrentRequestVote, UserCreatedTorrentRequestVote,
 };
 
 #[utoipa::path(
@@ -17,7 +17,10 @@ pub async fn add_torrent_request_vote(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let vote = arc.pool.create_torrent_request_vote(&torrent_request_vote, &current_user).await?;
+    let vote = arc
+        .pool
+        .create_torrent_request_vote(&torrent_request_vote, &current_user)
+        .await?;
 
     Ok(HttpResponse::Created().json(vote))
 }

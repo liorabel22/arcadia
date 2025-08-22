@@ -1,7 +1,8 @@
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::user::{EditedUser, PublicUser, UserCreatedUserWarning, UserMinimal, UserWarning}
+    connection_pool::ConnectionPool,
+    models::user::{EditedUser, PublicUser, UserCreatedUserWarning, UserMinimal, UserWarning},
 };
+use arcadia_common::error::{Error, Result};
 
 impl ConnectionPool {
     pub async fn find_user_profile(&self, id: &i64) -> Result<PublicUser> {

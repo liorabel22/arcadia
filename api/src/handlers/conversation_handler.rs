@@ -1,19 +1,16 @@
 use crate::{
-    handlers::{User, UserId}, Arcadia
+    Arcadia,
+    handlers::{User, UserId},
 };
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::{
-        conversation::{
-          Conversation, ConversationHierarchy, ConversationMessage, ConversationsOverview, UserCreatedConversation,
-          UserCreatedConversationMessage
-        },
-    },
-  };
+use arcadia_common::error::Result;
+use arcadia_storage::models::conversation::{
+    Conversation, ConversationHierarchy, ConversationMessage, ConversationsOverview,
+    UserCreatedConversation, UserCreatedConversationMessage,
+};
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::IntoParams;
-use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -28,7 +25,10 @@ pub async fn add_conversation(
     current_user: User,
 ) -> Result<HttpResponse> {
     // creates a conversation and the first message, empty conversations should not be allowed
-    let conversation = arc.pool.create_conversation(&mut conversation, current_user.id).await?;
+    let conversation = arc
+        .pool
+        .create_conversation(&mut conversation, current_user.id)
+        .await?;
 
     Ok(HttpResponse::Created().json(conversation))
 }
@@ -51,8 +51,10 @@ pub async fn get_conversation(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let conversation_with_messages =
-        arc.pool.find_conversation(query.id, current_user_id.0, true).await?;
+    let conversation_with_messages = arc
+        .pool
+        .find_conversation(query.id, current_user_id.0, true)
+        .await?;
 
     Ok(HttpResponse::Ok().json(conversation_with_messages))
 }
@@ -85,7 +87,10 @@ pub async fn add_conversation_message(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let message = arc.pool.create_conversation_message(&message, current_user.id).await?;
+    let message = arc
+        .pool
+        .create_conversation_message(&message, current_user.id)
+        .await?;
 
     Ok(HttpResponse::Created().json(message))
 }

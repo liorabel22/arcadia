@@ -1,4 +1,3 @@
-
 use arcadia_common::error::{Error, Result};
 
 use crate::connection_pool::ConnectionPool;

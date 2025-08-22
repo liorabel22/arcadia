@@ -1,18 +1,13 @@
-use crate::{
-    Arcadia,
-    handlers::UserId,
-};
+use crate::{Arcadia, handlers::UserId};
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::artist::{
-        AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite, ArtistLite,
-        UserCreatedAffiliatedArtist, UserCreatedArtist,
-    },
+use arcadia_common::error::Result;
+use arcadia_storage::models::artist::{
+    AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite, ArtistLite,
+    UserCreatedAffiliatedArtist, UserCreatedArtist,
 };
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
-use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
@@ -44,7 +39,10 @@ pub async fn add_affiliated_artists(
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
 ) -> Result<HttpResponse> {
-    let affiliations = arc.pool.create_artists_affiliation(&artists, current_user_id.0).await?;
+    let affiliations = arc
+        .pool
+        .create_artists_affiliation(&artists, current_user_id.0)
+        .await?;
 
     Ok(HttpResponse::Created().json(affiliations))
 }
@@ -66,7 +64,9 @@ pub async fn remove_affiliated_artists(
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
     // TODO: add protection based on user class
-    arc.pool.delete_artists_affiliation(&query.affiliation_ids).await?;
+    arc.pool
+        .delete_artists_affiliation(&query.affiliation_ids)
+        .await?;
 
     Ok(HttpResponse::Ok().json(json!({"result": "success"})))
 }

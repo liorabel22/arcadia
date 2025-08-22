@@ -1,9 +1,7 @@
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::torrent_report::{TorrentReport, UserCreatedTorrentReport},
-};
+use arcadia_storage::models::torrent_report::{TorrentReport, UserCreatedTorrentReport};
 
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use arcadia_common::error::Result;
 
 #[utoipa::path(

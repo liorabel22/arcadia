@@ -1,5 +1,5 @@
-use sqlx::{postgres::PgQueryResult};
 use arcadia_common::error::announce::Error;
+use sqlx::postgres::PgQueryResult;
 
 use crate::connection_pool::ConnectionPool;
 
@@ -109,7 +109,6 @@ impl ConnectionPool {
         .await
         .map_err(|_| Error::InvalidUserIdOrTorrentId)
     }
-
 }
 
 #[derive(sqlx::FromRow)]

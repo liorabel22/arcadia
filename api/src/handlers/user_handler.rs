@@ -1,21 +1,21 @@
 use std::ops::Deref;
 
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::{
-        torrent::{
-            TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup, TorrentSearchTorrent
-        },
-        user::{
-            APIKey, EditedUser, Profile, PublicProfile, UserCreatedAPIKey, UserCreatedUserWarning, UserMinimal, UserWarning
-        }
+use arcadia_common::error::{Error, Result};
+use arcadia_storage::models::{
+    torrent::{
+        TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup,
+        TorrentSearchTorrent,
+    },
+    user::{
+        APIKey, EditedUser, Profile, PublicProfile, UserCreatedAPIKey, UserCreatedUserWarning,
+        UserMinimal, UserWarning,
     },
 };
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::IntoParams;
-use arcadia_common::error::{Error, Result};
 
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct GetUserQuery {
@@ -55,13 +55,17 @@ pub async fn get_user(
         sort_by: TorrentSearchSortField::TorrentCreatedAt,
         order: TorrentSearchOrder::Desc,
     };
-    let uploaded_torrents =
-        arc.pool.search_torrents(&torrent_search, Some(current_user.id)).await?;
+    let uploaded_torrents = arc
+        .pool
+        .search_torrents(&torrent_search, Some(current_user.id))
+        .await?;
     torrent_search.torrent.snatched_by_id = Some(query.id);
     torrent_search.torrent.created_by_id = None;
     torrent_search.sort_by = TorrentSearchSortField::TorrentSnatchedAt;
-    let snatched_torrents =
-        arc.pool.search_torrents(&torrent_search, Some(current_user.id)).await?;
+    let snatched_torrents = arc
+        .pool
+        .search_torrents(&torrent_search, Some(current_user.id))
+        .await?;
 
     Ok(HttpResponse::Created().json(json!({
         "user":user,
@@ -99,15 +103,21 @@ pub async fn get_me(mut current_user: User, arc: web::Data<Arcadia>) -> Result<H
         sort_by: TorrentSearchSortField::TorrentCreatedAt,
         order: TorrentSearchOrder::Desc,
     };
-    let uploaded_torrents =
-        arc.pool.search_torrents(&torrent_search, Some(current_user.id)).await?;
+    let uploaded_torrents = arc
+        .pool
+        .search_torrents(&torrent_search, Some(current_user.id))
+        .await?;
     torrent_search.torrent.snatched_by_id = Some(current_user.id);
     torrent_search.torrent.created_by_id = None;
     torrent_search.sort_by = TorrentSearchSortField::TorrentSnatchedAt;
-    let snatched_torrents =
-        arc.pool.search_torrents(&torrent_search, Some(current_user.id)).await?;
-    let unread_conversations_amount =
-        arc.pool.find_unread_conversations_amount(current_user.id).await?;
+    let snatched_torrents = arc
+        .pool
+        .search_torrents(&torrent_search, Some(current_user.id))
+        .await?;
+    let unread_conversations_amount = arc
+        .pool
+        .find_unread_conversations_amount(current_user.id)
+        .await?;
     Ok(HttpResponse::Ok().json(json!({
             "user": current_user.deref(),
             "peers":peers,

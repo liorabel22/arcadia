@@ -1,12 +1,10 @@
-use arcadia_common::models::tracker::announce::{Announce, Peer};
-use sqlx::{types::ipnetwork::IpNetwork};
-use arcadia_common::error::Result;
 use crate::connection_pool::ConnectionPool;
-use crate::{models::peer::PeerStatus};
+use crate::models::peer::PeerStatus;
+use arcadia_common::error::Result;
+use arcadia_common::models::tracker::announce::{Announce, Peer};
+use sqlx::types::ipnetwork::IpNetwork;
 
-use crate::{
-    models,
-};
+use crate::models;
 
 impl ConnectionPool {
     pub async fn get_user_peers(&self, user_id: i64) -> Vec<models::peer::Peer> {

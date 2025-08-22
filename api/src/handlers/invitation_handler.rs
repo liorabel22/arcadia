@@ -1,9 +1,7 @@
-use crate::{handlers::User, services::email_service::EmailService, Arcadia};
+use crate::{Arcadia, handlers::User, services::email_service::EmailService};
 use actix_web::{HttpResponse, web};
 use arcadia_common::error::{Error, Result};
-use arcadia_storage::{
-    models::{invitation::{Invitation, SentInvitation}},
-};
+use arcadia_storage::models::invitation::{Invitation, SentInvitation};
 
 #[utoipa::path(
     post,
@@ -21,7 +19,10 @@ pub async fn send_invitation(
         return Err(Error::NoInvitationsAvailable);
     }
 
-    let created_invitation = arc.pool.create_invitation(&invitation, current_user.id).await?;
+    let created_invitation = arc
+        .pool
+        .create_invitation(&invitation, current_user.id)
+        .await?;
 
     // Send invitation email
     if let Ok(email_service) = EmailService::new(&arc) {

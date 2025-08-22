@@ -1,19 +1,20 @@
-use actix_web::{HttpResponse, web};
-use arcadia_storage::models::{
-    edition_group::{create_default_edition_group, UserCreatedEditionGroup},
-    title_group::{create_default_title_group, ContentType, ExternalDB, PublicRating, UserCreatedTitleGroup},
-};
-use regex::Regex;
-use tmdb_api::client::Client;
-use tmdb_api::client::reqwest::Client as ReqwestClient;
-use serde::Deserialize;
-use utoipa::IntoParams;
 use crate::{
-    Arcadia,
-    handlers::scrapers::ExternalDBData,
+    Arcadia, handlers::scrapers::ExternalDBData,
     services::common_service::naive_date_to_utc_midnight,
 };
+use actix_web::{HttpResponse, web};
 use arcadia_common::error::{Error, Result};
+use arcadia_storage::models::{
+    edition_group::{UserCreatedEditionGroup, create_default_edition_group},
+    title_group::{
+        ContentType, ExternalDB, PublicRating, UserCreatedTitleGroup, create_default_title_group,
+    },
+};
+use regex::Regex;
+use serde::Deserialize;
+use tmdb_api::client::Client;
+use tmdb_api::client::reqwest::Client as ReqwestClient;
+use utoipa::IntoParams;
 
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct GetTMDBQuery {

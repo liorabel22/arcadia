@@ -1,20 +1,17 @@
 use utoipa::OpenApi;
 
-use crate::{
-    handlers::{
-        artist_handler::GetArtistPublicationsQuery,
-        auth_handler::RegisterQuery,
-        home_handler::HomePage,
-        scrapers::ExternalDBData,
-        torrent_handler::{DownloadTorrentQuery, GetTopTorrentsQuery, UploadInformation},
-        torrent_request_handler::SearchTorrentRequestsQuery,
-        user_application_handler::{GetUserApplicationsQuery, UpdateUserApplication},
-    },
+use crate::handlers::{
+    artist_handler::GetArtistPublicationsQuery,
+    auth_handler::RegisterQuery,
+    home_handler::HomePage,
+    scrapers::ExternalDBData,
+    torrent_handler::{DownloadTorrentQuery, GetTopTorrentsQuery, UploadInformation},
+    torrent_request_handler::SearchTorrentRequestsQuery,
+    user_application_handler::{GetUserApplicationsQuery, UpdateUserApplication},
 };
 use arcadia_storage::models::{
     artist::{
-        AffiliatedArtist, AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite,
-        ArtistLite,
+        AffiliatedArtist, AffiliatedArtistHierarchy, Artist, ArtistAndTitleGroupsLite, ArtistLite,
     },
     conversation::{
         Conversation, ConversationHierarchy, ConversationMessage, ConversationMessageHierarchy,
@@ -30,9 +27,7 @@ use arcadia_storage::models::{
     invitation::{Invitation, SentInvitation},
     master_group::{MasterGroup, UserCreatedMasterGroup},
     series::{Series, SeriesAndTitleGroupHierarchyLite, SeriesLite, UserCreatedSeries},
-    title_group::{
-        EditedTitleGroup, PublicRating, TitleGroupAndAssociatedData, TitleGroupLite,
-    },
+    title_group::{EditedTitleGroup, PublicRating, TitleGroupAndAssociatedData, TitleGroupLite},
     title_group_comment::{TitleGroupComment, UserCreatedTitleGroupComment},
     torrent::{
         EditedTorrent, Extras, Torrent, TorrentSearch, TorrentSearchResults, TorrentToDelete,
@@ -41,8 +36,7 @@ use arcadia_storage::models::{
     torrent_report::{TorrentReport, UserCreatedTorrentReport},
     torrent_request::{
         TorrentRequest, TorrentRequestAndAssociatedData, TorrentRequestFill,
-        TorrentRequestHierarchyLite, TorrentRequestWithTitleGroupLite,
-        UserCreatedTorrentRequest,
+        TorrentRequestHierarchyLite, TorrentRequestWithTitleGroupLite, UserCreatedTorrentRequest,
     },
     torrent_request_vote::{
         TorrentRequestVote, TorrentRequestVoteHierarchy, UserCreatedTorrentRequestVote,

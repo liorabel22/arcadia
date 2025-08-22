@@ -1,8 +1,8 @@
-use crate::{handlers::User, Arcadia};
+use crate::{Arcadia, handlers::User};
 use actix_web::{HttpResponse, web};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::title_group_comment::{TitleGroupComment, UserCreatedTitleGroupComment},
+use arcadia_storage::models::title_group_comment::{
+    TitleGroupComment, UserCreatedTitleGroupComment,
 };
 
 #[utoipa::path(
@@ -17,8 +17,10 @@ pub async fn add_title_group_comment(
     arc: web::Data<Arcadia>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let title_group_comment =
-        arc.pool.create_title_group_comment(&comment, &current_user).await?;
+    let title_group_comment = arc
+        .pool
+        .create_title_group_comment(&comment, &current_user)
+        .await?;
 
     Ok(HttpResponse::Created().json(title_group_comment))
 }

@@ -1,11 +1,12 @@
-use serde_json::Value;
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::artist::{
+    connection_pool::ConnectionPool,
+    models::artist::{
         AffiliatedArtist, AffiliatedArtistHierarchy, Artist, ArtistLite,
         UserCreatedAffiliatedArtist, UserCreatedArtist,
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
+use serde_json::Value;
 
 impl ConnectionPool {
     pub async fn create_artists(
@@ -95,7 +96,7 @@ impl ConnectionPool {
 
         let fetched_artists: Vec<Artist> = sqlx::query_as!(
             Artist,
-        r#"
+            r#"
         SELECT * FROM artists WHERE id = ANY($1)
         "#,
             &artist_ids
@@ -169,7 +170,7 @@ impl ConnectionPool {
     pub async fn find_artists_lite(&self, name: &String) -> Result<Vec<ArtistLite>> {
         let found_artists = sqlx::query_as!(
             ArtistLite,
-        r#"
+            r#"
             SELECT name, id, pictures
             FROM artists
             WHERE LOWER(name) LIKE LOWER('%' || $1 || '%')

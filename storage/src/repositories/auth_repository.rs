@@ -1,9 +1,11 @@
 use crate::{
-    connection_pool::ConnectionPool, models::{
+    connection_pool::ConnectionPool,
+    models::{
         invitation::Invitation,
         user::{APIKey, Login, Register, User, UserCreatedAPIKey},
-    }
+    },
 };
+use arcadia_common::error::{Error, Result};
 use argon2::{
     Argon2,
     password_hash::{PasswordHash, PasswordVerifier},
@@ -14,7 +16,6 @@ use rand::{
     rng,
 };
 use sqlx::types::ipnetwork::IpNetwork;
-use arcadia_common::error::{Error, Result};
 
 impl ConnectionPool {
     pub async fn does_username_exist(&self, username: &str) -> Result<bool> {
@@ -48,7 +49,8 @@ impl ConnectionPool {
             return Err(Error::UsernameAlreadyExists);
         }
 
-        let settings = serde_json::json!({"site_appearance":{"item_detail_layout": "sidebar_right"}});
+        let settings =
+            serde_json::json!({"site_appearance":{"item_detail_layout": "sidebar_right"}});
 
         let registered_user = sqlx::query_as!(
             User,

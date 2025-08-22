@@ -1,10 +1,10 @@
-use std::{ops::Deref, sync::Arc};
 use arcadia_storage::connection_pool::ConnectionPool;
+use std::{ops::Deref, sync::Arc};
 
 use crate::env::Env;
 
-pub mod env;
 pub mod api_doc;
+pub mod env;
 pub mod handlers;
 pub mod routes;
 pub mod services;
@@ -40,7 +40,7 @@ impl Deref for Arcadia {
 
 impl Arcadia {
     pub fn new(pool: Arc<ConnectionPool>, env: Env) -> Self {
-        Self {pool, env}
+        Self { pool, env }
     }
     #[inline]
     pub fn is_open_signups(&self) -> bool {

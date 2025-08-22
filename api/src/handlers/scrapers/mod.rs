@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
-use arcadia_storage::models::{edition_group::UserCreatedEditionGroup, title_group::UserCreatedTitleGroup};
+use arcadia_storage::models::{
+    edition_group::UserCreatedEditionGroup, title_group::UserCreatedTitleGroup,
+};
 
 pub mod comic_vine;
 pub mod isbn;

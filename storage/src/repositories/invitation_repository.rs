@@ -1,12 +1,13 @@
+use crate::{
+    connection_pool::ConnectionPool,
+    models::invitation::{Invitation, SentInvitation},
+};
+use arcadia_common::error::{Error, Result};
 use rand::{
     distr::{Alphanumeric, SampleString},
     rng,
 };
 use sqlx::{Postgres, Transaction};
-use arcadia_common::error::{Error, Result};
-use crate::{
-    connection_pool::ConnectionPool, models::invitation::{Invitation, SentInvitation}
-};
 
 impl ConnectionPool {
     pub async fn create_invitation(

@@ -1,12 +1,13 @@
-use serde_json::Value;
-use sqlx::{query_as, query_scalar};
-use arcadia_common::error::{Error, Result};
 use crate::{
-    connection_pool::ConnectionPool, models::{
+    connection_pool::ConnectionPool,
+    models::{
         torrent_request::{TorrentRequest, UserCreatedTorrentRequest},
         user::User,
     },
 };
+use arcadia_common::error::{Error, Result};
+use serde_json::Value;
+use sqlx::{query_as, query_scalar};
 
 impl ConnectionPool {
     pub async fn create_torrent_request(
@@ -27,29 +28,32 @@ impl ConnectionPool {
             RETURNING *;
         "#;
 
-        let created_torrent_request = sqlx::query_as::<_, TorrentRequest>(create_torrent_request_query)
-            .bind(torrent_request.title_group_id)
-            .bind(current_user.id)
-            .bind(&torrent_request.edition_name)
-            .bind(&torrent_request.release_group)
-            .bind(&torrent_request.description)
-            .bind(&torrent_request.languages)
-            .bind(&torrent_request.container)
-            .bind(&torrent_request.audio_codec)
-            .bind(&torrent_request.audio_channels)
-            .bind(&torrent_request.video_codec)
-            .bind(&torrent_request.features)
-            .bind(&torrent_request.subtitle_languages)
-            .bind(&torrent_request.video_resolution)
-            .bind(&torrent_request.audio_bitrate_sampling)
-            .bind(&torrent_request.source)
-            .fetch_one(self.borrow())
-            .await
-            .map_err(Error::CouldNotCreateTorrentRequest)?;
+        let created_torrent_request =
+            sqlx::query_as::<_, TorrentRequest>(create_torrent_request_query)
+                .bind(torrent_request.title_group_id)
+                .bind(current_user.id)
+                .bind(&torrent_request.edition_name)
+                .bind(&torrent_request.release_group)
+                .bind(&torrent_request.description)
+                .bind(&torrent_request.languages)
+                .bind(&torrent_request.container)
+                .bind(&torrent_request.audio_codec)
+                .bind(&torrent_request.audio_channels)
+                .bind(&torrent_request.video_codec)
+                .bind(&torrent_request.features)
+                .bind(&torrent_request.subtitle_languages)
+                .bind(&torrent_request.video_resolution)
+                .bind(&torrent_request.audio_bitrate_sampling)
+                .bind(&torrent_request.source)
+                .fetch_one(self.borrow())
+                .await
+                .map_err(Error::CouldNotCreateTorrentRequest)?;
 
         torrent_request.initial_vote.torrent_request_id = created_torrent_request.id;
 
-        let _ = self.create_torrent_request_vote(&torrent_request.initial_vote, current_user).await?;
+        let _ = self
+            .create_torrent_request_vote(&torrent_request.initial_vote, current_user)
+            .await?;
 
         Ok(created_torrent_request)
     }
@@ -277,10 +281,7 @@ impl ConnectionPool {
         Ok(rows.unwrap())
     }
 
-    pub async fn find_torrent_request_hierarchy(
-        &self,
-        torrent_request_id: i64,
-    ) -> Result<Value> {
+    pub async fn find_torrent_request_hierarchy(&self, torrent_request_id: i64) -> Result<Value> {
         let result = sqlx::query!(
             r#"
             SELECT json_build_object(

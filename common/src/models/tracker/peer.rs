@@ -1,4 +1,4 @@
-use chrono::{DateTime,Local};
+use chrono::{DateTime, Local};
 
 #[derive(Debug)]
 pub struct Peer {

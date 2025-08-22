@@ -1,16 +1,15 @@
 use actix_web::{HttpResponse, web};
-use arcadia_storage::{
-    models::title_group::{
-        ContentType, EditedTitleGroup, PublicRating, TitleGroup, TitleGroupAndAssociatedData,
-        TitleGroupLite, UserCreatedTitleGroup,
-    },
+use arcadia_storage::models::title_group::{
+    ContentType, EditedTitleGroup, PublicRating, TitleGroup, TitleGroupAndAssociatedData,
+    TitleGroupLite, UserCreatedTitleGroup,
 };
 use futures::future::join_all;
 use serde::Deserialize;
 use utoipa::IntoParams;
 
 use crate::{
-    handlers::{scrapers::tmdb::get_tmdb_rating, User}, Arcadia
+    Arcadia,
+    handlers::{User, scrapers::tmdb::get_tmdb_rating},
 };
 use arcadia_common::error::{Error, Result};
 
@@ -38,14 +37,19 @@ pub async fn add_title_group(
         .filter_map(Result::ok)
         .collect();
 
-    let created_title_group = arc.pool.create_title_group(&form, &ratings, &current_user).await?;
+    let created_title_group = arc
+        .pool
+        .create_title_group(&form, &ratings, &current_user)
+        .await?;
 
     if !form.affiliated_artists.is_empty() {
         for artist in &mut form.affiliated_artists {
             artist.title_group_id = created_title_group.id
         }
 
-        let _ = arc.pool.create_artists_affiliation(&form.affiliated_artists, current_user.id)
+        let _ = arc
+            .pool
+            .create_artists_affiliation(&form.affiliated_artists, current_user.id)
             .await?;
     }
 
@@ -92,7 +96,10 @@ pub async fn get_title_group(
     query: web::Query<GetTitleGroupQuery>,
     current_user: User,
 ) -> Result<HttpResponse> {
-    let title_group = arc.pool.find_title_group_hierarchy(query.id, &current_user).await?;
+    let title_group = arc
+        .pool
+        .find_title_group_hierarchy(query.id, &current_user)
+        .await?;
 
     Ok(HttpResponse::Ok().json(title_group))
 }
@@ -111,7 +118,10 @@ pub async fn get_title_group_info_lite(
     arc: web::Data<Arcadia>,
     query: web::Query<GetTitleGroupLiteQuery>,
 ) -> Result<HttpResponse> {
-    let title_group = arc.pool.find_title_group_info_lite(Some(query.id), None, &None, 1).await?;
+    let title_group = arc
+        .pool
+        .find_title_group_info_lite(Some(query.id), None, &None, 1)
+        .await?;
 
     Ok(HttpResponse::Ok().json(title_group))
 }
@@ -134,9 +144,10 @@ pub async fn search_title_group_info_lite(
     arc: web::Data<Arcadia>,
     query: web::Query<SearchTitleGroupLiteQuery>,
 ) -> Result<HttpResponse> {
-    let title_groups =
-        arc.pool.find_title_group_info_lite(None, Some(&query.name), &query.content_type, 5)
-            .await?;
+    let title_groups = arc
+        .pool
+        .find_title_group_info_lite(None, Some(&query.name), &query.content_type, 5)
+        .await?;
 
     Ok(HttpResponse::Ok().json(title_groups))
 }
