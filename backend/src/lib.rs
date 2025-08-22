@@ -1,5 +1,5 @@
 use crate::env::Env;
-use std::ops::Deref;
+use std::{ops::Deref, str::FromStr};
 
 pub mod api_doc;
 pub mod env;
@@ -17,12 +17,16 @@ pub enum OpenSignups {
     Enabled,
 }
 
-impl From<bool> for OpenSignups {
-    fn from(value: bool) -> Self {
-        if value {
-            OpenSignups::Enabled
-        } else {
-            OpenSignups::Disabled
+impl FromStr for OpenSignups {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        match s {
+            "true" => Ok(Self::Enabled),
+            "false" => Ok(Self::Disabled),
+            _ => Err(Error::EnvVariableParseError(
+                "ARCADIA_OPEN_SIGNUPS".to_string(),
+            )),
         }
     }
 }
@@ -280,6 +284,9 @@ pub enum Error {
 
     #[error("invalid tmdb url")]
     InvalidTMDBUrl,
+
+    #[error("env variable parse error '{0}'")]
+    EnvVariableParseError(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

@@ -9,8 +9,8 @@ use actix_web::{
     },
     test, web,
 };
-use arcadia_backend::{Arcadia, OpenSignups, models::user::LoginResponse};
-use reqwest::Url;
+use arcadia_backend::{Arcadia, OpenSignups, env::Env, models::user::LoginResponse};
+use envconfig::Envconfig;
 use serde::de::DeserializeOwned;
 use sqlx::PgPool;
 
@@ -20,26 +20,11 @@ pub async fn create_test_app(
     global_upload_factor: f64,
     global_download_factor: f64,
 ) -> impl Service<Request, Response = ServiceResponse, Error = Error> {
-    let arc = Arcadia {
-        pool,
-        open_signups,
-        jwt_secret: String::from("verysecurejwtstring"),
-        tracker_name: String::from("Arcadia Test"),
-        frontend_url: Url::parse("http://testurl").unwrap(),
-        tracker_url: Url::parse("http://testurl").unwrap(),
-        tracker_announce_interval: 1800,
-        tracker_announce_interval_grace_period: 1800,
-        allowed_torrent_clients: ["lt0F01".as_bytes().to_vec()].into_iter().collect(),
-        global_upload_factor,
-        global_download_factor,
-        tmdb_api_key: None,
-        smtp_host: None,
-        smtp_port: None,
-        smtp_username: None,
-        smtp_password: None,
-        smtp_from_email: None,
-        smtp_from_name: None,
-    };
+    let mut env = Env::init_from_env().unwrap();
+    env.open_signups = open_signups;
+    env.tracker.global_upload_factor = global_upload_factor;
+    env.tracker.global_download_factor = global_download_factor;
+    let arc = Arcadia::new(pool, env);
 
     // TODO: CORS?
     test::init_service(

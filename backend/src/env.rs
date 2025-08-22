@@ -2,6 +2,8 @@ use envconfig::Envconfig;
 use reqwest::Url;
 use std::{collections::HashSet, str::FromStr};
 
+use crate::OpenSignups;
+
 #[derive(Envconfig, Clone)]
 pub struct Env {
     #[envconfig(nested)]
@@ -11,7 +13,7 @@ pub struct Env {
     #[envconfig(from = "JWT_SECRET")]
     pub jwt_secret: String,
     #[envconfig(from = "ARCADIA_OPEN_SIGNUPS")]
-    pub open_signups: bool,
+    pub open_signups: OpenSignups,
     #[envconfig(from = "ARCADIA_FRONTEND_URL")]
     pub frontend_url: Url,
     #[envconfig(nested)]
