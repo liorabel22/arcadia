@@ -4,10 +4,7 @@ use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::user::{Claims, Login, LoginResponse};
 use chrono::Duration;
 use chrono::prelude::Utc;
-use jsonwebtoken::{
-    EncodingKey, Header, encode,
-};
-
+use jsonwebtoken::{EncodingKey, Header, encode};
 
 #[utoipa::path(
     post,

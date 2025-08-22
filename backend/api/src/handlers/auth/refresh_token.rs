@@ -4,9 +4,7 @@ use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::user::{Claims, LoginResponse, RefreshToken};
 use chrono::Duration;
 use chrono::prelude::Utc;
-use jsonwebtoken::{
-    DecodingKey, EncodingKey, Header, Validation, decode, encode,
-};
+use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode};
 
 #[utoipa::path(
     post,
@@ -15,10 +13,7 @@ use jsonwebtoken::{
         (status = 200, description = "Successfully refreshed the token", body=LoginResponse),
     )
 )]
-pub async fn exec(
-    arc: web::Data<Arcadia>,
-    form: web::Json<RefreshToken>,
-) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>, form: web::Json<RefreshToken>) -> Result<HttpResponse> {
     let old_refresh_token = decode::<Claims>(
         &form.refresh_token,
         &DecodingKey::from_secret(arc.jwt_secret.as_bytes()),

@@ -2,7 +2,6 @@ pub mod auth;
 
 pub mod announce_handler;
 pub mod artist_handler;
-pub mod auth_handler;
 pub mod conversation_handler;
 pub mod edition_group_handler;
 pub mod forum_handler;

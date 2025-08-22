@@ -2,7 +2,7 @@ use actix_web::web;
 use actix_web::web::scope;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
-use crate::handlers::auth_handler::authenticate_user;
+use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::title_group_handler::edit_title_group;
 use crate::handlers::torrent_request_handler::search_torrent_requests;
 use crate::handlers::user_handler::add_api_key;
@@ -48,16 +48,13 @@ use crate::handlers::{
     user_handler::{edit_user, get_me, get_user, warn_user},
     wiki_handler::{add_wiki_article, get_wiki_article},
 };
-
-use crate::handlers::auth::config as AuthConfig;
+use crate::middlewares::jwt_middleware::authenticate_user;
 
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(handle_announce).service(
         web::scope("/api")
             .wrap(HttpAuthentication::with_fn(authenticate_user))
             .service(scope("/auth").configure(AuthConfig))
-            // .route("/register", web::post().to(register))
-            // .route("/login", web::post().to(login))
             .route("/apply", web::post().to(add_user_application))
             .route("/api-key", web::post().to(add_api_key))
             .route("/user-application", web::get().to(get_user_applications))

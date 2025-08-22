@@ -1,4 +1,4 @@
-use crate::{services::email_service::EmailService, Arcadia};
+use crate::{Arcadia, services::email_service::EmailService};
 use actix_web::{HttpRequest, HttpResponse, web};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::{
