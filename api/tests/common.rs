@@ -1,4 +1,3 @@
-use std::sync::Arc;
 use actix_http::Request;
 use actix_web::{
     App, Error,
@@ -15,6 +14,7 @@ use arcadia_storage::{connection_pool::ConnectionPool, models::user::LoginRespon
 use envconfig::Envconfig;
 use serde::de::DeserializeOwned;
 use sqlx::PgPool;
+use std::sync::Arc;
 
 pub async fn create_test_app(
     pool: PgPool,

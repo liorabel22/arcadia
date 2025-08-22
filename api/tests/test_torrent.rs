@@ -4,12 +4,15 @@ use sqlx::PgPool;
 
 pub mod common;
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_valid_torrent(pool: PgPool) {
     let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
@@ -51,7 +54,10 @@ async fn test_valid_torrent(pool: PgPool) {
     );
 }
 
-#[sqlx::test(fixtures("with_test_user", "with_test_title_group", "with_test_edition_group"), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures("with_test_user", "with_test_title_group", "with_test_edition_group"),
+    migrations = "../storage/migrations"
+)]
 async fn test_upload_torrent(pool: PgPool) {
     use actix_multipart_rfc7578::client::multipart;
 
@@ -130,12 +136,15 @@ struct TorrentSearchResults {
     title_groups: Option<Vec<TitleGroupLite>>,
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_find_torrents_by_external_link(pool: PgPool) {
     let link = "https://en.wikipedia.org/wiki/RollerCoaster_Tycoon";
 
@@ -169,12 +178,15 @@ async fn test_find_torrents_by_external_link(pool: PgPool) {
     );
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_find_torrents_by_name(pool: PgPool) {
     let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
@@ -206,12 +218,15 @@ async fn test_find_torrents_by_name(pool: PgPool) {
     );
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_find_torrents_no_link_or_name_provided(pool: PgPool) {
     let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 

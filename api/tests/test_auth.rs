@@ -101,7 +101,10 @@ async fn test_duplicate_username_registration(pool: PgPool) {
     assert_eq!(error["error"], "username already exists");
 }
 
-#[sqlx::test(fixtures("with_test_user", "with_test_user_invite"), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures("with_test_user", "with_test_user_invite"),
+    migrations = "../storage/migrations"
+)]
 async fn test_closed_registration_failures(pool: PgPool) {
     let service = common::create_test_app(pool, OpenSignups::Disabled, 1.0, 1.0).await;
 
@@ -148,7 +151,10 @@ async fn test_closed_registration_failures(pool: PgPool) {
     );
 }
 
-#[sqlx::test(fixtures("with_test_user", "with_test_user_invite"), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures("with_test_user", "with_test_user_invite"),
+    migrations = "../storage/migrations"
+)]
 async fn test_closed_registration_success(pool: PgPool) {
     let service = common::create_test_app(pool, OpenSignups::Disabled, 1.0, 1.0).await;
 
@@ -201,7 +207,10 @@ async fn test_closed_registration_success(pool: PgPool) {
     assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
 }
 
-#[sqlx::test(fixtures("with_test_user", "with_expired_test_user_invite"), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures("with_test_user", "with_expired_test_user_invite"),
+    migrations = "../storage/migrations"
+)]
 async fn test_closed_registration_expired_failure(pool: PgPool) {
     let service = common::create_test_app(pool, OpenSignups::Disabled, 1.0, 1.0).await;
 

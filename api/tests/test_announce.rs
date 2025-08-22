@@ -84,12 +84,15 @@ async fn test_announce_unknown_torrent(pool: PgPool) {
         .expect("expected failure message");
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_announce_known_torrent(pool: PgPool) {
     let service = common::create_test_app(pool, OpenSignups::Enabled, 1.0, 1.0).await;
     let req = test::TestRequest::get()
@@ -125,14 +128,17 @@ async fn test_announce_known_torrent(pool: PgPool) {
     assert!(resp.peers.is_empty());
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent",
-    "with_test_user2",
-    "with_test_peers"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent",
+        "with_test_user2",
+        "with_test_peers"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_announce_known_torrent_with_peers(pool: PgPool) {
     let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
     let req = test::TestRequest::get()
@@ -194,14 +200,17 @@ async fn test_announce_known_torrent_with_peers(pool: PgPool) {
     assert_eq!(body["user"]["real_downloaded"].as_u64().unwrap(), 44);
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent",
-    "with_test_user2",
-    "with_test_peers"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent",
+        "with_test_user2",
+        "with_test_peers"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_announce_global_factor_manipulation(pool: PgPool) {
     let (service, token) = common::create_test_app_and_login(pool, 2.0, 0.5).await;
     let req = test::TestRequest::get()
@@ -235,14 +244,17 @@ async fn test_announce_global_factor_manipulation(pool: PgPool) {
     assert_eq!(body["user"]["downloaded"].as_u64().unwrap(), 6);
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent_custom_up_down_factors",
-    "with_test_user2",
-    "with_test_peers"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent_custom_up_down_factors",
+        "with_test_user2",
+        "with_test_peers"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_announce_torrent_specific_factor_manipulation(pool: PgPool) {
     let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
     let req = test::TestRequest::get()
@@ -276,12 +288,15 @@ async fn test_announce_torrent_specific_factor_manipulation(pool: PgPool) {
     assert_eq!(body["user"]["downloaded"].as_u64().unwrap(), 6);
 }
 
-#[sqlx::test(fixtures(
-    "with_test_user",
-    "with_test_title_group",
-    "with_test_edition_group",
-    "with_test_torrent"
-), migrations = "../storage/migrations")]
+#[sqlx::test(
+    fixtures(
+        "with_test_user",
+        "with_test_title_group",
+        "with_test_edition_group",
+        "with_test_torrent"
+    ),
+    migrations = "../storage/migrations"
+)]
 async fn test_peers_after_announce(pool: PgPool) {
     let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
