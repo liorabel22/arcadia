@@ -7,7 +7,10 @@ use crate::handlers::{
     scrapers::ExternalDBData,
     torrent_handler::{DownloadTorrentQuery, GetTopTorrentsQuery, UploadInformation},
     torrent_request_handler::SearchTorrentRequestsQuery,
-    user_application_handler::{GetUserApplicationsQuery, UpdateUserApplication},
+    user_applications::{
+        create_user_application::GetUserApplicationsQuery,
+        update_user_application_status::UpdateUserApplication,
+    },
 };
 use arcadia_storage::models::{
     artist::{
@@ -61,9 +64,9 @@ use arcadia_storage::models::{
         crate::handlers::users::warn_user::exec,
         crate::handlers::users::get_me::exec,
         crate::handlers::users::get_registered_users::exec,
-        crate::handlers::user_application_handler::add_user_application,
-        crate::handlers::user_application_handler::get_user_applications,
-        crate::handlers::user_application_handler::update_user_application_status,
+        crate::handlers::user_applications::create_user_application::exec,
+        crate::handlers::user_applications::get_user_applications::exec,
+        crate::handlers::user_applications::update_user_application_status::exec,
         crate::handlers::home_handler::get_home,
         crate::handlers::artist_handler::get_artist_publications,
         crate::handlers::artist_handler::add_artists,

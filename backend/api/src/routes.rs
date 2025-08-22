@@ -3,6 +3,7 @@ use actix_web::web::scope;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::handlers::auth::config as AuthConfig;
+use crate::handlers::user_applications::config as UserApplicationsConfig;
 use crate::handlers::users::config as UsersConfig;
 
 use crate::handlers::title_group_handler::edit_title_group;
@@ -42,9 +43,6 @@ use crate::handlers::{
     torrent_report_handler::add_torrent_report,
     torrent_request_handler::{add_torrent_request, fill_torrent_request, get_torrent_request},
     torrent_request_vote_handler::add_torrent_request_vote,
-    user_application_handler::{
-        add_user_application, get_user_applications, update_user_application_status,
-    },
     wiki_handler::{add_wiki_article, get_wiki_article},
 };
 use crate::middlewares::jwt_middleware::authenticate_user;
@@ -55,12 +53,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .wrap(HttpAuthentication::with_fn(authenticate_user))
             .service(scope("/auth").configure(AuthConfig))
             .service(scope("/users").configure(UsersConfig))
-            .route("/apply", web::post().to(add_user_application))
-            .route("/user-application", web::get().to(get_user_applications))
-            .route(
-                "/user-application",
-                web::put().to(update_user_application_status),
-            )
+            .service(scope("/user-applications").configure(UserApplicationsConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))

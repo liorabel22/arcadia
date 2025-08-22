@@ -1,4 +1,4 @@
-pub mod add_api_key;
+pub mod create_api_key;
 pub mod edit_user;
 pub mod get_me;
 pub mod get_registered_users;
@@ -16,5 +16,5 @@ pub fn config(cfg: &mut ServiceConfig) {
     cfg.service(resource("/warnings").route(post().to(self::warn_user::exec)));
     cfg.service(resource("/me").route(post().to(self::get_me::exec)));
     cfg.service(resource("/registered").route(post().to(self::get_registered_users::exec)));
-    cfg.service(resource("/api-keys").route(post().to(self::add_api_key::exec)));
+    cfg.service(resource("/api-keys").route(post().to(self::create_api_key::exec)));
 }
