@@ -62,7 +62,6 @@ pub fn init(cfg: &mut web::ServiceConfig) {
                 "/user-application",
                 web::put().to(update_user_application_status),
             )
-            // .route("/refresh-token", web::post().to(refresh_token))
             .route("/home", web::get().to(get_home))
             .route("/user", web::get().to(get_user))
             .route("/user", web::put().to(edit_user))

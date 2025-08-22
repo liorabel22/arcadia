@@ -31,7 +31,7 @@ pub async fn authenticate_user(
     }
 }
 
-pub async fn validate_bearer_auth(
+async fn validate_bearer_auth(
     req: ServiceRequest,
     bearer: BearerAuth,
 ) -> std::result::Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
@@ -77,7 +77,7 @@ pub async fn validate_bearer_auth(
     Ok(req)
 }
 
-pub async fn validate_api_key(
+async fn validate_api_key(
     req: ServiceRequest,
     api_key: &str,
 ) -> std::result::Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
