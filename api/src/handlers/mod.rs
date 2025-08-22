@@ -84,7 +84,7 @@ impl actix_web::FromRequest for User {
         Box::pin(async move {
             pool.find_user_with_id(user_id)
                 .await
-                .map(|u| User(u))
+                .map(User)
                 .map_err(|e| actix_web::error::ErrorInternalServerError(e.to_string()))
         })
     }

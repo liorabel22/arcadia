@@ -149,7 +149,7 @@ pub async fn get_musicbrainz_data(
     let mut client = MusicBrainzClient::default();
     client
         .set_user_agent(&format!("{} ({})", arc.tracker.name, arc.frontend_url))
-        .unwrap();
+        .map_err(|_| Error::InvalidMusicbrainzUrl)?;
 
     let mut title_group: Option<UserCreatedTitleGroup> = None;
     let mut edition_group: Option<UserCreatedEditionGroup> = None;

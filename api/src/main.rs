@@ -28,7 +28,7 @@ async fn main() -> std::io::Result<()> {
     );
 
     let server_url = format!("{}:{}", env.actix.host, env.actix.port);
-    println!("Server running at http://{}", server_url);
+    println!("Server running at http://{server_url}");
 
     if env.tmdb_api_key.is_none() {
         println!("TMDB_API_KEY env var is not set. TMDB data fetching won't be available")
