@@ -118,18 +118,16 @@ async fn handle_announce(
         } else {
             torrent.upload_factor
         };
-        let upload_to_credit = ((real_uploaded as i64 - old_real_uploaded) as f64
-            * upload_factor)
-            .ceil() as i64;
+        let upload_to_credit =
+            ((real_uploaded as i64 - old_real_uploaded) as f64 * upload_factor).ceil() as i64;
 
         let download_factor = if arc.tracker.global_download_factor != 1.0 {
             arc.tracker.global_download_factor
         } else {
             torrent.download_factor
         };
-        let download_to_credit = ((real_downloaded as i64 - old_real_downloaded) as f64
-            * download_factor)
-            .ceil() as i64;
+        let download_to_credit =
+            ((real_downloaded as i64 - old_real_downloaded) as f64 * download_factor).ceil() as i64;
         let real_uploaded_to_credit = real_uploaded as i64 - old_real_uploaded;
         let real_downloaded_to_credit = real_downloaded as i64 - old_real_downloaded;
 
