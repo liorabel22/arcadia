@@ -126,7 +126,7 @@ jobs:
           cache-workspaces: ./backend
 
       - name: Setup env
-        run: cp -f ./api/.env.ci .env
+        run: cp -f ../api/.env.ci .env
 
       - name: Install sqlx
         run: cargo install sqlx-cli
