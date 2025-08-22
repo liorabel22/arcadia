@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::master_group::{MasterGroup, UserCreatedMasterGroup},

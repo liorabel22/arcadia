@@ -1,8 +1,10 @@
+use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::user::{EditedUser, PublicUser, UserCreatedUserWarning, UserMinimal, UserWarning},
 };
 use arcadia_common::error::{Error, Result};
+use sqlx::PgPool;
 
 impl ConnectionPool {
     pub async fn find_user_profile(&self, id: &i64) -> Result<PublicUser> {
@@ -89,7 +91,7 @@ impl ConnectionPool {
         current_user_id: i64,
         user_warning: &UserCreatedUserWarning,
     ) -> Result<UserWarning> {
-        let mut tx = self.borrow().begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
 
         let _ = sqlx::query!(
             r#"

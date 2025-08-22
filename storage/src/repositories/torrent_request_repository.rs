@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::{
@@ -7,7 +8,7 @@ use crate::{
 };
 use arcadia_common::error::{Error, Result};
 use serde_json::Value;
-use sqlx::{query_as, query_scalar};
+use sqlx::{query_as, query_scalar, PgPool};
 
 impl ConnectionPool {
     pub async fn create_torrent_request(
@@ -136,7 +137,7 @@ impl ConnectionPool {
         .fetch_one(self.borrow())
         .await?;
 
-        let mut tx = self.borrow().begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
 
         sqlx::query!(
             r#"

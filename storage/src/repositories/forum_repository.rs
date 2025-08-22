@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::forum::{
@@ -7,6 +8,7 @@ use crate::{
 };
 use arcadia_common::error::{Error, Result};
 use serde_json::Value;
+use sqlx::PgPool;
 
 impl ConnectionPool {
     pub async fn create_forum_post(
@@ -14,7 +16,7 @@ impl ConnectionPool {
         forum_post: &UserCreatedForumPost,
         current_user_id: i64,
     ) -> Result<ForumPost> {
-        let mut tx = self.borrow().begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
 
         let forum_post = sqlx::query_as!(
             ForumPost,
@@ -65,7 +67,7 @@ impl ConnectionPool {
         forum_thread: &mut UserCreatedForumThread,
         current_user_id: i64,
     ) -> Result<ForumThread> {
-        let mut tx = self.borrow().begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
 
         let created_forum_thread = sqlx::query_as!(
             ForumThread,

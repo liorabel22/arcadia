@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use crate::connection_pool::ConnectionPool;
 use crate::models::peer::PeerStatus;
 use arcadia_common::error::Result;

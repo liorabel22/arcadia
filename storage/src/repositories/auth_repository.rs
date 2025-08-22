@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::{
@@ -15,7 +16,7 @@ use rand::{
     distr::{Alphanumeric, SampleString},
     rng,
 };
-use sqlx::types::ipnetwork::IpNetwork;
+use sqlx::{types::ipnetwork::IpNetwork, PgPool};
 
 impl ConnectionPool {
     pub async fn does_username_exist(&self, username: &str) -> Result<bool> {
@@ -145,7 +146,7 @@ impl ConnectionPool {
         created_api_key: &UserCreatedAPIKey,
         current_user_id: i64,
     ) -> Result<APIKey> {
-        let mut tx = self.borrow().begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
 
         loop {
             let api_key: String = Alphanumeric.sample_string(&mut rng(), 40);

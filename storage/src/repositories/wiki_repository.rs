@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::wiki::{UserCreatedWikiArticle, WikiArticle},

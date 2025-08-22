@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use crate::{
     connection_pool::ConnectionPool,
     models::artist::{
@@ -7,6 +8,7 @@ use crate::{
 };
 use arcadia_common::error::{Error, Result};
 use serde_json::Value;
+use sqlx::PgPool;
 
 impl ConnectionPool {
     pub async fn create_artists(
@@ -14,7 +16,7 @@ impl ConnectionPool {
         artists: &Vec<UserCreatedArtist>,
         current_user_id: i64,
     ) -> Result<Vec<Artist>> {
-        let mut tx = self.borrow().begin().await?;
+        let mut tx = <ConnectionPool as Borrow<PgPool>>::borrow(self).begin().await?;
 
         let mut created_artists = Vec::new();
 
