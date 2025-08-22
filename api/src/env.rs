@@ -6,8 +6,8 @@ use std::{collections::HashSet, str::FromStr};
 pub struct Env {
     #[envconfig(nested)]
     pub actix: ActixConfig,
-    #[envconfig(from = "POSTGRES_URI")]
-    pub postgres_uri: String,
+    #[envconfig(from = "DATABASE_URL")]
+    pub database_url: String,
     #[envconfig(from = "JWT_SECRET")]
     pub jwt_secret: String,
     #[envconfig(from = "ARCADIA_OPEN_SIGNUPS")]

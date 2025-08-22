@@ -2,8 +2,8 @@ use envconfig::Envconfig;
 
 #[derive(Envconfig, Clone)]
 pub struct Env {
-    #[envconfig(from = "POSTGRES_URI")]
-    pub postgres_uri: String,
+    #[envconfig(from = "DATABASE_URL")]
+    pub database_url: String,
     #[envconfig(nested)]
     pub tracker: TrackerConfig,
 }

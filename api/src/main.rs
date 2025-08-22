@@ -22,7 +22,7 @@ async fn main() -> std::io::Result<()> {
 
     let env = Env::init_from_env().unwrap();
     let pool = Arc::new(
-        ConnectionPool::try_new(&env.postgres_uri)
+        ConnectionPool::try_new(&env.database_url)
             .await
             .expect("db connection"),
     );
