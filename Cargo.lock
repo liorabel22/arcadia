@@ -642,8 +642,6 @@ dependencies = [
 [[package]]
 name = "bip_metainfo"
 version = "0.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7991f0f834f2c60b59b9106abc3a18c6aaaa986716fab3aadc81b64b72dd6d5"
 dependencies = [
  "bip_bencode",
  "bip_util",

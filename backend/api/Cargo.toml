@@ -40,9 +40,6 @@ dotenvy = "0.15.7"
 arcadia-common = { path = "../common"}
 arcadia-storage = { path = "../storage"}
 
-[patch.crates-io]
-bip_metainfo = { path = "vendored/bip_metainfo" }
-
 [dev-dependencies]
 actix-multipart-rfc7578 = "0.11.0"
 bytes = "1.10.1"
