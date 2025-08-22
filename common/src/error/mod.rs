@@ -229,9 +229,6 @@ pub enum Error {
 
     #[error("invalid tmdb url")]
     InvalidTMDBUrl,
-
-    #[error("env variable parse error '{0}'")]
-    EnvVariableParseError(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

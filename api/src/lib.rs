@@ -1,4 +1,3 @@
-use arcadia_common::error::{Error, Result};
 use arcadia_storage::connection_pool::ConnectionPool;
 use std::{ops::Deref, str::FromStr, sync::Arc};
 
@@ -17,13 +16,13 @@ pub enum OpenSignups {
 }
 
 impl FromStr for OpenSignups {
-    type Err = Error;
+    type Err = env::Error;
 
-    fn from_str(s: &str) -> Result<Self> {
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         match s {
             "true" => Ok(Self::Enabled),
             "false" => Ok(Self::Disabled),
-            _ => Err(Error::EnvVariableParseError(
+            _ => Err(env::Error::EnvVariableParseError(
                 "ARCADIA_OPEN_SIGNUPS".to_string(),
             )),
         }
