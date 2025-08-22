@@ -14,6 +14,10 @@ impl ConnectionPool {
 
         Ok(Self(pool))
     }
+
+    pub fn with_pg_pool(pool: PgPool) -> Self {
+      Self(pool)
+    }
 }
 
 impl Borrow<PgPool> for ConnectionPool {

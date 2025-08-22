@@ -1,3 +1,4 @@
+use std::sync::Arc;
 use actix_http::Request;
 use actix_web::{
     App, Error,
@@ -9,7 +10,8 @@ use actix_web::{
     },
     test, web,
 };
-use arcadia_backend::{Arcadia, OpenSignups, env::Env, models::user::LoginResponse};
+use arcadia_api::{Arcadia, OpenSignups, env::Env};
+use arcadia_storage::{connection_pool::ConnectionPool, models::user::LoginResponse};
 use envconfig::Envconfig;
 use serde::de::DeserializeOwned;
 use sqlx::PgPool;
@@ -24,7 +26,7 @@ pub async fn create_test_app(
     env.open_signups = open_signups;
     env.tracker.global_upload_factor = global_upload_factor;
     env.tracker.global_download_factor = global_download_factor;
-    let arc = Arcadia::new(pool, env);
+    let arc = Arcadia::new(Arc::new(ConnectionPool::with_pg_pool(pool)), env);
 
     // TODO: CORS?
     test::init_service(

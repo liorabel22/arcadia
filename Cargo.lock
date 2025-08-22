@@ -508,6 +508,7 @@ dependencies = [
  "serde_bencode",
  "serde_bytes",
  "serde_json",
+ "sqlx",
  "strum",
  "thiserror 2.0.16",
  "tmdb-api",
