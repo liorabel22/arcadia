@@ -13,7 +13,6 @@ use crate::handlers::{
         add_affiliated_artists, add_artists, get_artist_publications, get_artists_lite,
         remove_affiliated_artists,
     },
-    auth_handler::refresh_token,
     conversation_handler::{
         add_conversation, add_conversation_message, get_conversation, get_user_conversations,
     },
@@ -66,7 +65,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
                 "/user-application",
                 web::put().to(update_user_application_status),
             )
-            .route("/refresh-token", web::post().to(refresh_token))
+            // .route("/refresh-token", web::post().to(refresh_token))
             .route("/home", web::get().to(get_home))
             .route("/user", web::get().to(get_user))
             .route("/user", web::put().to(edit_user))

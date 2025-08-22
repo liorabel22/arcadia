@@ -1,12 +1,9 @@
 use crate::Arcadia;
-use actix_web::{HttpMessage as _, HttpResponse, dev::ServiceRequest, web};
+use actix_web::{HttpMessage as _, dev::ServiceRequest, web};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
-use arcadia_common::error::{Error, Result};
-use arcadia_storage::models::user::{Claims, LoginResponse, RefreshToken};
-use chrono::Duration;
-use chrono::prelude::Utc;
+use arcadia_storage::models::user::Claims;
 use jsonwebtoken::{
-    DecodingKey, EncodingKey, Header, Validation, decode, encode, errors::ErrorKind,
+    DecodingKey, Validation, decode, errors::ErrorKind,
 };
 
 pub async fn authenticate_user(
@@ -104,52 +101,4 @@ pub async fn validate_api_key(
         .insert(crate::handlers::UserId(user_id));
 
     Ok(req)
-}
-
-#[utoipa::path(
-    post,
-    path = "/api/refresh-token",
-    responses(
-        (status = 200, description = "Successfully refreshed the token", body=LoginResponse),
-    )
-)]
-pub async fn refresh_token(
-    arc: web::Data<Arcadia>,
-    form: web::Json<RefreshToken>,
-) -> Result<HttpResponse> {
-    let old_refresh_token = decode::<Claims>(
-        &form.refresh_token,
-        &DecodingKey::from_secret(arc.jwt_secret.as_bytes()),
-        &Validation::default(),
-    )
-    .map_err(|_| Error::InvalidOrExpiredRefreshToken)?;
-
-    let token_claims = Claims {
-        sub: old_refresh_token.claims.sub,
-        exp: (Utc::now() + Duration::days(1)).timestamp() as usize,
-    };
-
-    let token = encode(
-        &Header::default(),
-        &token_claims,
-        &EncodingKey::from_secret(arc.jwt_secret.as_bytes()),
-    )
-    .unwrap();
-
-    let refresh_token_claims = Claims {
-        sub: old_refresh_token.claims.sub,
-        exp: (Utc::now() + Duration::days(90)).timestamp() as usize,
-    };
-
-    let refresh_token = encode(
-        &Header::default(),
-        &refresh_token_claims,
-        &EncodingKey::from_secret(arc.jwt_secret.as_bytes()),
-    )
-    .unwrap();
-
-    Ok(HttpResponse::Ok().json(serde_json::json!({
-        "token": token,
-        "refresh_token": refresh_token
-    })))
 }
