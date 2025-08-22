@@ -4,7 +4,7 @@ use std::{env, sync::Arc};
 #[tokio::main]
 async fn main() {
     if env::var("ENV").unwrap() == "development" {
-        dotenv::from_filename(".env").expect("cannot load env from a file");
+        dotenvy::from_filename(".env").expect("cannot load env from a file");
     }
 
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
