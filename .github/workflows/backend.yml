@@ -101,7 +101,7 @@ jobs:
     container: rust:1.89-bullseye
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./backend/storage
 
     services:
       arcadiadb:
