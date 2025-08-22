@@ -2,7 +2,7 @@ use crate::Arcadia;
 use actix_web::{HttpMessage as _, HttpResponse, dev::ServiceRequest, web};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use arcadia_common::error::{Error, Result};
-use arcadia_storage::models::user::{Claims, Login, LoginResponse, RefreshToken};
+use arcadia_storage::models::user::{Claims, LoginResponse, RefreshToken};
 use chrono::Duration;
 use chrono::prelude::Utc;
 use jsonwebtoken::{
