@@ -17,8 +17,6 @@ pub mod peers_handler;
 pub mod scrapers;
 pub mod series_handler;
 pub mod subscriptions_handler;
-pub mod title_group_comment_handler;
-pub mod title_group_handler;
 pub mod torrent_handler;
 pub mod torrent_report_handler;
 pub mod torrent_request_handler;

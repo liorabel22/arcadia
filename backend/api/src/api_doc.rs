@@ -88,7 +88,7 @@ use arcadia_storage::models::{
         crate::handlers::series_handler::get_series,
         crate::handlers::subscriptions_handler::add_subscription,
         crate::handlers::subscriptions_handler::remove_subscription,
-        crate::handlers::title_group_comment_handler::add_title_group_comment,
+        crate::handlers::title_groups::create_title_group_comment::exec,
         crate::handlers::title_groups::create_title_group::exec,
         crate::handlers::title_groups::edit_title_group::exec,
         crate::handlers::title_groups::get_title_group::exec,

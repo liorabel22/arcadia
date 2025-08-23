@@ -33,7 +33,6 @@ use crate::handlers::{
     },
     series_handler::{add_series, get_series},
     subscriptions_handler::{add_subscription, remove_subscription},
-    title_group_comment_handler::add_title_group_comment,
     torrent_handler::{
         delete_torrent, download_dottorrent_file, edit_torrent, find_torrents,
         get_registered_torrents, get_top_torrents, get_upload_information, upload_torrent,
@@ -81,10 +80,6 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .route(
                 "/affiliated-artists",
                 web::delete().to(remove_affiliated_artists),
-            )
-            .route(
-                "/title-group-comment",
-                web::post().to(add_title_group_comment),
             )
             .route("/series", web::post().to(add_series))
             .route("/series", web::get().to(get_series))

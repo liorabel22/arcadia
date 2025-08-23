@@ -12,7 +12,7 @@ use arcadia_storage::models::title_group_comment::{
         (status = 200, description = "Successfully posted the comment", body=TitleGroupComment),
     )
 )]
-pub async fn add_title_group_comment(
+pub async fn exec(
     comment: web::Json<UserCreatedTitleGroupComment>,
     arc: web::Data<Arcadia>,
     current_user: User,
