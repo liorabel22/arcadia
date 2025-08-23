@@ -4,6 +4,7 @@ pub mod auth;
 pub mod conversations;
 pub mod edition_groups;
 pub mod search;
+pub mod subscriptions;
 pub mod title_groups;
 pub mod torrent_requests;
 pub mod torrents;
@@ -19,7 +20,6 @@ pub mod master_group_handler;
 pub mod peers_handler;
 pub mod scrapers;
 pub mod series_handler;
-pub mod subscriptions_handler;
 pub mod torrent_report_handler;
 pub mod wiki_handler;
 
