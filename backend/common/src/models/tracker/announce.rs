@@ -1,4 +1,4 @@
-use actix_web::{FromRequest, HttpRequest, HttpResponse, ResponseError, dev};
+use actix_web::{dev, FromRequest, HttpRequest, HttpResponse, ResponseError};
 use serde::{Deserialize, Serialize};
 use std::future::Ready;
 use std::str::FromStr;

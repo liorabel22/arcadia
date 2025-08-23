@@ -21,7 +21,6 @@ pub mod torrent_handler;
 pub mod torrent_report_handler;
 pub mod torrent_request_handler;
 pub mod torrent_request_vote_handler;
-pub mod user_application_handler;
 pub mod wiki_handler;
 
 use std::{

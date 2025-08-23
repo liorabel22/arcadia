@@ -1,28 +1,27 @@
-use actix_web::{HttpResponse, web};
+use crate::{
+    handlers::scrapers::ExternalDBData, services::common_service::naive_date_to_utc_midnight,
+    Arcadia,
+};
+use actix_web::{web, HttpResponse};
+use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::{
-    edition_group::{UserCreatedEditionGroup, create_default_edition_group},
-    title_group::{ContentType, UserCreatedTitleGroup, create_default_title_group},
+    edition_group::{create_default_edition_group, UserCreatedEditionGroup},
+    title_group::{create_default_title_group, ContentType, UserCreatedTitleGroup},
 };
 use chrono::NaiveDate;
 use musicbrainz_rs::{
-    Fetch, FetchCoverart,
     client::MusicBrainzClient,
     entity::{
-        CoverartResponse,
         release::Release,
         release_group::{ReleaseGroup, ReleaseGroupPrimaryType},
+        CoverartResponse,
     },
+    Fetch, FetchCoverart,
 };
 use regex::Regex;
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::IntoParams;
-
-use crate::{
-    Arcadia, handlers::scrapers::ExternalDBData,
-    services::common_service::naive_date_to_utc_midnight,
-};
-use arcadia_common::error::{Error, Result};
 
 async fn get_musicbrainz_release_group_data(
     id: &str,

@@ -1,15 +1,14 @@
 use actix_http::Request;
 use actix_web::{
-    App, Error,
     body::MessageBody,
     dev::{Service, ServiceResponse},
     http::{
+        header::{HeaderValue, TryIntoHeaderPair, AUTHORIZATION, CONTENT_TYPE},
         StatusCode,
-        header::{AUTHORIZATION, CONTENT_TYPE, HeaderValue, TryIntoHeaderPair},
     },
-    test, web,
+    test, web, App, Error,
 };
-use arcadia_api::{Arcadia, OpenSignups, env::Env};
+use arcadia_api::{env::Env, Arcadia, OpenSignups};
 use arcadia_storage::{connection_pool::ConnectionPool, models::user::LoginResponse};
 use envconfig::Envconfig;
 use serde::de::DeserializeOwned;
