@@ -83,7 +83,7 @@ use arcadia_storage::models::{
         crate::handlers::torrents::get_upload_information::exec,
         crate::handlers::torrents::get_top_torrents::exec,
         crate::handlers::torrents::delete_torrent::exec,
-        crate::handlers::torrent_report_handler::add_torrent_report,
+        crate::handlers::torrents::create_torrent_report::exec,
         crate::handlers::edition_groups::create_edition_group::exec,
         crate::handlers::invitations::create_invitation::exec,
         crate::handlers::master_groups::create_master_group::exec,

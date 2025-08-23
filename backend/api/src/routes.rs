@@ -23,10 +23,7 @@ use crate::handlers::user_applications::config as UserApplicationsConfig;
 use crate::handlers::users::config as UsersConfig;
 use crate::handlers::wiki::config as WikiConfig;
 
-use crate::handlers::{
-    announce_handler::handle_announce, gift_handler::send_gift,
-    torrent_report_handler::add_torrent_report,
-};
+use crate::handlers::announce_handler::handle_announce;
 use crate::middlewares::jwt_middleware::authenticate_user;
 
 pub fn init(cfg: &mut web::ServiceConfig) {
@@ -52,7 +49,6 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/invitations").configure(InvitationsConfig))
             .service(scope("/home").configure(HomeConfig))
             .service(scope("/master-groups").configure(MasterGroupsConfig))
-            .service(scope("/gifts").configure(GiftsConfig))
-            .route("/report/torrent", web::post().to(add_torrent_report)),
+            .service(scope("/gifts").configure(GiftsConfig)),
     );
 }

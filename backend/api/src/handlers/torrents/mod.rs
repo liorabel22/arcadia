@@ -20,4 +20,5 @@ pub fn config(cfg: &mut ServiceConfig) {
     cfg.service(resource("/registered").route(get().to(self::get_registered_torrents::exec)));
     cfg.service(resource("/upload-info").route(get().to(self::get_upload_information::exec)));
     cfg.service(resource("/top").route(get().to(self::get_top_torrents::exec)));
+    cfg.service(resource("/reports").route(get().to(self::create_torrent_report::exec)));
 }
