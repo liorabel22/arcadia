@@ -11,7 +11,7 @@ pub async fn authenticate_user(
     // These routes are explicitly not authenticated.
     if matches!(
         req.path(),
-        "/api/login" | "/api/register" | "/api/refresh-token" | "/api/apply"
+        "/api/auth/login" | "/api/auth/register" | "/api/auth/refresh-token" | "/api/apply"
     ) {
         return Ok(req);
     }

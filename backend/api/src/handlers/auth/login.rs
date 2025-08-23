@@ -8,7 +8,7 @@ use jsonwebtoken::{encode, EncodingKey, Header};
 
 #[utoipa::path(
     post,
-    path = "/api/login",
+    path = "/api/auth/login",
     responses(
         (status = 200, description = "Successfully logged in", body=LoginResponse),
     )
