@@ -2,8 +2,6 @@ use crate::{handlers::User, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::wiki::{UserCreatedWikiArticle, WikiArticle};
-use serde::Deserialize;
-use utoipa::IntoParams;
 
 #[utoipa::path(
     post,
@@ -12,7 +10,7 @@ use utoipa::IntoParams;
         (status = 200, description = "Successfully created the wiki article", body=WikiArticle),
     )
 )]
-pub async fn add_wiki_article(
+pub async fn exec(
     article: web::Json<UserCreatedWikiArticle>,
     arc: web::Data<Arcadia>,
     current_user: User,
@@ -27,26 +25,4 @@ pub async fn add_wiki_article(
         .await?;
 
     Ok(HttpResponse::Created().json(article))
-}
-
-#[derive(Debug, Deserialize, IntoParams)]
-pub struct GetWikiArticleQuery {
-    id: i64,
-}
-
-#[utoipa::path(
-    get,
-    path = "/api/wiki/article",
-    params(GetWikiArticleQuery),
-    responses(
-        (status = 200, description = "Successfully found the wiki article", body=WikiArticle),
-    )
-)]
-pub async fn get_wiki_article(
-    query: web::Query<GetWikiArticleQuery>,
-    arc: web::Data<Arcadia>,
-) -> Result<HttpResponse> {
-    let article = arc.pool.find_wiki_article(query.id).await?;
-
-    Ok(HttpResponse::Ok().json(article))
 }

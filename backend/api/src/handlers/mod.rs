@@ -13,6 +13,7 @@ pub mod torrent_requests;
 pub mod torrents;
 pub mod user_applications;
 pub mod users;
+pub mod wiki;
 
 pub mod announce_handler;
 pub mod gift_handler;
@@ -22,7 +23,6 @@ pub mod master_group_handler;
 pub mod peers_handler;
 pub mod scrapers;
 pub mod torrent_report_handler;
-pub mod wiki_handler;
 
 use std::{
     ops::{Deref, DerefMut},
