@@ -4,6 +4,7 @@ pub mod auth;
 pub mod conversations;
 pub mod edition_groups;
 pub mod external_db;
+pub mod forum;
 pub mod search;
 pub mod series;
 pub mod subscriptions;
@@ -14,7 +15,6 @@ pub mod user_applications;
 pub mod users;
 
 pub mod announce_handler;
-pub mod forum_handler;
 pub mod gift_handler;
 pub mod home_handler;
 pub mod invitation_handler;

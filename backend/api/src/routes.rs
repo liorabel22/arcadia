@@ -8,6 +8,7 @@ use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::conversations::config as ConversationsConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::external_db::config as ExternalDbConfig;
+use crate::handlers::forum::config as ForumConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::series::config as SeriesConfig;
 use crate::handlers::subscriptions::config as SubscriptionsConfig;
@@ -19,10 +20,6 @@ use crate::handlers::users::config as UsersConfig;
 
 use crate::handlers::{
     announce_handler::handle_announce,
-    forum_handler::{
-        add_forum_post, add_forum_thread, get_forum, get_forum_sub_category_threads,
-        get_forum_thread, search_forum_thread,
-    },
     gift_handler::send_gift,
     home_handler::get_home,
     invitation_handler::send_invitation,
@@ -50,20 +47,12 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/subscriptions").configure(SubscriptionsConfig))
             .service(scope("/series").configure(SeriesConfig))
             .service(scope("/external_db").configure(ExternalDbConfig))
+            .service(scope("/forum").configure(ForumConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
             .route("/report/torrent", web::post().to(add_torrent_report))
             .route("/gift", web::post().to(send_gift))
-            .route("/forum", web::get().to(get_forum))
-            .route(
-                "/forum/sub-category",
-                web::get().to(get_forum_sub_category_threads),
-            )
-            .route("/forum/thread", web::get().to(get_forum_thread))
-            .route("/search/forum/thread", web::get().to(search_forum_thread))
-            .route("/forum/thread", web::post().to(add_forum_thread))
-            .route("/forum/post", web::post().to(add_forum_post))
             .route("/wiki/article", web::post().to(add_wiki_article))
             .route("/wiki/article", web::get().to(get_wiki_article)),
     );
