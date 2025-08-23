@@ -22,7 +22,7 @@ pub struct HomePage {
         (status = 200, description = "", body=HomePage),
     )
 )]
-pub async fn get_home(arc: web::Data<Arcadia>) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>) -> Result<HttpResponse> {
     let recent_announcements = arc
         .pool
         .find_first_thread_posts_in_sub_category(1, 5)

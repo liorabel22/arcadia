@@ -10,7 +10,7 @@ use arcadia_storage::models::invitation::{Invitation, SentInvitation};
         (status = 200, description = "Successfully sent the invitation", body=Invitation),
     )
 )]
-pub async fn send_invitation(
+pub async fn exec(
     invitation: web::Json<SentInvitation>,
     arc: web::Data<Arcadia>,
     current_user: User,

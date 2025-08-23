@@ -9,6 +9,8 @@ use crate::handlers::conversations::config as ConversationsConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::external_db::config as ExternalDbConfig;
 use crate::handlers::forum::config as ForumConfig;
+use crate::handlers::home::config as HomeConfig;
+use crate::handlers::invitations::config as InvitationsConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::series::config as SeriesConfig;
 use crate::handlers::subscriptions::config as SubscriptionsConfig;
@@ -20,9 +22,8 @@ use crate::handlers::users::config as UsersConfig;
 use crate::handlers::wiki::config as WikiConfig;
 
 use crate::handlers::{
-    announce_handler::handle_announce, gift_handler::send_gift, home_handler::get_home,
-    invitation_handler::send_invitation, master_group_handler::add_master_group,
-    torrent_report_handler::add_torrent_report,
+    announce_handler::handle_announce, gift_handler::send_gift,
+    master_group_handler::add_master_group, torrent_report_handler::add_torrent_report,
 };
 use crate::middlewares::jwt_middleware::authenticate_user;
 
@@ -46,8 +47,8 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/external_db").configure(ExternalDbConfig))
             .service(scope("/forum").configure(ForumConfig))
             .service(scope("/wiki").configure(WikiConfig))
-            .route("/home", web::get().to(get_home))
-            .route("/invitation", web::post().to(send_invitation))
+            .service(scope("/invitations").configure(InvitationsConfig))
+            .service(scope("/home").configure(HomeConfig))
             .route("/master-group", web::post().to(add_master_group))
             .route("/report/torrent", web::post().to(add_torrent_report))
             .route("/gift", web::post().to(send_gift)),

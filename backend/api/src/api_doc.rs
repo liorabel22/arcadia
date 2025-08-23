@@ -3,7 +3,7 @@ use utoipa::OpenApi;
 use crate::handlers::{
     artists::get_artist_publications::GetArtistPublicationsQuery,
     auth::register::RegisterQuery,
-    home_handler::HomePage,
+    home::get_home::HomePage,
     scrapers::ExternalDBData,
     search::search_torrent_requests::SearchTorrentRequestsQuery,
     torrents::{
@@ -71,7 +71,7 @@ use arcadia_storage::models::{
         crate::handlers::user_applications::create_user_application::exec,
         crate::handlers::user_applications::get_user_applications::exec,
         crate::handlers::user_applications::update_user_application_status::exec,
-        crate::handlers::home_handler::get_home,
+        crate::handlers::home::get_home::exec,
         crate::handlers::artists::get_artist_publications::exec,
         crate::handlers::artists::create_artists::exec,
         crate::handlers::affiliated_artists::create_affiliated_artists::exec,
@@ -85,7 +85,7 @@ use arcadia_storage::models::{
         crate::handlers::torrents::delete_torrent::exec,
         crate::handlers::torrent_report_handler::add_torrent_report,
         crate::handlers::edition_groups::create_edition_group::exec,
-        crate::handlers::invitation_handler::send_invitation,
+        crate::handlers::invitations::create_invitation::exec,
         crate::handlers::master_group_handler::add_master_group,
         crate::handlers::series::create_series::exec,
         crate::handlers::series::get_series::exec,
