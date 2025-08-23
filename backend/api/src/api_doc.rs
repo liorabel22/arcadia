@@ -81,7 +81,7 @@ use arcadia_storage::models::{
         crate::handlers::torrent_handler::get_top_torrents,
         crate::handlers::torrent_handler::delete_torrent,
         crate::handlers::torrent_report_handler::add_torrent_report,
-        crate::handlers::edition_group_handler::add_edition_group,
+        crate::handlers::edition_groups::create_edition_group::exec,
         crate::handlers::invitation_handler::send_invitation,
         crate::handlers::master_group_handler::add_master_group,
         crate::handlers::series_handler::add_series,

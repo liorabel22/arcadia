@@ -3,6 +3,7 @@ use actix_web::web::scope;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::handlers::auth::config as AuthConfig;
+use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::title_groups::config as TitleGroupsConfig;
 use crate::handlers::user_applications::config as UserApplicationsConfig;
@@ -18,7 +19,6 @@ use crate::handlers::{
     conversation_handler::{
         add_conversation, add_conversation_message, get_conversation, get_user_conversations,
     },
-    edition_group_handler::add_edition_group,
     forum_handler::{
         add_forum_post, add_forum_thread, get_forum, get_forum_sub_category_threads,
         get_forum_thread, search_forum_thread,
@@ -52,11 +52,11 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/users").configure(UsersConfig))
             .service(scope("/user-applications").configure(UserApplicationsConfig))
             .service(scope("/title-groups").configure(TitleGroupsConfig))
+            .service(scope("/edition-groups").configure(EditionGroupsConfig))
             .service(scope("/search").configure(SearchConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
-            .route("/edition-group", web::post().to(add_edition_group))
             .route("/torrent", web::post().to(upload_torrent))
             .route("/torrent", web::put().to(edit_torrent))
             .route("/torrent", web::get().to(download_dottorrent_file))

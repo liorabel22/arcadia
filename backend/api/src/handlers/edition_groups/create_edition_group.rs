@@ -10,7 +10,7 @@ use arcadia_storage::models::edition_group::{EditionGroup, UserCreatedEditionGro
         (status = 200, description = "Successfully created the edition_group", body=EditionGroup),
     )
 )]
-pub async fn add_edition_group(
+pub async fn exec(
     form: web::Json<UserCreatedEditionGroup>,
     arc: web::Data<Arcadia>,
     current_user_id: UserId,
