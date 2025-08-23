@@ -10,7 +10,7 @@ use arcadia_storage::models::gift::{Gift, UserCreatedGift};
         (status = 200, description = "Successfully sent the gift", body=Gift),
     )
 )]
-pub async fn send_gift(
+pub async fn exec(
     gift: web::Json<UserCreatedGift>,
     arc: web::Data<Arcadia>,
     current_user: User,

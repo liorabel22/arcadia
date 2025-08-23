@@ -105,7 +105,7 @@ use arcadia_storage::models::{
         crate::handlers::torrent_requests::get_torrent_request::exec,
         crate::handlers::torrent_requests::fill_torrent_request::exec,
         crate::handlers::torrent_requests::create_torrent_request_vote::exec,
-        crate::handlers::gift_handler::send_gift,
+        crate::handlers::gifts::create_gift::exec,
         crate::handlers::forum::get_forum::exec,
         crate::handlers::forum::get_forum_sub_category_threads::exec,
         crate::handlers::forum::get_forum_thread::exec,

@@ -9,6 +9,7 @@ use crate::handlers::conversations::config as ConversationsConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::external_db::config as ExternalDbConfig;
 use crate::handlers::forum::config as ForumConfig;
+use crate::handlers::gifts::config as GiftsConfig;
 use crate::handlers::home::config as HomeConfig;
 use crate::handlers::invitations::config as InvitationsConfig;
 use crate::handlers::master_groups::config as MasterGroupsConfig;
@@ -51,7 +52,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/invitations").configure(InvitationsConfig))
             .service(scope("/home").configure(HomeConfig))
             .service(scope("/master-groups").configure(MasterGroupsConfig))
-            .route("/report/torrent", web::post().to(add_torrent_report))
-            .route("/gift", web::post().to(send_gift)),
+            .service(scope("/gifts").configure(GiftsConfig))
+            .route("/report/torrent", web::post().to(add_torrent_report)),
     );
 }
