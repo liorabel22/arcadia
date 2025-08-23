@@ -5,6 +5,7 @@ use actix_web_httpauth::middleware::HttpAuthentication;
 use crate::handlers::affiliated_artists::config as AffiliatedArtistsConfig;
 use crate::handlers::artists::config as ArtistsConfig;
 use crate::handlers::auth::config as AuthConfig;
+use crate::handlers::conversations::config as ConversationsConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::title_groups::config as TitleGroupsConfig;
@@ -15,9 +16,6 @@ use crate::handlers::users::config as UsersConfig;
 
 use crate::handlers::{
     announce_handler::handle_announce,
-    conversation_handler::{
-        add_conversation, add_conversation_message, get_conversation, get_user_conversations,
-    },
     forum_handler::{
         add_forum_post, add_forum_thread, get_forum, get_forum_sub_category_threads,
         get_forum_thread, search_forum_thread,
@@ -51,6 +49,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/torrent-requests").configure(TorrentRequestsConfig))
             .service(scope("/artists").configure(ArtistsConfig))
             .service(scope("/affiliated-artists").configure(AffiliatedArtistsConfig))
+            .service(scope("/conversations").configure(ConversationsConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
@@ -71,13 +70,6 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .route("/forum/post", web::post().to(add_forum_post))
             .route("/wiki/article", web::post().to(add_wiki_article))
             .route("/wiki/article", web::get().to(get_wiki_article))
-            .route("/conversation", web::post().to(add_conversation))
-            .route("/conversation", web::get().to(get_conversation))
-            .route("/conversations", web::get().to(get_user_conversations))
-            .route(
-                "/conversation/message",
-                web::post().to(add_conversation_message),
-            )
             .route("/external_db/isbn", web::get().to(get_isbn_data))
             .route("/external_db/tmdb", web::get().to(get_tmdb_data))
             .route("/external_db/isbn", web::get().to(get_isbn_data))

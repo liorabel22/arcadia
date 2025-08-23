@@ -3,6 +3,7 @@ pub mod edit_user;
 pub mod get_me;
 pub mod get_registered_users;
 pub mod get_user;
+pub mod get_user_conversations;
 pub mod warn_user;
 
 use actix_web::web::{get, post, put, resource, ServiceConfig};
@@ -17,4 +18,7 @@ pub fn config(cfg: &mut ServiceConfig) {
     cfg.service(resource("/me").route(post().to(self::get_me::exec)));
     cfg.service(resource("/registered").route(post().to(self::get_registered_users::exec)));
     cfg.service(resource("/api-keys").route(post().to(self::create_api_key::exec)));
+    cfg.service(
+        resource("/{user_id}/conversations").route(get().to(self::get_user_conversations::exec)),
+    );
 }

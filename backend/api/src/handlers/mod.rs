@@ -1,6 +1,7 @@
 pub mod affiliated_artists;
 pub mod artists;
 pub mod auth;
+pub mod conversations;
 pub mod edition_groups;
 pub mod search;
 pub mod title_groups;
@@ -10,7 +11,6 @@ pub mod user_applications;
 pub mod users;
 
 pub mod announce_handler;
-pub mod conversation_handler;
 pub mod forum_handler;
 pub mod gift_handler;
 pub mod home_handler;
@@ -34,6 +34,14 @@ use arcadia_storage::models::user;
 // Populated by the authentication middleware.
 #[derive(Debug, Copy, Clone)]
 pub struct UserId(pub i64);
+
+impl Deref for UserId {
+    type Target = i64;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 impl actix_web::FromRequest for UserId {
     type Error = std::convert::Infallible;
