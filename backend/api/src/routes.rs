@@ -6,6 +6,7 @@ use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::title_groups::config as TitleGroupsConfig;
+use crate::handlers::torrents::config as TorrentsConfig;
 use crate::handlers::user_applications::config as UserApplicationsConfig;
 use crate::handlers::users::config as UsersConfig;
 
@@ -33,10 +34,6 @@ use crate::handlers::{
     },
     series_handler::{add_series, get_series},
     subscriptions_handler::{add_subscription, remove_subscription},
-    torrent_handler::{
-        delete_torrent, download_dottorrent_file, edit_torrent, find_torrents,
-        get_registered_torrents, get_top_torrents, get_upload_information, upload_torrent,
-    },
     torrent_report_handler::add_torrent_report,
     torrent_request_handler::{add_torrent_request, fill_torrent_request, get_torrent_request},
     torrent_request_vote_handler::add_torrent_request_vote,
@@ -54,22 +51,11 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/title-groups").configure(TitleGroupsConfig))
             .service(scope("/edition-groups").configure(EditionGroupsConfig))
             .service(scope("/search").configure(SearchConfig))
+            .service(scope("/torrents").configure(TorrentsConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
-            .route("/torrent", web::post().to(upload_torrent))
-            .route("/torrent", web::put().to(edit_torrent))
-            .route("/torrent", web::get().to(download_dottorrent_file))
-            .route(
-                "/registered-torrents",
-                web::get().to(get_registered_torrents),
-            )
-            // .route("/registered-users", web::get().to(get_registered_users))
-            .route("/upload", web::get().to(get_upload_information))
-            .route("/torrent", web::delete().to(delete_torrent))
-            .route("/torrent/top", web::get().to(get_top_torrents))
             .route("/report/torrent", web::post().to(add_torrent_report))
-            .route("/search/torrent/lite", web::post().to(find_torrents))
             .route("/search/artist/lite", web::get().to(get_artists_lite))
             .route("/artists", web::post().to(add_artists))
             .route("/artist", web::get().to(get_artist_publications))
