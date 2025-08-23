@@ -11,6 +11,7 @@ use crate::handlers::external_db::config as ExternalDbConfig;
 use crate::handlers::forum::config as ForumConfig;
 use crate::handlers::home::config as HomeConfig;
 use crate::handlers::invitations::config as InvitationsConfig;
+use crate::handlers::master_groups::config as MasterGroupsConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::series::config as SeriesConfig;
 use crate::handlers::subscriptions::config as SubscriptionsConfig;
@@ -23,7 +24,7 @@ use crate::handlers::wiki::config as WikiConfig;
 
 use crate::handlers::{
     announce_handler::handle_announce, gift_handler::send_gift,
-    master_group_handler::add_master_group, torrent_report_handler::add_torrent_report,
+    torrent_report_handler::add_torrent_report,
 };
 use crate::middlewares::jwt_middleware::authenticate_user;
 
@@ -49,7 +50,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/wiki").configure(WikiConfig))
             .service(scope("/invitations").configure(InvitationsConfig))
             .service(scope("/home").configure(HomeConfig))
-            .route("/master-group", web::post().to(add_master_group))
+            .service(scope("/master-groups").configure(MasterGroupsConfig))
             .route("/report/torrent", web::post().to(add_torrent_report))
             .route("/gift", web::post().to(send_gift)),
     );

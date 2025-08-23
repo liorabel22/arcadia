@@ -10,7 +10,7 @@ use arcadia_storage::models::master_group::{MasterGroup, UserCreatedMasterGroup}
         (status = 200, description = "Successfully created the master group", body=MasterGroup),
     )
 )]
-pub async fn add_master_group(
+pub async fn exec(
     form: web::Json<UserCreatedMasterGroup>,
     arc: web::Data<Arcadia>,
     current_user_id: UserId,

@@ -86,7 +86,7 @@ use arcadia_storage::models::{
         crate::handlers::torrent_report_handler::add_torrent_report,
         crate::handlers::edition_groups::create_edition_group::exec,
         crate::handlers::invitations::create_invitation::exec,
-        crate::handlers::master_group_handler::add_master_group,
+        crate::handlers::master_groups::create_master_group::exec,
         crate::handlers::series::create_series::exec,
         crate::handlers::series::get_series::exec,
         crate::handlers::subscriptions::create_subscription::exec,
