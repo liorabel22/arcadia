@@ -1,3 +1,5 @@
+pub mod affiliated_artists;
+pub mod artists;
 pub mod auth;
 pub mod edition_groups;
 pub mod search;
@@ -8,7 +10,6 @@ pub mod user_applications;
 pub mod users;
 
 pub mod announce_handler;
-pub mod artist_handler;
 pub mod conversation_handler;
 pub mod forum_handler;
 pub mod gift_handler;

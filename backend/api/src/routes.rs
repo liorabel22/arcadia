@@ -2,6 +2,8 @@ use actix_web::web;
 use actix_web::web::scope;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
+use crate::handlers::affiliated_artists::config as AffiliatedArtistsConfig;
+use crate::handlers::artists::config as ArtistsConfig;
 use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::search::config as SearchConfig;
@@ -13,10 +15,6 @@ use crate::handlers::users::config as UsersConfig;
 
 use crate::handlers::{
     announce_handler::handle_announce,
-    artist_handler::{
-        add_affiliated_artists, add_artists, get_artist_publications, get_artists_lite,
-        remove_affiliated_artists,
-    },
     conversation_handler::{
         add_conversation, add_conversation_message, get_conversation, get_user_conversations,
     },
@@ -51,21 +49,12 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/search").configure(SearchConfig))
             .service(scope("/torrents").configure(TorrentsConfig))
             .service(scope("/torrent-requests").configure(TorrentRequestsConfig))
+            .service(scope("/artists").configure(ArtistsConfig))
+            .service(scope("/affiliated-artists").configure(AffiliatedArtistsConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
             .route("/report/torrent", web::post().to(add_torrent_report))
-            .route("/search/artist/lite", web::get().to(get_artists_lite))
-            .route("/artists", web::post().to(add_artists))
-            .route("/artist", web::get().to(get_artist_publications))
-            .route(
-                "/affiliated-artists",
-                web::post().to(add_affiliated_artists),
-            )
-            .route(
-                "/affiliated-artists",
-                web::delete().to(remove_affiliated_artists),
-            )
             .route("/series", web::post().to(add_series))
             .route("/series", web::get().to(get_series))
             .route("/subscription", web::post().to(add_subscription))
