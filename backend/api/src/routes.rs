@@ -6,11 +6,11 @@ use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::title_groups::config as TitleGroupsConfig;
+use crate::handlers::torrent_requests::config as TorrentRequestsConfig;
 use crate::handlers::torrents::config as TorrentsConfig;
 use crate::handlers::user_applications::config as UserApplicationsConfig;
 use crate::handlers::users::config as UsersConfig;
 
-use crate::handlers::torrent_request_handler::search_torrent_requests;
 use crate::handlers::{
     announce_handler::handle_announce,
     artist_handler::{
@@ -35,8 +35,6 @@ use crate::handlers::{
     series_handler::{add_series, get_series},
     subscriptions_handler::{add_subscription, remove_subscription},
     torrent_report_handler::add_torrent_report,
-    torrent_request_handler::{add_torrent_request, fill_torrent_request, get_torrent_request},
-    torrent_request_vote_handler::add_torrent_request_vote,
     wiki_handler::{add_wiki_article, get_wiki_article},
 };
 use crate::middlewares::jwt_middleware::authenticate_user;
@@ -52,6 +50,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/edition-groups").configure(EditionGroupsConfig))
             .service(scope("/search").configure(SearchConfig))
             .service(scope("/torrents").configure(TorrentsConfig))
+            .service(scope("/torrent-requests").configure(TorrentRequestsConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
@@ -69,20 +68,6 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             )
             .route("/series", web::post().to(add_series))
             .route("/series", web::get().to(get_series))
-            .route("/torrent-request", web::post().to(add_torrent_request))
-            .route("/torrent-request", web::get().to(get_torrent_request))
-            .route(
-                "/torrent-request/fill",
-                web::post().to(fill_torrent_request),
-            )
-            .route(
-                "/torrent-request/vote",
-                web::post().to(add_torrent_request_vote),
-            )
-            .route(
-                "/search/torrent-request",
-                web::get().to(search_torrent_requests),
-            )
             .route("/subscription", web::post().to(add_subscription))
             .route("/subscription", web::delete().to(remove_subscription))
             .route("/gift", web::post().to(send_gift))

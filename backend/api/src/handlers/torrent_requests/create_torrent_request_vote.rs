@@ -12,7 +12,7 @@ use arcadia_storage::models::torrent_request_vote::{
         (status = 200, description = "Successfully voted on the torrent_request", body=TorrentRequestVote),
     )
 )]
-pub async fn add_torrent_request_vote(
+pub async fn exec(
     torrent_request_vote: web::Json<UserCreatedTorrentRequestVote>,
     arc: web::Data<Arcadia>,
     current_user: User,

@@ -2,6 +2,7 @@ pub mod auth;
 pub mod edition_groups;
 pub mod search;
 pub mod title_groups;
+pub mod torrent_requests;
 pub mod torrents;
 pub mod user_applications;
 pub mod users;
@@ -19,8 +20,6 @@ pub mod scrapers;
 pub mod series_handler;
 pub mod subscriptions_handler;
 pub mod torrent_report_handler;
-pub mod torrent_request_handler;
-pub mod torrent_request_vote_handler;
 pub mod wiki_handler;
 
 use std::{
