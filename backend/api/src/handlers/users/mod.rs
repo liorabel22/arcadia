@@ -15,8 +15,8 @@ pub fn config(cfg: &mut ServiceConfig) {
             .route(put().to(self::edit_user::exec)),
     );
     cfg.service(resource("/warnings").route(post().to(self::warn_user::exec)));
-    cfg.service(resource("/me").route(post().to(self::get_me::exec)));
-    cfg.service(resource("/registered").route(post().to(self::get_registered_users::exec)));
+    cfg.service(resource("/me").route(get().to(self::get_me::exec)));
+    cfg.service(resource("/registered").route(get().to(self::get_registered_users::exec)));
     cfg.service(resource("/api-keys").route(post().to(self::create_api_key::exec)));
     cfg.service(
         resource("/{user_id}/conversations").route(get().to(self::get_user_conversations::exec)),
