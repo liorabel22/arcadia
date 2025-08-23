@@ -8,6 +8,7 @@ use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::conversations::config as ConversationsConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
 use crate::handlers::search::config as SearchConfig;
+use crate::handlers::series::config as SeriesConfig;
 use crate::handlers::subscriptions::config as SubscriptionsConfig;
 use crate::handlers::title_groups::config as TitleGroupsConfig;
 use crate::handlers::torrent_requests::config as TorrentRequestsConfig;
@@ -29,7 +30,6 @@ use crate::handlers::{
         comic_vine::get_comic_vine_data, isbn::get_isbn_data, musicbrainz::get_musicbrainz_data,
         tmdb::get_tmdb_data,
     },
-    series_handler::{add_series, get_series},
     torrent_report_handler::add_torrent_report,
     wiki_handler::{add_wiki_article, get_wiki_article},
 };
@@ -51,12 +51,11 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/affiliated-artists").configure(AffiliatedArtistsConfig))
             .service(scope("/conversations").configure(ConversationsConfig))
             .service(scope("/subscriptions").configure(SubscriptionsConfig))
+            .service(scope("/series").configure(SeriesConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
             .route("/report/torrent", web::post().to(add_torrent_report))
-            .route("/series", web::post().to(add_series))
-            .route("/series", web::get().to(get_series))
             .route("/gift", web::post().to(send_gift))
             .route("/forum", web::get().to(get_forum))
             .route(
