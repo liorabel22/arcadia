@@ -1,9 +1,7 @@
 use crate::{handlers::User, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::models::forum::{
-    ForumThread, UserCreatedForumThread,
-};
+use arcadia_storage::models::forum::{ForumThread, UserCreatedForumThread};
 
 #[utoipa::path(
     post,

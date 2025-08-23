@@ -1,6 +1,6 @@
 use crate::services::announce_service::is_torrent_client_allowed;
 use crate::Arcadia;
-use actix_web::{dev, get, web, FromRequest, HttpRequest, HttpResponse, ResponseError};
+use actix_web::{dev, web, FromRequest, HttpRequest, HttpResponse, ResponseError};
 use arcadia_common::{
     actix::HttpResponseBuilderExt,
     error::announce::Error as AnnounceError,
@@ -53,8 +53,7 @@ impl FromRequest for UserAgent {
     }
 }
 
-#[get("/announce/{passkey}")]
-async fn handle_announce(
+pub async fn exec(
     arc: web::Data<Arcadia>,
     passkey: web::Path<String>,
     user_agent: Option<UserAgent>,

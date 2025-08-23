@@ -1,7 +1,4 @@
-use crate::{
-    handlers::UserId,
-    Arcadia,
-};
+use crate::{handlers::UserId, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::conversation::ConversationHierarchy;

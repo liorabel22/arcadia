@@ -1,13 +1,7 @@
-use crate::{
-    handlers::User,
-    Arcadia,
-};
+use crate::{handlers::User, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::models::conversation::{
-    Conversation,
-    UserCreatedConversation,
-};
+use arcadia_storage::models::conversation::{Conversation, UserCreatedConversation};
 
 #[utoipa::path(
     post,

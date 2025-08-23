@@ -1,8 +1,8 @@
-use actix_web::web;
-use actix_web::web::scope;
+use actix_web::web::{self, scope};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::handlers::affiliated_artists::config as AffiliatedArtistsConfig;
+use crate::handlers::announces::config as AnnouncesConfig;
 use crate::handlers::artists::config as ArtistsConfig;
 use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::conversations::config as ConversationsConfig;
@@ -22,12 +22,12 @@ use crate::handlers::torrents::config as TorrentsConfig;
 use crate::handlers::user_applications::config as UserApplicationsConfig;
 use crate::handlers::users::config as UsersConfig;
 use crate::handlers::wiki::config as WikiConfig;
-
-use crate::handlers::announce_handler::handle_announce;
 use crate::middlewares::jwt_middleware::authenticate_user;
 
 pub fn init(cfg: &mut web::ServiceConfig) {
-    cfg.service(handle_announce).service(
+    cfg.service(scope("/announce").configure(AnnouncesConfig));
+
+    cfg.service(
         web::scope("/api")
             .wrap(HttpAuthentication::with_fn(authenticate_user))
             .service(scope("/auth").configure(AuthConfig))

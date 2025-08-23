@@ -1,9 +1,7 @@
 use crate::{handlers::User, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::models::series::{
-    Series, UserCreatedSeries,
-};
+use arcadia_storage::models::series::{Series, UserCreatedSeries};
 
 #[utoipa::path(
     post,

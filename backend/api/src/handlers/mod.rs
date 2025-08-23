@@ -1,4 +1,5 @@
 pub mod affiliated_artists;
+pub mod announces;
 pub mod artists;
 pub mod auth;
 pub mod conversations;
@@ -19,7 +20,6 @@ pub mod user_applications;
 pub mod users;
 pub mod wiki;
 
-pub mod announce_handler;
 pub mod peers_handler;
 pub mod scrapers;
 
