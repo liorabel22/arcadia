@@ -85,7 +85,7 @@ pub struct GetISBNDataQuery {
         (status = 200, description = "", body=ExternalDBData),
     )
 )]
-pub async fn get_isbn_data(query: web::Query<GetISBNDataQuery>) -> Result<HttpResponse> {
+pub async fn exec(query: web::Query<GetISBNDataQuery>) -> Result<HttpResponse> {
     let book_url = format!("https://openlibrary.org/isbn/{}.json", query.isbn);
     let book = reqwest::get(&book_url).await?.json::<Book>().await?;
     let work_path = &book.works.first().unwrap().key;

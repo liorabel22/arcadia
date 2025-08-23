@@ -136,7 +136,7 @@ pub struct GetMusicbrainzQuery {
         (status = 200, description = "", body=ExternalDBData),
     )
 )]
-pub async fn get_musicbrainz_data(
+pub async fn exec(
     query: web::Query<GetMusicbrainzQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {

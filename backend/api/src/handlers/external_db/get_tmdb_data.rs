@@ -76,7 +76,7 @@ async fn get_tmdb_movie_data(client: &Client<ReqwestClient>, id: u64) -> Result<
         (status = 200, description = "", body=ExternalDBData),
     )
 )]
-pub async fn get_tmdb_data(
+pub async fn exec(
     query: web::Query<GetTMDBQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {

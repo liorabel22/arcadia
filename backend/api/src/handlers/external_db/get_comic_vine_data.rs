@@ -155,7 +155,7 @@ pub enum ComicVineResourceType {
         (status = 200, description = "", body=ExternalDBData),
     )
 )]
-pub async fn get_comic_vine_data(
+pub async fn exec(
     query: web::Query<GetComicVineQuery>,
     arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {

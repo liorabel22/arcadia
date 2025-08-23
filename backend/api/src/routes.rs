@@ -7,6 +7,7 @@ use crate::handlers::artists::config as ArtistsConfig;
 use crate::handlers::auth::config as AuthConfig;
 use crate::handlers::conversations::config as ConversationsConfig;
 use crate::handlers::edition_groups::config as EditionGroupsConfig;
+use crate::handlers::external_db::config as ExternalDbConfig;
 use crate::handlers::search::config as SearchConfig;
 use crate::handlers::series::config as SeriesConfig;
 use crate::handlers::subscriptions::config as SubscriptionsConfig;
@@ -26,10 +27,6 @@ use crate::handlers::{
     home_handler::get_home,
     invitation_handler::send_invitation,
     master_group_handler::add_master_group,
-    scrapers::{
-        comic_vine::get_comic_vine_data, isbn::get_isbn_data, musicbrainz::get_musicbrainz_data,
-        tmdb::get_tmdb_data,
-    },
     torrent_report_handler::add_torrent_report,
     wiki_handler::{add_wiki_article, get_wiki_article},
 };
@@ -52,6 +49,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/conversations").configure(ConversationsConfig))
             .service(scope("/subscriptions").configure(SubscriptionsConfig))
             .service(scope("/series").configure(SeriesConfig))
+            .service(scope("/external_db").configure(ExternalDbConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
@@ -67,17 +65,6 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .route("/forum/thread", web::post().to(add_forum_thread))
             .route("/forum/post", web::post().to(add_forum_post))
             .route("/wiki/article", web::post().to(add_wiki_article))
-            .route("/wiki/article", web::get().to(get_wiki_article))
-            .route("/external_db/isbn", web::get().to(get_isbn_data))
-            .route("/external_db/tmdb", web::get().to(get_tmdb_data))
-            .route("/external_db/isbn", web::get().to(get_isbn_data))
-            .route(
-                "/external_db/comic_vine",
-                web::get().to(get_comic_vine_data),
-            )
-            .route(
-                "/external_db/musicbrainz",
-                web::get().to(get_musicbrainz_data),
-            ),
+            .route("/wiki/article", web::get().to(get_wiki_article)),
     );
 }

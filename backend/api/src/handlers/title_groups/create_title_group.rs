@@ -3,7 +3,7 @@ use arcadia_storage::models::title_group::{PublicRating, TitleGroup, UserCreated
 use futures::future::join_all;
 
 use crate::{
-    handlers::{scrapers::tmdb::get_tmdb_rating, User},
+    handlers::{external_db::get_tmdb_data::get_tmdb_rating, User},
     Arcadia,
 };
 use arcadia_common::error::Result;

@@ -3,6 +3,7 @@ pub mod artists;
 pub mod auth;
 pub mod conversations;
 pub mod edition_groups;
+pub mod external_db;
 pub mod search;
 pub mod series;
 pub mod subscriptions;
