@@ -1,10 +1,10 @@
 use crate::Arcadia;
-use actix_web::{HttpResponse, web};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::user::{Claims, Login, LoginResponse};
-use chrono::Duration;
 use chrono::prelude::Utc;
-use jsonwebtoken::{EncodingKey, Header, encode};
+use chrono::Duration;
+use jsonwebtoken::{encode, EncodingKey, Header};
 
 #[utoipa::path(
     post,

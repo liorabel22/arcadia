@@ -5,7 +5,7 @@ pub mod get_registered_users;
 pub mod get_user;
 pub mod warn_user;
 
-use actix_web::web::{ServiceConfig, get, post, put, resource};
+use actix_web::web::{get, post, put, resource, ServiceConfig};
 
 pub fn config(cfg: &mut ServiceConfig) {
     cfg.service(

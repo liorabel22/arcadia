@@ -1,4 +1,6 @@
 pub mod auth;
+pub mod search;
+pub mod title_groups;
 pub mod user_applications;
 pub mod users;
 

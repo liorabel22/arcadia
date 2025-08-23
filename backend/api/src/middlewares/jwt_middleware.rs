@@ -1,8 +1,8 @@
 use crate::Arcadia;
-use actix_web::{HttpMessage as _, dev::ServiceRequest, web};
+use actix_web::{dev::ServiceRequest, web, HttpMessage as _};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use arcadia_storage::models::user::Claims;
-use jsonwebtoken::{DecodingKey, Validation, decode, errors::ErrorKind};
+use jsonwebtoken::{decode, errors::ErrorKind, DecodingKey, Validation};
 
 pub async fn authenticate_user(
     req: ServiceRequest,

@@ -1,5 +1,5 @@
-use crate::{Arcadia, services::email_service::EmailService};
-use actix_web::{HttpRequest, HttpResponse, web};
+use crate::{services::email_service::EmailService, Arcadia};
+use actix_web::{web, HttpRequest, HttpResponse};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::{
     models::{
@@ -9,8 +9,8 @@ use arcadia_storage::{
     sqlx::types::ipnetwork::IpNetwork,
 };
 use argon2::{
+    password_hash::{rand_core::OsRng, PasswordHasher, SaltString},
     Argon2,
-    password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
 };
 use serde::Deserialize;
 use utoipa::ToSchema;

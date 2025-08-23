@@ -3,10 +3,11 @@ use actix_web::web::scope;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::handlers::auth::config as AuthConfig;
+use crate::handlers::search::config as SearchConfig;
+use crate::handlers::title_groups::config as TitleGroupsConfig;
 use crate::handlers::user_applications::config as UserApplicationsConfig;
 use crate::handlers::users::config as UsersConfig;
 
-use crate::handlers::title_group_handler::edit_title_group;
 use crate::handlers::torrent_request_handler::search_torrent_requests;
 use crate::handlers::{
     announce_handler::handle_announce,
@@ -33,9 +34,6 @@ use crate::handlers::{
     series_handler::{add_series, get_series},
     subscriptions_handler::{add_subscription, remove_subscription},
     title_group_comment_handler::add_title_group_comment,
-    title_group_handler::{
-        add_title_group, get_title_group, get_title_group_info_lite, search_title_group_info_lite,
-    },
     torrent_handler::{
         delete_torrent, download_dottorrent_file, edit_torrent, find_torrents,
         get_registered_torrents, get_top_torrents, get_upload_information, upload_torrent,
@@ -54,20 +52,11 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/auth").configure(AuthConfig))
             .service(scope("/users").configure(UsersConfig))
             .service(scope("/user-applications").configure(UserApplicationsConfig))
+            .service(scope("/title-groups").configure(TitleGroupsConfig))
+            .service(scope("/search").configure(SearchConfig))
             .route("/home", web::get().to(get_home))
             .route("/invitation", web::post().to(send_invitation))
             .route("/master-group", web::post().to(add_master_group))
-            .route("/title-group", web::post().to(add_title_group))
-            .route("/title-group", web::get().to(get_title_group))
-            .route("/title-group", web::put().to(edit_title_group))
-            .route(
-                "/title-group/lite",
-                web::get().to(get_title_group_info_lite),
-            )
-            .route(
-                "/search/title-group/lite",
-                web::get().to(search_title_group_info_lite),
-            )
             .route("/edition-group", web::post().to(add_edition_group))
             .route("/torrent", web::post().to(upload_torrent))
             .route("/torrent", web::put().to(edit_torrent))
