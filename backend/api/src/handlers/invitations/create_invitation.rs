@@ -5,7 +5,7 @@ use arcadia_storage::models::invitation::{Invitation, SentInvitation};
 
 #[utoipa::path(
     post,
-    path = "/api/invitation",
+    path = "/api/invitations",
     responses(
         (status = 200, description = "Successfully sent the invitation", body=Invitation),
     )

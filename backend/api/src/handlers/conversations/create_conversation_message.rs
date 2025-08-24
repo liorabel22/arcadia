@@ -5,7 +5,7 @@ use arcadia_storage::models::conversation::{ConversationMessage, UserCreatedConv
 
 #[utoipa::path(
     post,
-    path = "/api/conversation/message",
+    path = "/api/conversations/messages",
     responses(
         (status = 200, description = "Successfully created the conversation's message", body=ConversationMessage),
     )

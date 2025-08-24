@@ -13,7 +13,7 @@ pub struct Params {
 
 #[utoipa::path(
     get,
-    path = "/api/conversations",
+    path = "/api/users/{user_id}/conversations",
     responses(
         (status = 200, description = "Found the conversations and some of their metadata", body=ConversationsOverview),
     )

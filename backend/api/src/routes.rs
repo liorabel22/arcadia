@@ -43,7 +43,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(scope("/conversations").configure(ConversationsConfig))
             .service(scope("/subscriptions").configure(SubscriptionsConfig))
             .service(scope("/series").configure(SeriesConfig))
-            .service(scope("/external_db").configure(ExternalDbConfig))
+            .service(scope("/external-sources").configure(ExternalDbConfig))
             .service(scope("/forum").configure(ForumConfig))
             .service(scope("/wiki").configure(WikiConfig))
             .service(scope("/invitations").configure(InvitationsConfig))

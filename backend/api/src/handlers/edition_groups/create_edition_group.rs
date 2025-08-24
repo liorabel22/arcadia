@@ -5,7 +5,7 @@ use arcadia_storage::models::edition_group::{EditionGroup, UserCreatedEditionGro
 
 #[utoipa::path(
     post,
-    path = "/api/edition-group",
+    path = "/api/edition-groups",
     responses(
         (status = 200, description = "Successfully created the edition_group", body=EditionGroup),
     )

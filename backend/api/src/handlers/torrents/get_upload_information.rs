@@ -12,7 +12,7 @@ pub struct UploadInformation {
 
 #[utoipa::path(
     get,
-    path = "/api/upload",
+    path = "/api/torrents/upload-info",
     responses(
         (status = 200, description = "Information related to uploading", body=UploadInformation),
     )

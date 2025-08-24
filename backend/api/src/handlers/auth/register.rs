@@ -22,7 +22,7 @@ pub struct RegisterQuery {
 
 #[utoipa::path(
     post,
-    path = "/api/register",
+    path = "/api/auth/register",
     responses(
         (status = 200, description = "Successfully registered the user", body = User),
     )

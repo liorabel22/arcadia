@@ -17,7 +17,7 @@ pub struct DownloadTorrentQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/torrent",
+    path = "/api/torrents",
     params (DownloadTorrentQuery),
     responses(
         (status = 200, description = "Successfully downloaded the torrent file"),

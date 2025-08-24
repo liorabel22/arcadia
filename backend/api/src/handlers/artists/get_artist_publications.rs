@@ -12,7 +12,7 @@ pub struct GetArtistPublicationsQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/artist",
+    path = "/api/artists",
     params (GetArtistPublicationsQuery),
     responses(
         (status = 200, description = "Successfully got the artist's pulications", body=ArtistAndTitleGroupsLite),

@@ -13,7 +13,7 @@ pub struct GetConversationQuery {
 #[utoipa::path(
     get,
     params(GetConversationQuery),
-    path = "/api/conversation",
+    path = "/api/conversations",
     responses(
         (status = 200, description = "Found the conversation and its messages", body=ConversationHierarchy),
     )

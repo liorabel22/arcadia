@@ -15,5 +15,5 @@ pub fn config(cfg: &mut ServiceConfig) {
     cfg.service(
         resource("/torrent-requests").route(post().to(self::search_torrent_requests::exec)),
     );
-    cfg.service(resource("/forum/thread").route(post().to(self::search_forum_thread::exec)));
+    cfg.service(resource("/forum/threads").route(post().to(self::search_forum_thread::exec)));
 }

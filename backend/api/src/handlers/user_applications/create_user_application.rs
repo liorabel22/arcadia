@@ -15,7 +15,7 @@ pub struct GetUserApplicationsQuery {
 
 #[utoipa::path(
     post,
-    path = "/api/apply",
+    path = "/api/user-applications",
     responses(
         (status = 201, description = "Successfully created user application", body = UserApplication)
     )

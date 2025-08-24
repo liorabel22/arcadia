@@ -6,7 +6,7 @@ use arcadia_storage::models::torrent::{EditedTorrent, Torrent};
 
 #[utoipa::path(
     put,
-    path = "/api/torrent",
+    path = "/api/torrents",
     responses(
         (status = 200, description = "Successfully edited the torrent", body=Torrent),
     )

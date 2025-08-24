@@ -10,7 +10,7 @@ use arcadia_common::error::Result;
 
 #[utoipa::path(
     post,
-    path = "/api/title-group",
+    path = "/api/title-groups",
     responses(
         (status = 200, description = "Successfully created the title_group", body=TitleGroup),
     )

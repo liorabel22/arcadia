@@ -17,7 +17,7 @@ pub struct SearchTorrentRequestsQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/search/torrent-request",
+    path = "/api/search/torrent-requests",
     params(
         ("title_group_name" = Option<String>, Query, description = "Name of the title group to search for"),
         ("tags" = Option<Vec<String>>, Query, description = "Tags to filter title groups by"),

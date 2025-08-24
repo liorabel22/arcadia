@@ -12,7 +12,7 @@ pub struct AddSubscriptionQuery {
 
 #[utoipa::path(
     post,
-    path = "/api/subscription",
+    path = "/api/subscriptions",
     params (AddSubscriptionQuery),
     responses(
         (status = 200, description = "Successfully subscribed to the item"),

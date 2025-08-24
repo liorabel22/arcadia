@@ -7,7 +7,7 @@ use serde_json::json;
 
 #[utoipa::path(
     post,
-    path = "/api/torrent-request/fill",
+    path = "/api/torrent-requests/fill",
     responses(
         (status = 200, description = "Successfully filled the torrent request"),
     )

@@ -6,7 +6,7 @@ use arcadia_storage::models::torrent::TorrentMinimal;
 
 #[utoipa::path(
     get,
-    path = "/api/registered-torrents",
+    path = "/api/torrents/registered",
     responses(
         (status = 200, description = "All registered torrents", body=Vec<TorrentMinimal>),
     )

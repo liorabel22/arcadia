@@ -7,7 +7,7 @@ use arcadia_storage::models::title_group_comment::{
 
 #[utoipa::path(
     post,
-    path = "/api/title-group-comment",
+    path = "/api/title-groups/comments",
     responses(
         (status = 200, description = "Successfully posted the comment", body=TitleGroupComment),
     )

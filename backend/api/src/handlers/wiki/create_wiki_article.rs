@@ -5,7 +5,7 @@ use arcadia_storage::models::wiki::{UserCreatedWikiArticle, WikiArticle};
 
 #[utoipa::path(
     post,
-    path = "/api/wiki/article",
+    path = "/api/wiki/articles",
     responses(
         (status = 200, description = "Successfully created the wiki article", body=WikiArticle),
     )

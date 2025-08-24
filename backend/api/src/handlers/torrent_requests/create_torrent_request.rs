@@ -6,7 +6,7 @@ use arcadia_storage::models::torrent_request::{TorrentRequest, UserCreatedTorren
 
 #[utoipa::path(
     post,
-    path = "/api/torrent-request",
+    path = "/api/torrent-requests",
     responses(
         (status = 200, description = "Successfully created the torrent_request", body=TorrentRequest),
     )

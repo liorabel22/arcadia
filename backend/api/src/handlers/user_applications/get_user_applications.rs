@@ -13,7 +13,7 @@ pub struct GetUserApplicationsQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/user-application",
+    path = "/api//user-applications",
     params(
         ("limit" = Option<i64>, Query, description = "Maximum number of applications to return (default: 50)"),
         ("page" = Option<i64>, Query, description = "Page (default: 1)"),

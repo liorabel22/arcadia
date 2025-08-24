@@ -12,7 +12,7 @@ pub struct GetWikiArticleQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/wiki/article",
+    path = "/api/wiki/articles",
     params(GetWikiArticleQuery),
     responses(
         (status = 200, description = "Successfully found the wiki article", body=WikiArticle),

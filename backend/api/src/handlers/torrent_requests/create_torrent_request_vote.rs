@@ -7,7 +7,7 @@ use arcadia_storage::models::torrent_request_vote::{
 
 #[utoipa::path(
     post,
-    path = "/api/torrent-request/vote",
+    path = "/api/torrent-requests/vote",
     responses(
         (status = 200, description = "Successfully voted on the torrent_request", body=TorrentRequestVote),
     )

@@ -13,7 +13,7 @@ pub struct GetTitleGroupQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/title-group",
+    path = "/api/title-groups",
     params(GetTitleGroupQuery),
     responses(
         (status = 200, description = "Successfully got the title_group", body=TitleGroupAndAssociatedData),

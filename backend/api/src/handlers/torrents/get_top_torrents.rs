@@ -14,7 +14,7 @@ pub struct GetTopTorrentsQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/torrent/top",
+    path = "/api/torrents/top",
     params(GetTopTorrentsQuery),
     responses(
         (status = 200, description = "Top torrents found (and their title/edition group), sorted by amount of users who seeded at some point in time", body=TorrentSearchResults),

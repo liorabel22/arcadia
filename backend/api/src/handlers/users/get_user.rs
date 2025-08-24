@@ -19,7 +19,7 @@ pub struct GetUserQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/user",
+    path = "/api/users",
     params(GetUserQuery),
     responses(
         (status = 200, description = "Successfully got the user's profile", body=PublicProfile),

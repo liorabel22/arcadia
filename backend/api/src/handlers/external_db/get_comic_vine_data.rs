@@ -148,9 +148,9 @@ pub enum ComicVineResourceType {
 }
 
 #[utoipa::path(
-    post,
+    get,
     params(GetComicVineQuery),
-    path = "/api/external_db/comic_vine",
+    path = "/api/external-sources/comic-vine",
     responses(
         (status = 200, description = "", body=ExternalDBData),
     )
