@@ -160,7 +160,7 @@ async fn test_find_torrents_by_external_link(pool: PgPool) {
     });
 
     let req = test::TestRequest::post()
-        .uri("/api/search/torrent/lite")
+        .uri("/api/search/torrents/lite")
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
         .insert_header(token)
         .set_json(body)
@@ -200,7 +200,7 @@ async fn test_find_torrents_by_name(pool: PgPool) {
     });
 
     let req = test::TestRequest::post()
-        .uri("/api/search/torrent/lite")
+        .uri("/api/search/torrents/lite")
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
         .insert_header(token)
         .set_json(body)
@@ -240,7 +240,7 @@ async fn test_find_torrents_no_link_or_name_provided(pool: PgPool) {
     });
 
     let req = test::TestRequest::post()
-        .uri("/api/search/torrent/lite")
+        .uri("/api/search/torrents/lite")
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
         .insert_header(token)
         .set_json(body)

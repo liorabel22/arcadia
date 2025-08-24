@@ -43,7 +43,7 @@ pub async fn exec(arc: web::Data<Arcadia>, form: web::Json<RefreshToken>) -> Res
         &refresh_token_claims,
         &EncodingKey::from_secret(arc.jwt_secret.as_bytes()),
     )
-    .unwrap();
+    .map_err(Error::JwtError)?;
 
     Ok(HttpResponse::Ok().json(serde_json::json!({
         "token": token,

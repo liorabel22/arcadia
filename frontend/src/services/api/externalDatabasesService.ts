@@ -9,7 +9,7 @@ export const getExternalDatabaseData = async (item_id: string | number, database
       return (await api.get('external-sources/isbn?isbn=' + item_id)).data
     }
     case 'comic_vine': {
-      return (await api.get('external-sources/comic_vine?url=' + item_id)).data
+      return (await api.get('external-sources/comic-vine?url=' + item_id)).data
     }
     case 'musicbrainz': {
       return (await api.get('external-sources/musicbrainz?url=' + item_id)).data

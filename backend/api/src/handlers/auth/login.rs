@@ -50,7 +50,7 @@ pub async fn exec(arc: web::Data<Arcadia>, user_login: web::Json<Login>) -> Resu
         &token_claims,
         &EncodingKey::from_secret(arc.jwt_secret.as_bytes()),
     )
-    .unwrap();
+    .map_err(Error::JwtError)?;
 
     Ok(HttpResponse::Ok().json(serde_json::json!({
         "token": token,

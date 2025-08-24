@@ -15,7 +15,7 @@ pub struct GetArtistPublicationsQuery {
     path = "/api/artists",
     params (GetArtistPublicationsQuery),
     responses(
-        (status = 200, description = "Successfully got the artist's pulications", body=ArtistAndTitleGroupsLite),
+        (status = 200, description = "Successfully got the artist's publications", body=ArtistAndTitleGroupsLite),
     )
 )]
 pub async fn exec(

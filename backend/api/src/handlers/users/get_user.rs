@@ -62,7 +62,7 @@ pub async fn exec(
         .search_torrents(&torrent_search, Some(current_user.id))
         .await?;
 
-    Ok(HttpResponse::Created().json(json!({
+    Ok(HttpResponse::Ok().json(json!({
         "user":user,
         "last_five_uploaded_torrents": uploaded_torrents.get("title_groups").unwrap(),
         "last_five_snatched_torrents": snatched_torrents.get("title_groups").unwrap()

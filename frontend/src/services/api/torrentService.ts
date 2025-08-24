@@ -135,7 +135,7 @@ export const editTorrent = async (editedTorrent: EditedTorrent) => {
 export type UploadInformation = components['schemas']['UploadInformation']
 
 export const getUploadInformation = async () => {
-  return (await api.get<UploadInformation>('/upload-info')).data
+  return (await api.get<UploadInformation>('/torrents/upload-info')).data
 }
 
 export type TorrentToDelete = components['schemas']['TorrentToDelete']
