@@ -14,7 +14,7 @@ pub struct SearchTitleGroupLiteQuery {
 
 #[utoipa::path(
     get,
-    path = "/api/search/title-group/lite",
+    path = "/api/search/title-groups/lite",
     params(SearchTitleGroupLiteQuery),
     responses(
         (status = 200, description = "Returns title groups with their name containing the provided string, only the 5 first matches", body=Vec<TitleGroupLite>),

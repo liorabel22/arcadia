@@ -18,7 +18,7 @@ use arcadia_storage::models::torrent::{TorrentSearch, TorrentSearchResults};
 
 #[utoipa::path(
     get,
-    path = "/api/search/torrent/lite",
+    path = "/api/search/torrents/lite",
     responses(
         (status = 200, description = "Title groups and their torrents found", body=TorrentSearchResults),
     )
