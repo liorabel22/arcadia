@@ -5,7 +5,7 @@ use arcadia_storage::models::user::UserMinimal;
 
 #[utoipa::path(
     get,
-    operation_id = "Edit registered users",
+    operation_id = "Get registered users",
     tag = "User",
     path = "/api/users/registered",
     responses(
