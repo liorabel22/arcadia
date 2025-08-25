@@ -17,6 +17,8 @@ pub struct HomePage {
 
 #[utoipa::path(
     get,
+    operation_id = "Get home data",
+    tag = "Home",
     path = "/api/home",
     responses(
         (status = 200, description = "", body=HomePage),

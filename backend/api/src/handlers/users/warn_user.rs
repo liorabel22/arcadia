@@ -5,6 +5,8 @@ use arcadia_storage::models::user::{UserCreatedUserWarning, UserWarning};
 
 #[utoipa::path(
     post,
+    operation_id = "Warn users",
+    tag = "User",
     path = "/api/users/warnings",
     responses(
         (status = 200, description = "Successfully warned the user", body=UserWarning),

@@ -70,8 +70,10 @@ async fn get_tmdb_movie_data(client: &Client<ReqwestClient>, id: u64) -> Result<
 
 #[utoipa::path(
     get,
-    params(GetTMDBQuery),
+    operation_id = "Get TMDB data",
+    tag = "External Source",
     path = "/api/external-sources/tmdb",
+    params(GetTMDBQuery),
     responses(
         (status = 200, description = "", body=ExternalDBData),
     )

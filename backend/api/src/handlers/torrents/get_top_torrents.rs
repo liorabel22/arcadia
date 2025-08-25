@@ -14,6 +14,8 @@ pub struct GetTopTorrentsQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Get top torrent",
+    tag = "Torrent",
     path = "/api/torrents/top",
     params(GetTopTorrentsQuery),
     responses(

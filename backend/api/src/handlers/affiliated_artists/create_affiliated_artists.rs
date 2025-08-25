@@ -5,6 +5,8 @@ use arcadia_storage::models::artist::{AffiliatedArtistHierarchy, UserCreatedAffi
 
 #[utoipa::path(
     post,
+    operation_id = "Create artist affiliation",
+    tag = "Affiliated Artist",
     path = "/api/affiliated-artists",
     responses(
         (status = 200, description = "Successfully created the artist affiliations", body=Vec<AffiliatedArtistHierarchy>),

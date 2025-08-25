@@ -22,6 +22,8 @@ pub struct RegisterQuery {
 
 #[utoipa::path(
     post,
+    operation_id = "Register",
+    tag = "Auth",
     path = "/api/auth/register",
     responses(
         (status = 200, description = "Successfully registered the user", body = User),

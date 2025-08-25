@@ -7,6 +7,8 @@ use arcadia_storage::models::torrent::{Torrent, UploadedTorrent};
 
 #[utoipa::path(
     post,
+    operation_id = "Create torrent",
+    tag = "Torrent",
     path = "/api/torrents",
     request_body(content = UploadedTorrent, content_type = "multipart/form-data"),
     responses(

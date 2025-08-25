@@ -5,6 +5,8 @@ use arcadia_storage::models::series::{Series, UserCreatedSeries};
 
 #[utoipa::path(
     post,
+    operation_id = "Create series",
+    tag = "Series",
     path = "/api/series",
     responses(
         (status = 200, description = "Successfully created the series", body=Series),

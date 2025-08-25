@@ -5,6 +5,8 @@ use arcadia_storage::models::master_group::{MasterGroup, UserCreatedMasterGroup}
 
 #[utoipa::path(
     post,
+    operation_id = "Create master group",
+    tag = "Master Group",
     path = "/api/master-groups",
     responses(
         (status = 200, description = "Successfully created the master group", body=MasterGroup),

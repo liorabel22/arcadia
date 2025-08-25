@@ -8,6 +8,8 @@ pub type GetTitleGroupLiteQuery = GetTitleGroupQuery;
 
 #[utoipa::path(
     get,
+    operation_id = "Get title group info lite",
+    tag = "Title Group",
     path = "/api/title-groups/lite",
     params(GetTitleGroupLiteQuery),
     responses(

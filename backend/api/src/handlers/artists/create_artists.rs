@@ -5,6 +5,8 @@ use arcadia_storage::models::artist::{Artist, UserCreatedArtist};
 
 #[utoipa::path(
     post,
+    operation_id = "Create artist",
+    tag = "Artist",
     path = "/api/artists",
     responses(
         (status = 201, description = "Successfully created the artists, returned in the same order as the one sent.

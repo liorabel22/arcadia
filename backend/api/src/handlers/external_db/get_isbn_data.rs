@@ -79,8 +79,10 @@ pub struct GetISBNDataQuery {
 
 #[utoipa::path(
     get,
-    params(GetISBNDataQuery),
+    operation_id = "Get isbn data",
+    tag = "External Source",
     path = "/api/external-sources/isbn",
+    params(GetISBNDataQuery),
     responses(
         (status = 200, description = "", body=ExternalDBData),
     )

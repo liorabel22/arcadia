@@ -130,8 +130,10 @@ pub struct GetMusicbrainzQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Get Musicbranz data",
+    tag = "External Source",
+    path = "/api/external-sources/musicbrainz",
     params(GetMusicbrainzQuery),
-    path = "/api/external_db/musicbrainz",
     responses(
         (status = 200, description = "", body=ExternalDBData),
     )

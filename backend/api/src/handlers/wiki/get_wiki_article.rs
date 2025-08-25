@@ -12,6 +12,8 @@ pub struct GetWikiArticleQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Get wiki article",
+    tag = "Wiki",
     path = "/api/wiki/articles",
     params(GetWikiArticleQuery),
     responses(

@@ -12,6 +12,8 @@ pub struct UpdateUserApplication {
 
 #[utoipa::path(
     put,
+    operation_id = "Update user application status",
+    tag = "User Application",
     path = "/api/user-applications",
     request_body = UpdateUserApplication,
     responses(

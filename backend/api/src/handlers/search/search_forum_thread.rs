@@ -14,6 +14,8 @@ pub struct GetForumThreadQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Search forum threads",
+    tag = "Search",
     path = "/api/search/forum/threads",
     params(GetForumThreadQuery),
     responses(

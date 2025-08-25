@@ -5,6 +5,8 @@ use arcadia_storage::models::torrent_report::{TorrentReport, UserCreatedTorrentR
 
 #[utoipa::path(
     post,
+    operation_id = "Create torrent report",
+    tag = "Torrent",
     path = "/api/torrents/reports",
     responses(
         (status = 200, description = "Torrent successfully reported", body=TorrentReport),

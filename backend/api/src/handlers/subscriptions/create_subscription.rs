@@ -12,6 +12,8 @@ pub struct AddSubscriptionQuery {
 
 #[utoipa::path(
     post,
+    operation_id = "Create subscription",
+    tag = "Subscription",
     path = "/api/subscriptions",
     params (AddSubscriptionQuery),
     responses(

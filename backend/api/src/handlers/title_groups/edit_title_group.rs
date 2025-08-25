@@ -6,6 +6,8 @@ use arcadia_common::error::{Error, Result};
 
 #[utoipa::path(
     put,
+    operation_id = "Edit title group",
+    tag = "Title Group",
     path = "/api/title-groups",
     responses(
         (status = 200, description = "Successfully edited the title group", body=TitleGroup),

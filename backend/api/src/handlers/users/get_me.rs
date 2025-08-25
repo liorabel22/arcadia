@@ -14,6 +14,8 @@ use serde_json::json;
 
 #[utoipa::path(
     get,
+    operation_id = "Get me",
+    tag = "User",
     path = "/api/users/me",
     responses(
         (status = 200, description = "Successfully got the user's profile", body=Profile),

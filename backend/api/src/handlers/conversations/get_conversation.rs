@@ -12,6 +12,8 @@ pub struct GetConversationQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Get conversations",
+    tag = "Conversation",
     params(GetConversationQuery),
     path = "/api/conversations",
     responses(

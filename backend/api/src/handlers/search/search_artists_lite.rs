@@ -12,6 +12,8 @@ pub struct GetArtistLiteQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Search artists",
+    tag = "Search",
     path = "/api/search/artists/lite",
     params (GetArtistLiteQuery),
     description = "Case insensitive",

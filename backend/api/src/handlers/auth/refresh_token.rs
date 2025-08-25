@@ -8,6 +8,8 @@ use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation}
 
 #[utoipa::path(
     post,
+    operation_id = "Refresh token",
+    tag = "Auth",
     path = "/api/auth/refresh-token",
     responses(
         (status = 200, description = "Successfully refreshed the token", body=LoginResponse),

@@ -7,6 +7,8 @@ use arcadia_storage::models::torrent::TorrentToDelete;
 
 #[utoipa::path(
     delete,
+    operation_id = "Delete torrent",
+    tag = "Torrent",
     path = "/api/torrents",
     responses(
         (status = 200, description = "Torrent deleted"),

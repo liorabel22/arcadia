@@ -5,6 +5,8 @@ use arcadia_storage::models::gift::{Gift, UserCreatedGift};
 
 #[utoipa::path(
     post,
+    operation_id = "Create gift",
+    tag = "Gift",
     path = "/api/gifts",
     responses(
         (status = 200, description = "Successfully sent the gift", body=Gift),

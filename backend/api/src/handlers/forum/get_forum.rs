@@ -5,6 +5,8 @@ use arcadia_storage::models::forum::ForumOverview;
 
 #[utoipa::path(
     get,
+    operation_id = "Create forum",
+    tag = "Forum",
     path = "/api/forum",
     responses(
         (status = 200, description = "Returns an overview of the forum", body=ForumOverview),

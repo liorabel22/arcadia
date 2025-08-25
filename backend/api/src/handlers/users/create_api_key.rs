@@ -5,6 +5,8 @@ use arcadia_storage::models::user::{APIKey, UserCreatedAPIKey};
 
 #[utoipa::path(
     post,
+    operation_id = "Create API key",
+    tag = "User",
     path = "/api/users/api-keys",
     request_body(content = UserCreatedAPIKey, content_type = "application/json"),
     responses(

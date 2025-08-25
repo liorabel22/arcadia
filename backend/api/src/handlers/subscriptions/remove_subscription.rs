@@ -9,6 +9,8 @@ pub type RemoveSubscriptionQuery = AddSubscriptionQuery;
 
 #[utoipa::path(
     delete,
+    operation_id = "Remove subscription",
+    tag = "Subscription",
     path = "/api/subscriptions",
     params (RemoveSubscriptionQuery),
     responses(

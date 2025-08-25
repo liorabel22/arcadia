@@ -12,8 +12,10 @@ pub struct GetForumSubCategoryThreadsQuery {
 
 #[utoipa::path(
     get,
-    params(GetForumSubCategoryThreadsQuery),
+    operation_id = "Get forim sub-category thread",
+    tag = "Forum",
     path = "/api/forum/sub-category",
+    params(GetForumSubCategoryThreadsQuery),
     responses(
         (status = 200, description = "Returns the threads in the forum sub-category", body=ForumSubCategoryHierarchy),
     )

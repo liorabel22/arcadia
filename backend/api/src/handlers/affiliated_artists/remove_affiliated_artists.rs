@@ -12,6 +12,8 @@ pub struct RemoveAffiliatedArtistsQuery {
 
 #[utoipa::path(
     delete,
+    operation_id = "Delete artist affiliation",
+    tag = "Affiliated Artist",
     path = "/api/affiliated-artists",
     responses(
         (status = 200, description = "Successfully removed the artist affiliations"),

@@ -5,6 +5,8 @@ use arcadia_storage::models::forum::{ForumPost, UserCreatedForumPost};
 
 #[utoipa::path(
     post,
+    operation_id = "Create forum post",
+    tag = "Forum",
     path = "/api/forum/post",
     responses(
         (status = 200, description = "Successfully created the forum post", body=ForumPost),

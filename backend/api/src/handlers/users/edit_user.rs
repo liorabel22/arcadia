@@ -6,6 +6,8 @@ use serde_json::json;
 
 #[utoipa::path(
     put,
+    operation_id = "Edit user",
+    tag = "User",
     path = "/api/users",
     responses(
         (status = 200, description = "Successfully edited the user"),

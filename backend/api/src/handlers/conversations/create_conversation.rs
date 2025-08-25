@@ -5,6 +5,8 @@ use arcadia_storage::models::conversation::{Conversation, UserCreatedConversatio
 
 #[utoipa::path(
     post,
+    operation_id = "Create conversation",
+    tag = "Conversation",
     path = "/api/conversations",
     responses(
         (status = 200, description = "Successfully created the conversation and first message", body=Conversation),

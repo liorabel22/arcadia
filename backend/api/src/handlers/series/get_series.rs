@@ -12,6 +12,8 @@ pub struct GetSeriesQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Get series",
+    tag = "Series",
     path = "/api/series",
     params (GetSeriesQuery),
     responses(

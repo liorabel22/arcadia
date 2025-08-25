@@ -12,6 +12,8 @@ pub struct GetArtistPublicationsQuery {
 
 #[utoipa::path(
     get,
+    operation_id = "Get artist publications",
+    tag = "Artist",
     path = "/api/artists",
     params (GetArtistPublicationsQuery),
     responses(
