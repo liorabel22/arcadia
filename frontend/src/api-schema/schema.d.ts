@@ -684,7 +684,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["Edit registered users"];
+        get: operations["Get registered users"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3524,7 +3524,7 @@ export interface operations {
             };
         };
     };
-    "Edit registered users": {
+    "Get registered users": {
         parameters: {
             query?: never;
             header?: never;
