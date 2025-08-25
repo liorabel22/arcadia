@@ -91,6 +91,8 @@ cargo fmt --all
 ### Frontend Development
 
 ```bash
+cd frontend
+
 # Development server with hot reload
 npm run dev
 
