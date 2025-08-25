@@ -13,8 +13,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
-        delete: operations["exec"];
+        post: operations["Create artist affiliation"];
+        delete: operations["Delete artist affiliation"];
         options?: never;
         head?: never;
         patch?: never;
@@ -27,9 +27,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get artist publications"];
         put?: never;
-        post: operations["exec"];
+        post: operations["Create artist"];
         delete?: never;
         options?: never;
         head?: never;
@@ -45,7 +45,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Login"];
         delete?: never;
         options?: never;
         head?: never;
@@ -61,7 +61,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Refresh token"];
         delete?: never;
         options?: never;
         head?: never;
@@ -77,7 +77,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Register"];
         delete?: never;
         options?: never;
         head?: never;
@@ -91,9 +91,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get conversations"];
         put?: never;
-        post: operations["exec"];
+        post: operations["Create conversation"];
         delete?: never;
         options?: never;
         head?: never;
@@ -109,7 +109,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create conversation message"];
         delete?: never;
         options?: never;
         head?: never;
@@ -125,7 +125,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create edition group"];
         delete?: never;
         options?: never;
         head?: never;
@@ -139,7 +139,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get comic vine data"];
         put?: never;
         post?: never;
         delete?: never;
@@ -155,7 +155,23 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get isbn data"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/external-sources/musicbrainz": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Get Musicbranz data"];
         put?: never;
         post?: never;
         delete?: never;
@@ -171,23 +187,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/external_db/musicbrainz": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["exec"];
+        get: operations["Get TMDB data"];
         put?: never;
         post?: never;
         delete?: never;
@@ -203,7 +203,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Create forum"];
         put?: never;
         post?: never;
         delete?: never;
@@ -221,7 +221,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create forum post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -235,7 +235,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get forim sub-category thread"];
         put?: never;
         post?: never;
         delete?: never;
@@ -251,9 +251,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get forum thread"];
         put?: never;
-        post: operations["exec"];
+        post: operations["Create forum thread"];
         delete?: never;
         options?: never;
         head?: never;
@@ -269,7 +269,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create gift"];
         delete?: never;
         options?: never;
         head?: never;
@@ -283,7 +283,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get home data"];
         put?: never;
         post?: never;
         delete?: never;
@@ -301,7 +301,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create invitation"];
         delete?: never;
         options?: never;
         head?: never;
@@ -317,7 +317,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create master group"];
         delete?: never;
         options?: never;
         head?: never;
@@ -332,7 +332,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Case insensitive */
-        get: operations["exec"];
+        get: operations["Search artists"];
         put?: never;
         post?: never;
         delete?: never;
@@ -348,7 +348,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Search forum threads"];
         put?: never;
         post?: never;
         delete?: never;
@@ -364,7 +364,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Search title group info"];
         put?: never;
         post?: never;
         delete?: never;
@@ -380,7 +380,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Search torrent requests"];
         put?: never;
         post?: never;
         delete?: never;
@@ -396,7 +396,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Search torrents"];
         put?: never;
         post?: never;
         delete?: never;
@@ -412,9 +412,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get series"];
         put?: never;
-        post: operations["exec"];
+        post: operations["Create series"];
         delete?: never;
         options?: never;
         head?: never;
@@ -430,8 +430,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
-        delete: operations["exec"];
+        post: operations["Create subscription"];
+        delete: operations["Remove subscription"];
         options?: never;
         head?: never;
         patch?: never;
@@ -444,9 +444,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
-        put: operations["exec"];
-        post: operations["exec"];
+        get: operations["Get title group"];
+        put: operations["Edit title group"];
+        post: operations["Create title group"];
         delete?: never;
         options?: never;
         head?: never;
@@ -462,7 +462,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create title group comment"];
         delete?: never;
         options?: never;
         head?: never;
@@ -476,7 +476,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get title group info lite"];
         put?: never;
         post?: never;
         delete?: never;
@@ -492,9 +492,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get torrent requests"];
         put?: never;
-        post: operations["exec"];
+        post: operations["Create torrent request"];
         delete?: never;
         options?: never;
         head?: never;
@@ -510,7 +510,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Fill torrent request"];
         delete?: never;
         options?: never;
         head?: never;
@@ -526,7 +526,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create torrent request vote"];
         delete?: never;
         options?: never;
         head?: never;
@@ -540,10 +540,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
-        put: operations["exec"];
-        post: operations["exec"];
-        delete: operations["exec"];
+        get: operations["Download .torrent file"];
+        put: operations["Edit torrent"];
+        post: operations["Create torrent"];
+        delete: operations["Delete torrent"];
         options?: never;
         head?: never;
         patch?: never;
@@ -556,7 +556,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get registered torrents"];
         put?: never;
         post?: never;
         delete?: never;
@@ -574,7 +574,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Create torrent report"];
         delete?: never;
         options?: never;
         head?: never;
@@ -588,7 +588,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get top torrent"];
         put?: never;
         post?: never;
         delete?: never;
@@ -604,7 +604,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get upload information"];
         put?: never;
         post?: never;
         delete?: never;
@@ -620,9 +620,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
-        put: operations["exec"];
-        post: operations["exec"];
+        get: operations["Get user applications"];
+        put: operations["Update user application status"];
+        post: operations["Create user application"];
         delete?: never;
         options?: never;
         head?: never;
@@ -636,8 +636,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
-        put: operations["exec"];
+        get: operations["Get users"];
+        put: operations["Edit user"];
         post?: never;
         delete?: never;
         options?: never;
@@ -652,7 +652,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get user conversations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -668,7 +668,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get me"];
         put?: never;
         post?: never;
         delete?: never;
@@ -684,7 +684,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Edit registered users"];
         put?: never;
         post?: never;
         delete?: never;
@@ -702,7 +702,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["exec"];
+        post: operations["Warn users"];
         delete?: never;
         options?: never;
         head?: never;
@@ -716,9 +716,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["exec"];
+        get: operations["Get wiki article"];
         put?: never;
-        post: operations["exec"];
+        post: operations["Create wiki article"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2198,7 +2198,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    exec: {
+    "Create artist affiliation": {
         parameters: {
             query?: never;
             header?: never;
@@ -2222,7 +2222,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Delete artist affiliation": {
         parameters: {
             query?: never;
             header?: never;
@@ -2240,7 +2240,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get artist publications": {
         parameters: {
             query: {
                 id: number;
@@ -2251,7 +2251,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully got the artist's pulications */
+            /** @description Successfully got the artist's publications */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2262,7 +2262,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create artist": {
         parameters: {
             query?: never;
             header?: never;
@@ -2287,7 +2287,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    Login: {
         parameters: {
             query?: never;
             header?: never;
@@ -2311,7 +2311,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Refresh token": {
         parameters: {
             query?: never;
             header?: never;
@@ -2335,7 +2335,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    Register: {
         parameters: {
             query?: never;
             header?: never;
@@ -2359,7 +2359,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get conversations": {
         parameters: {
             query: {
                 id: number;
@@ -2381,7 +2381,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create conversation": {
         parameters: {
             query?: never;
             header?: never;
@@ -2405,7 +2405,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create conversation message": {
         parameters: {
             query?: never;
             header?: never;
@@ -2429,7 +2429,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create edition group": {
         parameters: {
             query?: never;
             header?: never;
@@ -2453,7 +2453,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get comic vine data": {
         parameters: {
             query: {
                 url: string;
@@ -2474,7 +2474,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get isbn data": {
         parameters: {
             query: {
                 isbn: string;
@@ -2495,7 +2495,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get Musicbranz data": {
         parameters: {
             query: {
                 url: string;
@@ -2516,7 +2516,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get TMDB data": {
         parameters: {
             query: {
                 url: string;
@@ -2537,7 +2537,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create forum": {
         parameters: {
             query?: never;
             header?: never;
@@ -2557,7 +2557,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create forum post": {
         parameters: {
             query?: never;
             header?: never;
@@ -2581,7 +2581,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get forim sub-category thread": {
         parameters: {
             query: {
                 id: number;
@@ -2603,7 +2603,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get forum thread": {
         parameters: {
             query: {
                 id: number;
@@ -2625,7 +2625,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create forum thread": {
         parameters: {
             query?: never;
             header?: never;
@@ -2649,7 +2649,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create gift": {
         parameters: {
             query?: never;
             header?: never;
@@ -2673,7 +2673,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get home data": {
         parameters: {
             query?: never;
             header?: never;
@@ -2692,7 +2692,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create invitation": {
         parameters: {
             query?: never;
             header?: never;
@@ -2716,7 +2716,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create master group": {
         parameters: {
             query?: never;
             header?: never;
@@ -2740,7 +2740,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Search artists": {
         parameters: {
             query: {
                 name: string;
@@ -2762,7 +2762,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Search forum threads": {
         parameters: {
             query: {
                 title: string;
@@ -2786,7 +2786,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Search title group info": {
         parameters: {
             query: {
                 name: string;
@@ -2809,7 +2809,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Search torrent requests": {
         parameters: {
             query?: {
                 /** @description Name of the title group to search for */
@@ -2838,7 +2838,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Search torrents": {
         parameters: {
             query?: never;
             header?: never;
@@ -2862,7 +2862,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get series": {
         parameters: {
             query: {
                 id: number;
@@ -2884,7 +2884,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create series": {
         parameters: {
             query?: never;
             header?: never;
@@ -2908,7 +2908,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create subscription": {
         parameters: {
             query: {
                 item_id: number;
@@ -2929,7 +2929,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Remove subscription": {
         parameters: {
             query: {
                 item_id: number;
@@ -2950,7 +2950,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get title group": {
         parameters: {
             query: {
                 id: number;
@@ -2972,7 +2972,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Edit title group": {
         parameters: {
             query?: never;
             header?: never;
@@ -2996,7 +2996,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create title group": {
         parameters: {
             query?: never;
             header?: never;
@@ -3020,7 +3020,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create title group comment": {
         parameters: {
             query?: never;
             header?: never;
@@ -3044,7 +3044,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get title group info lite": {
         parameters: {
             query: {
                 id: number;
@@ -3066,7 +3066,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get torrent requests": {
         parameters: {
             query: {
                 id: number;
@@ -3088,7 +3088,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create torrent request": {
         parameters: {
             query?: never;
             header?: never;
@@ -3112,7 +3112,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Fill torrent request": {
         parameters: {
             query?: never;
             header?: never;
@@ -3134,7 +3134,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create torrent request vote": {
         parameters: {
             query?: never;
             header?: never;
@@ -3158,7 +3158,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Download .torrent file": {
         parameters: {
             query: {
                 id: number;
@@ -3178,7 +3178,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Edit torrent": {
         parameters: {
             query?: never;
             header?: never;
@@ -3202,7 +3202,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create torrent": {
         parameters: {
             query?: never;
             header?: never;
@@ -3226,7 +3226,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Delete torrent": {
         parameters: {
             query?: never;
             header?: never;
@@ -3248,7 +3248,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get registered torrents": {
         parameters: {
             query?: never;
             header?: never;
@@ -3268,7 +3268,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create torrent report": {
         parameters: {
             query?: never;
             header?: never;
@@ -3292,7 +3292,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get top torrent": {
         parameters: {
             query: {
                 period: string;
@@ -3315,7 +3315,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get upload information": {
         parameters: {
             query?: never;
             header?: never;
@@ -3335,7 +3335,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get user applications": {
         parameters: {
             query?: {
                 /** @description Maximum number of applications to return (default: 50) */
@@ -3378,7 +3378,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Update user application status": {
         parameters: {
             query?: never;
             header?: never;
@@ -3416,7 +3416,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create user application": {
         parameters: {
             query?: never;
             header?: never;
@@ -3440,7 +3440,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get users": {
         parameters: {
             query: {
                 id: number;
@@ -3462,7 +3462,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Edit user": {
         parameters: {
             query?: never;
             header?: never;
@@ -3484,7 +3484,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get user conversations": {
         parameters: {
             query?: never;
             header?: never;
@@ -3504,7 +3504,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get me": {
         parameters: {
             query?: never;
             header?: never;
@@ -3524,7 +3524,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Edit registered users": {
         parameters: {
             query?: never;
             header?: never;
@@ -3544,7 +3544,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Warn users": {
         parameters: {
             query?: never;
             header?: never;
@@ -3568,7 +3568,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Get wiki article": {
         parameters: {
             query: {
                 id: number;
@@ -3590,7 +3590,7 @@ export interface operations {
             };
         };
     };
-    exec: {
+    "Create wiki article": {
         parameters: {
             query?: never;
             header?: never;
