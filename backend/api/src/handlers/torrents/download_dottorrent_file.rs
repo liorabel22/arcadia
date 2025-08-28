@@ -21,6 +21,9 @@ pub struct DownloadTorrentQuery {
     tag = "Torrent",
     path = "/api/torrents",
     params (DownloadTorrentQuery),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully downloaded the torrent file"),
     )

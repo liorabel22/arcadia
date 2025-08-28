@@ -8,6 +8,9 @@ use arcadia_storage::models::edition_group::{EditionGroup, UserCreatedEditionGro
     operation_id = "Create edition group",
     tag = "Edition Group",
     path = "/api/edition-groups",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully created the edition_group", body=EditionGroup),
     )

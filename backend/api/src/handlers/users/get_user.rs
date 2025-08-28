@@ -23,6 +23,9 @@ pub struct GetUserQuery {
     tag = "User",
     path = "/api/users",
     params(GetUserQuery),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully got the user's profile", body=PublicProfile),
     )

@@ -9,6 +9,9 @@ use arcadia_storage::models::torrent::{EditedTorrent, Torrent};
     operation_id = "Edit torrent",
     tag = "Torrent",
     path = "/api/torrents",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully edited the torrent", body=Torrent),
     )

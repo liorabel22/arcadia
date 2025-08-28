@@ -9,6 +9,9 @@ use arcadia_common::error::{Error, Result};
     operation_id = "Edit title group",
     tag = "Title Group",
     path = "/api/title-groups",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully edited the title group", body=TitleGroup),
     )

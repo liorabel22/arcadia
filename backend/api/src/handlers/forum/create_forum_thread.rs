@@ -8,6 +8,9 @@ use arcadia_storage::models::forum::{ForumThread, UserCreatedForumThread};
     operation_id = "Create forum thread",
     tag = "Forum",
     path = "/api/forum/thread",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully created the forum thread", body=ForumThread),
     )

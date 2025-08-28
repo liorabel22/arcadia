@@ -8,6 +8,9 @@ use arcadia_storage::models::master_group::{MasterGroup, UserCreatedMasterGroup}
     operation_id = "Create master group",
     tag = "Master Group",
     path = "/api/master-groups",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully created the master group", body=MasterGroup),
     )

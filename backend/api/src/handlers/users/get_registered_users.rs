@@ -8,6 +8,9 @@ use arcadia_storage::models::user::UserMinimal;
     operation_id = "Get registered users",
     tag = "User",
     path = "/api/users/registered",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "All registered users", body=Vec<UserMinimal>),
     )

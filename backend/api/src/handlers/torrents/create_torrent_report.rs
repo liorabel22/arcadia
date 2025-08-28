@@ -8,6 +8,9 @@ use arcadia_storage::models::torrent_report::{TorrentReport, UserCreatedTorrentR
     operation_id = "Create torrent report",
     tag = "Torrent",
     path = "/api/torrents/reports",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Torrent successfully reported", body=TorrentReport),
     )

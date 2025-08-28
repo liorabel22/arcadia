@@ -8,6 +8,9 @@ use arcadia_storage::models::artist::{Artist, UserCreatedArtist};
     operation_id = "Create artist",
     tag = "Artist",
     path = "/api/artists",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 201, description = "Successfully created the artists, returned in the same order as the one sent.
             In the case of a db conflict (duplicate), the existing entry is returned (can be seen with the created_at attribute).", body=Vec<Artist>),

@@ -9,6 +9,9 @@ use arcadia_storage::models::user::{APIKey, UserCreatedAPIKey};
     tag = "User",
     path = "/api/users/api-keys",
     request_body(content = UserCreatedAPIKey, content_type = "application/json"),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 201, description = "Successfully created the API key", body=APIKey),
     )

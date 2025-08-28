@@ -8,6 +8,9 @@ use arcadia_storage::models::gift::{Gift, UserCreatedGift};
     operation_id = "Create gift",
     tag = "Gift",
     path = "/api/gifts",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully sent the gift", body=Gift),
     )

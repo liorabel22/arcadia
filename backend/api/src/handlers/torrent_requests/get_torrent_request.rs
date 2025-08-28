@@ -17,6 +17,9 @@ pub struct GetTorrentRequestQuery {
     tag = "Torrent Request",
     path = "/api/torrent-requests",
     params(GetTorrentRequestQuery),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully got the torrent request with associated data", body=TorrentRequestAndAssociatedData),
     )

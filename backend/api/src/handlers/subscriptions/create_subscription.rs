@@ -16,6 +16,9 @@ pub struct AddSubscriptionQuery {
     tag = "Subscription",
     path = "/api/subscriptions",
     params (AddSubscriptionQuery),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully subscribed to the item"),
     )

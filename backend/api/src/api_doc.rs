@@ -1,4 +1,7 @@
-use utoipa::OpenApi;
+use utoipa::{
+    openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
+    Modify, OpenApi,
+};
 
 use crate::handlers::{
     artists::get_artist_publications::GetArtistPublicationsQuery,
@@ -58,6 +61,7 @@ use arcadia_storage::models::{
 #[derive(OpenApi)]
 #[openapi(
     info(title = "arcadia-backend API",),
+    modifiers(&SecurityAddon),
     paths(
         crate::handlers::auth::register::exec,
         crate::handlers::auth::login::exec,
@@ -207,3 +211,21 @@ use arcadia_storage::models::{
     ),)
 )]
 pub struct ApiDoc;
+
+struct SecurityAddon;
+
+impl Modify for SecurityAddon {
+    fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+        // we can unwrap safely since there already is components registered.
+        let components = openapi.components.as_mut().unwrap();
+        components.add_security_scheme(
+            "http",
+            SecurityScheme::Http(
+                HttpBuilder::new()
+                    .scheme(HttpAuthScheme::Bearer)
+                    .bearer_format("JWT")
+                    .build(),
+            ),
+        )
+    }
+}

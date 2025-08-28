@@ -9,6 +9,9 @@ use serde_json::json;
     operation_id = "Edit user",
     tag = "User",
     path = "/api/users",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully edited the user"),
     )
