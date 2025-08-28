@@ -21,8 +21,7 @@ impl FromRequest for JwtAuthData {
 
     fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
         req.extensions()
-            .get::<JwtAuthData>()
-            .map(|auth_data| auth_data.clone())
+            .get::<JwtAuthData>().cloned()
             .map(ok)
             .unwrap_or_else(|| err(ErrorUnauthorized("not authorized")))
     }
