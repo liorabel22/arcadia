@@ -8,17 +8,6 @@ pub async fn authenticate_user(
     req: ServiceRequest,
     bearer: Option<BearerAuth>,
 ) -> std::result::Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    // These routes are explicitly not authenticated.
-    if matches!(
-        req.path(),
-        "/api/auth/login"
-            | "/api/auth/register"
-            | "/api/auth/refresh-token"
-            | "/api/user-applications"
-    ) {
-        return Ok(req);
-    }
-
     if let Some(bearer) = bearer {
         validate_bearer_auth(req, bearer).await
     } else if let Some(api_key) = req.headers().get("api_key") {
