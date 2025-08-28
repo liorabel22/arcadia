@@ -22,26 +22,3 @@ pub mod wiki;
 
 pub mod peers_handler;
 pub mod scrapers;
-
-use actix_web::{
-    dev::Payload, error::ErrorUnauthorized, Error, FromRequest, HttpMessage as _, HttpRequest,
-};
-use futures_util::future::{err, ok, Ready};
-
-#[derive(Debug, Clone)]
-pub struct JwtAuthData {
-    pub sub: i64,
-}
-
-impl FromRequest for JwtAuthData {
-    type Error = Error;
-    type Future = Ready<Result<Self, Self::Error>>;
-
-    fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
-        req.extensions()
-            .get::<JwtAuthData>()
-            .map(|auth_data| auth_data.clone())
-            .map(ok)
-            .unwrap_or_else(|| err(ErrorUnauthorized("not authorized")))
-    }
-}

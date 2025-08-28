@@ -1,4 +1,4 @@
-use crate::{handlers::UserId, Arcadia};
+use crate::Arcadia;
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::artist::{AffiliatedArtistHierarchy, UserCreatedAffiliatedArtist};

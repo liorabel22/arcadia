@@ -1,8 +1,31 @@
-use crate::{handlers::JwtAuthData, Arcadia};
-use actix_web::{dev::ServiceRequest, web, HttpMessage as _};
+use crate::Arcadia;
+use actix_web::{
+    dev::{Payload, ServiceRequest},
+    error::ErrorUnauthorized,
+    web, Error, FromRequest, HttpMessage as _, HttpRequest,
+};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use arcadia_storage::models::user::Claims;
+use futures_util::future::{err, ok, Ready};
 use jsonwebtoken::{decode, errors::ErrorKind, DecodingKey, Validation};
+
+#[derive(Debug, Clone)]
+pub struct JwtAuthData {
+    pub sub: i64,
+}
+
+impl FromRequest for JwtAuthData {
+    type Error = Error;
+    type Future = Ready<Result<Self, Self::Error>>;
+
+    fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
+        req.extensions()
+            .get::<JwtAuthData>()
+            .map(|auth_data| auth_data.clone())
+            .map(ok)
+            .unwrap_or_else(|| err(ErrorUnauthorized("not authorized")))
+    }
+}
 
 pub async fn authenticate_user(
     req: ServiceRequest,
