@@ -1,4 +1,4 @@
-use crate::Arcadia;
+use crate::{handlers::JwtAuthData, Arcadia};
 use actix_web::{dev::ServiceRequest, web, HttpMessage as _};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use arcadia_storage::models::user::Claims;
@@ -65,17 +65,19 @@ async fn validate_bearer_auth(
     };
 
     let user_id = token_data.claims.sub;
-
-    let banned = arc.pool.is_user_banned(user_id).await;
+    let Ok(banned) = arc.pool.is_user_banned(user_id).await else {
+        return Err((
+            actix_web::error::ErrorUnauthorized("account does not exist"),
+            req,
+        ));
+    };
 
     if banned {
         return Err((actix_web::error::ErrorUnauthorized("account banned"), req));
     }
 
     let _ = arc.pool.update_last_seen(user_id).await;
-
-    req.extensions_mut()
-        .insert(crate::handlers::UserId(user_id));
+    req.extensions_mut().insert(JwtAuthData { sub: user_id });
 
     Ok(req)
 }
@@ -97,9 +99,7 @@ async fn validate_api_key(
             return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req));
         }
     };
-
-    req.extensions_mut()
-        .insert(crate::handlers::UserId(user_id));
+    req.extensions_mut().insert(JwtAuthData { sub: user_id });
 
     Ok(req)
 }
