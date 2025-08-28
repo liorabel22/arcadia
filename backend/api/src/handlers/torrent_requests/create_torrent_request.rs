@@ -1,5 +1,4 @@
-use crate::handlers::User;
-use crate::Arcadia;
+use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::torrent_request::{TorrentRequest, UserCreatedTorrentRequest};
@@ -16,11 +15,11 @@ use arcadia_storage::models::torrent_request::{TorrentRequest, UserCreatedTorren
 pub async fn exec(
     mut torrent_request: web::Json<UserCreatedTorrentRequest>,
     arc: web::Data<Arcadia>,
-    current_user: User,
+    user: JwtAuthData,
 ) -> Result<HttpResponse> {
     let torrent_request = arc
         .pool
-        .create_torrent_request(&mut torrent_request, &current_user)
+        .create_torrent_request(&mut torrent_request, user.sub)
         .await?;
 
     Ok(HttpResponse::Created().json(torrent_request))

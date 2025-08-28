@@ -1,4 +1,4 @@
-use crate::{handlers::User, Arcadia};
+use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::forum::{ForumThread, UserCreatedForumThread};
@@ -15,11 +15,11 @@ use arcadia_storage::models::forum::{ForumThread, UserCreatedForumThread};
 pub async fn exec(
     mut forum_thread: web::Json<UserCreatedForumThread>,
     arc: web::Data<Arcadia>,
-    current_user: User,
+    user: JwtAuthData,
 ) -> Result<HttpResponse> {
     let forum_thread = arc
         .pool
-        .create_forum_thread(&mut forum_thread, current_user.id)
+        .create_forum_thread(&mut forum_thread, user.sub)
         .await?;
 
     Ok(HttpResponse::Created().json(forum_thread))

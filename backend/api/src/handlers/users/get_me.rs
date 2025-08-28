@@ -1,6 +1,4 @@
-use std::ops::Deref;
-
-use crate::{handlers::User, Arcadia};
+use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::{
@@ -21,7 +19,8 @@ use serde_json::json;
         (status = 200, description = "Successfully got the user's profile", body=Profile),
     )
 )]
-pub async fn exec(mut current_user: User, arc: web::Data<Arcadia>) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>, user: JwtAuthData) -> Result<HttpResponse> {
+    let mut current_user = arc.pool.find_user_with_id(user.sub).await?;
     current_user.password_hash = String::from("");
     let peers = arc.pool.get_user_peers(current_user.id).await;
     let user_warnings = arc.pool.find_user_warnings(current_user.id).await;
@@ -64,7 +63,7 @@ pub async fn exec(mut current_user: User, arc: web::Data<Arcadia>) -> Result<Htt
         .await?;
 
     Ok(HttpResponse::Ok().json(json!({
-            "user": current_user.deref(),
+            "user": current_user,
             "peers":peers,
             "user_warnings": user_warnings,
             "unread_conversations_amount": unread_conversations_amount,

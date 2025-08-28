@@ -12,6 +12,7 @@ use jsonwebtoken::{decode, errors::ErrorKind, DecodingKey, Validation};
 #[derive(Debug, Clone)]
 pub struct JwtAuthData {
     pub sub: i64,
+    pub class: String,
 }
 
 impl FromRequest for JwtAuthData {
@@ -100,7 +101,10 @@ async fn validate_bearer_auth(
     }
 
     let _ = arc.pool.update_last_seen(user_id).await;
-    req.extensions_mut().insert(JwtAuthData { sub: user_id });
+    req.extensions_mut().insert(JwtAuthData {
+        sub: user_id,
+        class: token_data.claims.class,
+    });
 
     Ok(req)
 }
@@ -116,13 +120,14 @@ async fn validate_api_key(
         ));
     };
 
-    let user_id = match arc.pool.find_user_id_with_api_key(api_key).await {
-        Ok(id) => id,
-        Err(e) => {
-            return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req));
-        }
+    let user = match arc.pool.find_user_id_with_api_key(api_key).await {
+        Ok(user) => user,
+        Err(e) => return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req)),
     };
-    req.extensions_mut().insert(JwtAuthData { sub: user_id });
+    req.extensions_mut().insert(JwtAuthData {
+        sub: user.id,
+        class: user.class,
+    });
 
     Ok(req)
 }

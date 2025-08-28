@@ -1,4 +1,4 @@
-use crate::{handlers::User, Arcadia};
+use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::conversation::{ConversationMessage, UserCreatedConversationMessage};
@@ -15,11 +15,11 @@ use arcadia_storage::models::conversation::{ConversationMessage, UserCreatedConv
 pub async fn exec(
     message: web::Json<UserCreatedConversationMessage>,
     arc: web::Data<Arcadia>,
-    current_user: User,
+    user: JwtAuthData,
 ) -> Result<HttpResponse> {
     let message = arc
         .pool
-        .create_conversation_message(&message, current_user.id)
+        .create_conversation_message(&message, user.sub)
         .await?;
 
     Ok(HttpResponse::Created().json(message))

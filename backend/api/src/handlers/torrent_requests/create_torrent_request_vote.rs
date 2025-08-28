@@ -1,4 +1,4 @@
-use crate::{handlers::User, Arcadia};
+use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::torrent_request_vote::{
@@ -17,11 +17,11 @@ use arcadia_storage::models::torrent_request_vote::{
 pub async fn exec(
     torrent_request_vote: web::Json<UserCreatedTorrentRequestVote>,
     arc: web::Data<Arcadia>,
-    current_user: User,
+    user: JwtAuthData,
 ) -> Result<HttpResponse> {
     let vote = arc
         .pool
-        .create_torrent_request_vote(&torrent_request_vote, &current_user)
+        .create_torrent_request_vote(&torrent_request_vote, user.sub)
         .await?;
 
     Ok(HttpResponse::Created().json(vote))
