@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::edition_group::{EditionGroup, UserCreatedEditionGroup};
@@ -15,7 +15,7 @@ use arcadia_storage::models::edition_group::{EditionGroup, UserCreatedEditionGro
 pub async fn exec(
     form: web::Json<UserCreatedEditionGroup>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let edition_group = arc.pool.create_edition_group(&form, user.sub).await?;
 

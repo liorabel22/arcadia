@@ -1,5 +1,5 @@
 use crate::{
-    middlewares::jwt_middleware::JwtAuthData, services::email_service::EmailService, Arcadia,
+    middlewares::jwt_middleware::Authdata, services::email_service::EmailService, Arcadia,
 };
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
@@ -17,7 +17,7 @@ use arcadia_storage::models::invitation::{Invitation, SentInvitation};
 pub async fn exec(
     invitation: web::Json<SentInvitation>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let current_user = arc.pool.find_user_with_id(user.sub).await?;
     if current_user.invitations == 0 {

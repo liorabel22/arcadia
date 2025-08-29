@@ -1,6 +1,6 @@
 use actix_web::{web, HttpResponse};
 
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::torrent::TorrentMinimal;
 
@@ -13,7 +13,7 @@ use arcadia_storage::models::torrent::TorrentMinimal;
         (status = 200, description = "All registered torrents", body=Vec<TorrentMinimal>),
     )
 )]
-pub async fn exec(arc: web::Data<Arcadia>, user: JwtAuthData) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>, user: Authdata) -> Result<HttpResponse> {
     if user.class != "tracker" {
         return Err(Error::InsufficientPrivileges);
     };

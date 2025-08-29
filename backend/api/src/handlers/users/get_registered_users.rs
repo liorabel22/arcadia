@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::user::UserMinimal;
@@ -12,7 +12,7 @@ use arcadia_storage::models::user::UserMinimal;
         (status = 200, description = "All registered users", body=Vec<UserMinimal>),
     )
 )]
-pub async fn exec(arc: web::Data<Arcadia>, user: JwtAuthData) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>, user: Authdata) -> Result<HttpResponse> {
     // TODO: change on extracker integration
     if user.class != "tracker" {
         return Err(Error::InsufficientPrivileges);

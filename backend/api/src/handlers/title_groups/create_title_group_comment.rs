@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::title_group_comment::{
@@ -17,7 +17,7 @@ use arcadia_storage::models::title_group_comment::{
 pub async fn exec(
     comment: web::Json<UserCreatedTitleGroupComment>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let title_group_comment = arc
         .pool

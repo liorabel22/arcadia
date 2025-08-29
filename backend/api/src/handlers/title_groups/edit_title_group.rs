@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse};
 use arcadia_storage::models::title_group::{EditedTitleGroup, TitleGroup};
 
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use arcadia_common::error::{Error, Result};
 
 #[utoipa::path(
@@ -16,7 +16,7 @@ use arcadia_common::error::{Error, Result};
 pub async fn exec(
     form: web::Json<EditedTitleGroup>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let title_group = arc.pool.find_title_group(form.id).await?;
 

@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::user::{UserCreatedUserWarning, UserWarning};
@@ -15,7 +15,7 @@ use arcadia_storage::models::user::{UserCreatedUserWarning, UserWarning};
 pub async fn exec(
     form: web::Json<UserCreatedUserWarning>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     if user.class != "staff" {
         return Err(Error::InsufficientPrivileges);

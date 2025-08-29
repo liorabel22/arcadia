@@ -3,8 +3,8 @@ use arcadia_storage::models::title_group::{PublicRating, TitleGroup, UserCreated
 use futures::future::join_all;
 
 use crate::{
-    handlers::external_db::get_tmdb_data::get_tmdb_rating,
-    middlewares::jwt_middleware::JwtAuthData, Arcadia,
+    handlers::external_db::get_tmdb_data::get_tmdb_rating, middlewares::jwt_middleware::Authdata,
+    Arcadia,
 };
 use arcadia_common::error::Result;
 
@@ -20,7 +20,7 @@ use arcadia_common::error::Result;
 pub async fn exec(
     mut form: web::Json<UserCreatedTitleGroup>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let rating_futures: Vec<_> = form
         .external_links

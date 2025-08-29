@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::wiki::{UserCreatedWikiArticle, WikiArticle};
@@ -15,7 +15,7 @@ use arcadia_storage::models::wiki::{UserCreatedWikiArticle, WikiArticle};
 pub async fn exec(
     article: web::Json<UserCreatedWikiArticle>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     if user.class != "staff" {
         return Err(Error::InsufficientPrivileges);

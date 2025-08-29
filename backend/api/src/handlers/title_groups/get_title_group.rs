@@ -3,7 +3,7 @@ use arcadia_storage::models::title_group::TitleGroupAndAssociatedData;
 use serde::Deserialize;
 use utoipa::IntoParams;
 
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use arcadia_common::error::Result;
 
 #[derive(Debug, Deserialize, IntoParams)]
@@ -24,7 +24,7 @@ pub struct GetTitleGroupQuery {
 pub async fn exec(
     arc: web::Data<Arcadia>,
     query: web::Query<GetTitleGroupQuery>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let title_group = arc
         .pool

@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse};
 use serde_json::json;
 
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::torrent::TorrentToDelete;
 
@@ -17,7 +17,7 @@ use arcadia_storage::models::torrent::TorrentToDelete;
 pub async fn exec(
     mut form: web::Json<TorrentToDelete>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     if user.class != "staff" {
         return Err(Error::InsufficientPrivileges);

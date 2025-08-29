@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use serde::Deserialize;
@@ -23,7 +23,7 @@ pub struct AddSubscriptionQuery {
 pub async fn exec(
     query: web::Query<AddSubscriptionQuery>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     arc.pool
         .create_subscription(query.item_id, &query.item, user.sub)

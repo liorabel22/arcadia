@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::{
@@ -30,7 +30,7 @@ pub struct GetUserQuery {
 pub async fn exec(
     arc: web::Data<Arcadia>,
     query: web::Query<GetUserQuery>,
-    _: JwtAuthData,
+    _: Authdata,
 ) -> Result<HttpResponse> {
     let user = arc.pool.find_user_profile(&query.id).await?;
 

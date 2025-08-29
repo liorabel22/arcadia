@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::master_group::{MasterGroup, UserCreatedMasterGroup};
@@ -15,7 +15,7 @@ use arcadia_storage::models::master_group::{MasterGroup, UserCreatedMasterGroup}
 pub async fn exec(
     form: web::Json<UserCreatedMasterGroup>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let master_group = arc.pool.create_master_group(&form, user.sub).await?;
 

@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::{
@@ -19,7 +19,7 @@ use serde_json::json;
         (status = 200, description = "Successfully got the user's profile", body=Profile),
     )
 )]
-pub async fn exec(arc: web::Data<Arcadia>, user: JwtAuthData) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>, user: Authdata) -> Result<HttpResponse> {
     let mut current_user = arc.pool.find_user_with_id(user.sub).await?;
     current_user.password_hash = String::from("");
     let peers = arc.pool.get_user_peers(current_user.id).await;

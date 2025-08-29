@@ -10,18 +10,18 @@ use futures_util::future::{err, ok, Ready};
 use jsonwebtoken::{decode, errors::ErrorKind, DecodingKey, Validation};
 
 #[derive(Debug, Clone)]
-pub struct JwtAuthData {
+pub struct Authdata {
     pub sub: i64,
     pub class: String,
 }
 
-impl FromRequest for JwtAuthData {
+impl FromRequest for Authdata {
     type Error = Error;
     type Future = Ready<Result<Self, Self::Error>>;
 
     fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
         req.extensions()
-            .get::<JwtAuthData>()
+            .get::<Authdata>()
             .cloned()
             .map(ok)
             .unwrap_or_else(|| err(ErrorUnauthorized("not authorized")))
@@ -101,7 +101,7 @@ async fn validate_bearer_auth(
     }
 
     let _ = arc.pool.update_last_seen(user_id).await;
-    req.extensions_mut().insert(JwtAuthData {
+    req.extensions_mut().insert(Authdata {
         sub: user_id,
         class: token_data.claims.class,
     });
@@ -124,7 +124,7 @@ async fn validate_api_key(
         Ok(user) => user,
         Err(e) => return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req)),
     };
-    req.extensions_mut().insert(JwtAuthData {
+    req.extensions_mut().insert(Authdata {
         sub: user.id,
         class: user.class,
     });

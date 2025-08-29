@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::user::{APIKey, UserCreatedAPIKey};
@@ -16,7 +16,7 @@ use arcadia_storage::models::user::{APIKey, UserCreatedAPIKey};
 pub async fn exec(
     form: web::Json<UserCreatedAPIKey>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let created_api_key = arc.pool.create_api_key(&form, user.sub).await?;
 

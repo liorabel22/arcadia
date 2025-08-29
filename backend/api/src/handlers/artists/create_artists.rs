@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use arcadia_storage::models::artist::{Artist, UserCreatedArtist};
@@ -16,7 +16,7 @@ use arcadia_storage::models::artist::{Artist, UserCreatedArtist};
 pub async fn exec(
     artists: web::Json<Vec<UserCreatedArtist>>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let artists = arc.pool.create_artists(&artists, user.sub).await?;
 

@@ -1,6 +1,6 @@
 use actix_web::{web, HttpResponse};
 
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use arcadia_common::error::Result;
 use arcadia_storage::models::torrent::{TorrentSearch, TorrentSearchResults};
 
@@ -28,7 +28,7 @@ use arcadia_storage::models::torrent::{TorrentSearch, TorrentSearchResults};
 pub async fn exec(
     form: web::Json<TorrentSearch>,
     arc: web::Data<Arcadia>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     let search_results = arc.pool.search_torrents(&form, Some(user.sub)).await?;
 

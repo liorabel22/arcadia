@@ -1,4 +1,4 @@
-use crate::{middlewares::jwt_middleware::JwtAuthData, Arcadia};
+use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
 use arcadia_storage::models::user_application::{UserApplication, UserApplicationStatus};
@@ -25,7 +25,7 @@ pub struct UpdateUserApplication {
 pub async fn exec(
     arc: web::Data<Arcadia>,
     form: web::Json<UpdateUserApplication>,
-    user: JwtAuthData,
+    user: Authdata,
 ) -> Result<HttpResponse> {
     // Check if user is staff
     if user.class != "staff" {
