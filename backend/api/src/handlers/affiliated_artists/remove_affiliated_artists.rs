@@ -1,4 +1,4 @@
-use crate::Arcadia;
+use crate::{handlers::UserId, Arcadia};
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
 use serde::Deserialize;
@@ -15,6 +15,9 @@ pub struct RemoveAffiliatedArtistsQuery {
     operation_id = "Delete artist affiliation",
     tag = "Affiliated Artist",
     path = "/api/affiliated-artists",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully removed the artist affiliations"),
     )
@@ -22,6 +25,7 @@ pub struct RemoveAffiliatedArtistsQuery {
 pub async fn exec(
     query: actix_web_lab::extract::Query<RemoveAffiliatedArtistsQuery>,
     arc: web::Data<Arcadia>,
+    _: UserId,
 ) -> Result<HttpResponse> {
     // TODO: add protection based on user class
     arc.pool

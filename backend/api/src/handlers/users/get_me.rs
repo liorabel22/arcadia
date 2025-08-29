@@ -15,6 +15,9 @@ use serde_json::json;
     operation_id = "Get me",
     tag = "User",
     path = "/api/users/me",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully got the user's profile", body=Profile),
     )

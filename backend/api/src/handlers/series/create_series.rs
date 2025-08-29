@@ -8,6 +8,9 @@ use arcadia_storage::models::series::{Series, UserCreatedSeries};
     operation_id = "Create series",
     tag = "Series",
     path = "/api/series",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully created the series", body=Series),
     )

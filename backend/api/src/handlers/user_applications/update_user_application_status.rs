@@ -16,6 +16,9 @@ pub struct UpdateUserApplication {
     tag = "User Application",
     path = "/api/user-applications",
     request_body = UpdateUserApplication,
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully updated user application status", body = UserApplication),
         (status = 403, description = "Forbidden - Only staff members can update user applications"),

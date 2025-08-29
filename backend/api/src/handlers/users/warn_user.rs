@@ -8,6 +8,9 @@ use arcadia_storage::models::user::{UserCreatedUserWarning, UserWarning};
     operation_id = "Warn users",
     tag = "User",
     path = "/api/users/warnings",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully warned the user", body=UserWarning),
     )

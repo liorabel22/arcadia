@@ -8,6 +8,9 @@ use arcadia_storage::models::artist::{AffiliatedArtistHierarchy, UserCreatedAffi
     operation_id = "Create artist affiliation",
     tag = "Affiliated Artist",
     path = "/api/affiliated-artists",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully created the artist affiliations", body=Vec<AffiliatedArtistHierarchy>),
     )

@@ -11,6 +11,9 @@ use arcadia_storage::models::torrent::{Torrent, UploadedTorrent};
     tag = "Torrent",
     path = "/api/torrents",
     request_body(content = UploadedTorrent, content_type = "multipart/form-data"),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 201, description = "Successfully uploaded the torrent", body=Torrent),
     )

@@ -10,6 +10,9 @@ use arcadia_storage::models::torrent::TorrentToDelete;
     operation_id = "Delete torrent",
     tag = "Torrent",
     path = "/api/torrents",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Torrent deleted"),
     )

@@ -8,6 +8,9 @@ use arcadia_storage::models::wiki::{UserCreatedWikiArticle, WikiArticle};
     operation_id = "Create wiki article",
     tag = "Wiki",
     path = "/api/wiki/articles",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully created the wiki article", body=WikiArticle),
     )

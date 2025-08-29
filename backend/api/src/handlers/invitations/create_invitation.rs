@@ -10,6 +10,9 @@ use arcadia_storage::models::invitation::{Invitation, SentInvitation};
     operation_id = "Create invitation",
     tag = "Invitation",
     path = "/api/invitations",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully sent the invitation", body=Invitation),
     )

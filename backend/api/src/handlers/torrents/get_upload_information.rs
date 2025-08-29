@@ -15,6 +15,9 @@ pub struct UploadInformation {
     operation_id = "Get upload information",
     tag = "Torrent",
     path = "/api/torrents/upload-info",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Information related to uploading", body=UploadInformation),
     )

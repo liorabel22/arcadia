@@ -16,6 +16,9 @@ pub struct GetWikiArticleQuery {
     tag = "Wiki",
     path = "/api/wiki/articles",
     params(GetWikiArticleQuery),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully found the wiki article", body=WikiArticle),
     )

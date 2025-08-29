@@ -10,6 +10,9 @@ use arcadia_storage::models::title_group_comment::{
     operation_id = "Create title group comment",
     tag = "Title Group",
     path = "/api/title-groups/comments",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully posted the comment", body=TitleGroupComment),
     )

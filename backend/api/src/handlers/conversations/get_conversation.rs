@@ -16,6 +16,9 @@ pub struct GetConversationQuery {
     tag = "Conversation",
     params(GetConversationQuery),
     path = "/api/conversations",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Found the conversation and its messages", body=ConversationHierarchy),
     )

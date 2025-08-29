@@ -17,6 +17,9 @@ pub struct GetTitleGroupQuery {
     tag = "Title Group",
     path = "/api/title-groups",
     params(GetTitleGroupQuery),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully got the title_group", body=TitleGroupAndAssociatedData),
     )

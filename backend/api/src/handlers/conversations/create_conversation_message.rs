@@ -8,6 +8,9 @@ use arcadia_storage::models::conversation::{ConversationMessage, UserCreatedConv
     operation_id = "Create conversation message",
     tag = "Conversation",
     path = "/api/conversations/messages",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully created the conversation's message", body=ConversationMessage),
     )

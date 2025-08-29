@@ -9,6 +9,9 @@ use serde_json::json;
     operation_id = "Fill torrent request",
     tag = "Torrent Request",
     path = "/api/torrent-requests/fill",
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully filled the torrent request"),
     )

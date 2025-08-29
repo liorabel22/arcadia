@@ -13,6 +13,9 @@ pub type RemoveSubscriptionQuery = AddSubscriptionQuery;
     tag = "Subscription",
     path = "/api/subscriptions",
     params (RemoveSubscriptionQuery),
+    security(
+      ("http" = ["Bearer"])
+    ),
     responses(
         (status = 200, description = "Successfully unsubscribed to the item"),
     )
