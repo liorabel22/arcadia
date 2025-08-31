@@ -120,7 +120,7 @@ async fn validate_api_key(
         ));
     };
 
-    let user = match arc.pool.find_user_id_with_api_key(api_key).await {
+    let user = match arc.pool.find_user_with_api_key(api_key).await {
         Ok(user) => user,
         Err(e) => return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req)),
     };

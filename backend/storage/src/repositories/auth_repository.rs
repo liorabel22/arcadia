@@ -109,7 +109,7 @@ impl ConnectionPool {
         Ok(user)
     }
 
-    pub async fn find_user_id_with_api_key(&self, api_key: &str) -> Result<User> {
+    pub async fn find_user_with_api_key(&self, api_key: &str) -> Result<User> {
         let user = sqlx::query_as!(
             User,
             r#"
