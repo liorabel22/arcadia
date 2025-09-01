@@ -1,7 +1,7 @@
-use arcadia_storage::{connection_pool::ConnectionPool, redis::RedisPoolInterface};
+use arcadia_storage::connection_pool::ConnectionPool;
 use std::{ops::Deref, str::FromStr, sync::Arc};
 
-use crate::{env::Env, services::auth::Auth};
+use crate::env::Env;
 
 pub mod api_doc;
 pub mod env;
@@ -30,14 +30,12 @@ impl FromStr for OpenSignups {
     }
 }
 
-pub struct Arcadia<R: RedisPoolInterface> {
+pub struct Arcadia {
     pub pool: Arc<ConnectionPool>,
-    pub redis_pool: Arc<R>,
-    pub auth: Auth<R>,
     env: Env,
 }
 
-impl<R: RedisPoolInterface> Deref for Arcadia<R> {
+impl Deref for Arcadia {
     type Target = Env;
 
     fn deref(&self) -> &Self::Target {
@@ -45,14 +43,9 @@ impl<R: RedisPoolInterface> Deref for Arcadia<R> {
     }
 }
 
-impl<R: RedisPoolInterface> Arcadia<R> {
-    pub fn new(pool: Arc<ConnectionPool>, redis_pool: Arc<R>, env: Env) -> Self {
-        Self {
-            pool,
-            redis_pool: Arc::clone(&redis_pool),
-            auth: Auth::new(Arc::clone(&redis_pool)),
-            env,
-        }
+impl Arcadia {
+    pub fn new(pool: Arc<ConnectionPool>, env: Env) -> Self {
+        Self { pool, env }
     }
     #[inline]
     pub fn is_open_signups(&self) -> bool {

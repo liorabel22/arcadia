@@ -1,12 +1,8 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::torrent_request_vote::{TorrentRequestVote, UserCreatedTorrentRequestVote},
-    redis::RedisPoolInterface,
+use arcadia_storage::models::torrent_request_vote::{
+    TorrentRequestVote, UserCreatedTorrentRequestVote,
 };
 
 #[utoipa::path(
@@ -21,9 +17,9 @@ use arcadia_storage::{
         (status = 200, description = "Successfully voted on the torrent_request", body=TorrentRequestVote),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    torrent_request_vote: Json<UserCreatedTorrentRequestVote>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    torrent_request_vote: web::Json<UserCreatedTorrentRequestVote>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let vote = arc

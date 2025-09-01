@@ -5,17 +5,15 @@ pub mod search_torrent_requests;
 pub mod search_torrents;
 
 use actix_web::web::{post, resource, ServiceConfig};
-use arcadia_storage::redis::RedisPoolInterface;
 
-pub fn config<R: RedisPoolInterface + 'static>(cfg: &mut ServiceConfig) {
+pub fn config(cfg: &mut ServiceConfig) {
     cfg.service(
-        resource("/title-groups/lite")
-            .route(post().to(self::search_title_group_info_lite::exec::<R>)),
+        resource("/title-groups/lite").route(post().to(self::search_title_group_info_lite::exec)),
     );
-    cfg.service(resource("/torrents/lite").route(post().to(self::search_torrents::exec::<R>)));
-    cfg.service(resource("/artists/lite").route(post().to(self::search_artists_lite::exec::<R>)));
+    cfg.service(resource("/torrents/lite").route(post().to(self::search_torrents::exec)));
+    cfg.service(resource("/artists/lite").route(post().to(self::search_artists_lite::exec)));
     cfg.service(
-        resource("/torrent-requests").route(post().to(self::search_torrent_requests::exec::<R>)),
+        resource("/torrent-requests").route(post().to(self::search_torrent_requests::exec)),
     );
-    cfg.service(resource("/forum/threads").route(post().to(self::search_forum_thread::exec::<R>)));
+    cfg.service(resource("/forum/threads").route(post().to(self::search_forum_thread::exec)));
 }

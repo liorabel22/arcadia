@@ -2,12 +2,8 @@ use crate::{
     handlers::subscriptions::create_subscription::AddSubscriptionQuery,
     middlewares::jwt_middleware::Authdata, Arcadia,
 };
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::redis::RedisPoolInterface;
 
 pub type RemoveSubscriptionQuery = AddSubscriptionQuery;
 
@@ -24,9 +20,9 @@ pub type RemoveSubscriptionQuery = AddSubscriptionQuery;
         (status = 200, description = "Successfully unsubscribed to the item"),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    query: Query<RemoveSubscriptionQuery>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    query: web::Query<RemoveSubscriptionQuery>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     arc.pool

@@ -1,13 +1,10 @@
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use serde::Deserialize;
 use utoipa::{IntoParams, ToSchema};
 
 use crate::Arcadia;
 use arcadia_common::error::Result;
-use arcadia_storage::{models::torrent::TorrentSearchResults, redis::RedisPoolInterface};
+use arcadia_storage::models::torrent::TorrentSearchResults;
 
 #[derive(Debug, Deserialize, IntoParams, ToSchema)]
 pub struct GetTopTorrentsQuery {
@@ -25,9 +22,9 @@ pub struct GetTopTorrentsQuery {
         (status = 200, description = "Top torrents found (and their title/edition group), sorted by amount of users who seeded at some point in time", body=TorrentSearchResults),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    query: Query<GetTopTorrentsQuery>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    query: web::Query<GetTopTorrentsQuery>,
+    arc: web::Data<Arcadia>,
 ) -> Result<HttpResponse> {
     let search_results = arc
         .pool

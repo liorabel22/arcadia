@@ -1,13 +1,7 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
-use arcadia_storage::{
-    models::user::{UserCreatedUserWarning, UserWarning},
-    redis::RedisPoolInterface,
-};
+use arcadia_storage::models::user::{UserCreatedUserWarning, UserWarning};
 
 #[utoipa::path(
     post,
@@ -21,10 +15,10 @@ use arcadia_storage::{
         (status = 200, description = "Successfully warned the user", body=UserWarning),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    form: Json<UserCreatedUserWarning>,
+pub async fn exec(
+    form: web::Json<UserCreatedUserWarning>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
-    arc: Data<Arcadia<R>>,
 ) -> Result<HttpResponse> {
     if user.class != "staff" {
         return Err(Error::InsufficientPrivileges);

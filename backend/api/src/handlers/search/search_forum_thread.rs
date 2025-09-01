@@ -1,10 +1,7 @@
 use crate::Arcadia;
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{models::forum::ForumThreadHierarchy, redis::RedisPoolInterface};
+use arcadia_storage::models::forum::ForumThreadHierarchy;
 use serde::Deserialize;
 use utoipa::IntoParams;
 
@@ -25,9 +22,9 @@ pub struct GetForumThreadQuery {
         (status = 200, description = "Returns the threads and its posts", body=Vec<ForumThreadHierarchy>)
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: Data<Arcadia<R>>,
-    query: Query<GetForumThreadQuery>,
+pub async fn exec(
+    arc: web::Data<Arcadia>,
+    query: web::Query<GetForumThreadQuery>,
 ) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
 

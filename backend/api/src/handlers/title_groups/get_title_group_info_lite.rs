@@ -1,8 +1,5 @@
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
-use arcadia_storage::{models::title_group::TitleGroupLite, redis::RedisPoolInterface};
+use actix_web::{web, HttpResponse};
+use arcadia_storage::models::title_group::TitleGroupLite;
 
 use crate::{handlers::title_groups::get_title_group::GetTitleGroupQuery, Arcadia};
 use arcadia_common::error::Result;
@@ -19,9 +16,9 @@ pub type GetTitleGroupLiteQuery = GetTitleGroupQuery;
         (status = 200, description = "Successfully got the title_group (lite info)", body=TitleGroupLite),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: Data<Arcadia<R>>,
-    query: Query<GetTitleGroupLiteQuery>,
+pub async fn exec(
+    arc: web::Data<Arcadia>,
+    query: web::Query<GetTitleGroupLiteQuery>,
 ) -> Result<HttpResponse> {
     let title_group = arc
         .pool

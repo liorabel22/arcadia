@@ -1,15 +1,12 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{web::Data, HttpResponse};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::{
-        torrent::{
-            TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup,
-            TorrentSearchTorrent,
-        },
-        user::Profile,
+use arcadia_storage::models::{
+    torrent::{
+        TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup,
+        TorrentSearchTorrent,
     },
-    redis::RedisPoolInterface,
+    user::Profile,
 };
 use serde_json::json;
 
@@ -25,10 +22,7 @@ use serde_json::json;
         (status = 200, description = "Successfully got the user's profile", body=Profile),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    user: Authdata,
-    arc: Data<Arcadia<R>>,
-) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>, user: Authdata) -> Result<HttpResponse> {
     let mut current_user = arc.pool.find_user_with_id(user.sub).await?;
     current_user.password_hash = String::from("");
     let peers = arc.pool.get_user_peers(current_user.id).await;
@@ -72,12 +66,12 @@ pub async fn exec<R: RedisPoolInterface + 'static>(
         .await?;
 
     Ok(HttpResponse::Ok().json(json!({
-        "user": current_user,
-        "peers":peers,
-        "user_warnings": user_warnings,
-        "unread_conversations_amount": unread_conversations_amount,
-        "unread_notifications_amount":unread_notifications_amount,
-        "last_five_uploaded_torrents": uploaded_torrents.get("title_groups").unwrap(),
-        "last_five_snatched_torrents": snatched_torrents.get("title_groups").unwrap()
+            "user": current_user,
+            "peers":peers,
+            "user_warnings": user_warnings,
+            "unread_conversations_amount": unread_conversations_amount,
+            "unread_notifications_amount":unread_notifications_amount,
+            "last_five_uploaded_torrents": uploaded_torrents.get("title_groups").unwrap(),
+            "last_five_snatched_torrents": snatched_torrents.get("title_groups").unwrap()
     })))
 }

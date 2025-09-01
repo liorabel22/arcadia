@@ -1,10 +1,7 @@
 use crate::Arcadia;
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{models::forum::ForumSubCategoryHierarchy, redis::RedisPoolInterface};
+use arcadia_storage::models::forum::ForumSubCategoryHierarchy;
 use serde::Deserialize;
 use utoipa::IntoParams;
 
@@ -23,9 +20,9 @@ pub struct GetForumSubCategoryThreadsQuery {
         (status = 200, description = "Returns the threads in the forum sub-category", body=ForumSubCategoryHierarchy),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: Data<Arcadia<R>>,
-    query: Query<GetForumSubCategoryThreadsQuery>,
+pub async fn exec(
+    arc: web::Data<Arcadia>,
+    query: web::Query<GetForumSubCategoryThreadsQuery>,
 ) -> Result<HttpResponse> {
     //TODO: restrict access to some sub_categories based on forbidden_classes
     let threads = arc.pool.find_forum_sub_category_threads(query.id).await?;

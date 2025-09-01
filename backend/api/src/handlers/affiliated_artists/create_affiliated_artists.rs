@@ -1,13 +1,7 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::artist::{AffiliatedArtistHierarchy, UserCreatedAffiliatedArtist},
-    redis::RedisPoolInterface,
-};
+use arcadia_storage::models::artist::{AffiliatedArtistHierarchy, UserCreatedAffiliatedArtist};
 
 #[utoipa::path(
     post,
@@ -21,9 +15,9 @@ use arcadia_storage::{
         (status = 200, description = "Successfully created the artist affiliations", body=Vec<AffiliatedArtistHierarchy>),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    artists: Json<Vec<UserCreatedAffiliatedArtist>>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    artists: web::Json<Vec<UserCreatedAffiliatedArtist>>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let affiliations = arc

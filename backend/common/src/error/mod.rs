@@ -125,9 +125,6 @@ pub enum Error {
     #[error("invalid or expired refresh token")]
     InvalidOrExpiredRefreshToken,
 
-    #[error("invalided token")]
-    InvalidatedToken,
-
     #[error("JWT error")]
     JwtError(#[source] jsonwebtoken::errors::Error),
 
@@ -238,12 +235,6 @@ pub enum Error {
 
     #[error("invalid tmdb url")]
     InvalidTMDBUrl,
-
-    #[error("redis error '{0}'")]
-    RedisError(String),
-
-    #[error("serde error")]
-    SerdeError(#[from] serde_json::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -265,9 +256,7 @@ impl actix_web::ResponseError for Error {
             | Error::InvalidUserIdOrTorrentId => StatusCode::BAD_REQUEST,
 
             // 401 Unauthorized
-            Error::InvalidOrExpiredRefreshToken | Error::InvalidatedToken => {
-                StatusCode::UNAUTHORIZED
-            }
+            Error::InvalidOrExpiredRefreshToken => StatusCode::UNAUTHORIZED,
 
             // 403 Forbidden
             Error::AccountBanned | Error::InsufficientPrivileges => StatusCode::FORBIDDEN,

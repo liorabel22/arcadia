@@ -1,18 +1,12 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::{
-        torrent::{
-            TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup,
-            TorrentSearchTorrent,
-        },
-        user::PublicProfile,
+use arcadia_storage::models::{
+    torrent::{
+        TorrentSearch, TorrentSearchOrder, TorrentSearchSortField, TorrentSearchTitleGroup,
+        TorrentSearchTorrent,
     },
-    redis::RedisPoolInterface,
+    user::PublicProfile,
 };
 use serde::Deserialize;
 use serde_json::json;
@@ -36,9 +30,9 @@ pub struct GetUserQuery {
         (status = 200, description = "Successfully got the user's profile", body=PublicProfile),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: Data<Arcadia<R>>,
-    query: Query<GetUserQuery>,
+pub async fn exec(
+    arc: web::Data<Arcadia>,
+    query: web::Query<GetUserQuery>,
     _: Authdata,
 ) -> Result<HttpResponse> {
     let user = arc.pool.find_user_profile(&query.id).await?;

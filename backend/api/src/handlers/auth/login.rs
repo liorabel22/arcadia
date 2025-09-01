@@ -1,14 +1,9 @@
-use crate::{
-    services::auth::{AUTH_TOKEN_LONG_DURATION, AUTH_TOKEN_SHORT_DURATION, REFRESH_TOKEN_DURATION},
-    Arcadia,
-};
+use crate::Arcadia;
 use actix_web::{web, HttpResponse};
 use arcadia_common::error::{Error, Result};
-use arcadia_storage::{
-    models::user::{Claims, Login, LoginResponse},
-    redis::RedisPoolInterface,
-};
+use arcadia_storage::models::user::{Claims, Login, LoginResponse};
 use chrono::prelude::Utc;
+use chrono::Duration;
 use jsonwebtoken::{encode, EncodingKey, Header};
 
 #[utoipa::path(
@@ -20,10 +15,7 @@ use jsonwebtoken::{encode, EncodingKey, Header};
         (status = 200, description = "Successfully logged in", body=LoginResponse),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: web::Data<Arcadia<R>>,
-    user_login: web::Json<Login>,
-) -> Result<HttpResponse> {
+pub async fn exec(arc: web::Data<Arcadia>, user_login: web::Json<Login>) -> Result<HttpResponse> {
     let user = arc.pool.find_user_with_password(&user_login).await?;
 
     if user.banned {
@@ -32,18 +24,15 @@ pub async fn exec<R: RedisPoolInterface + 'static>(
 
     let mut token_expiration_date = Utc::now();
     let mut refresh_token = String::from("");
-    let now = Utc::now();
-
     if !user_login.remember_me {
-        token_expiration_date += *AUTH_TOKEN_SHORT_DURATION;
+        token_expiration_date += Duration::hours(1);
     } else {
-        token_expiration_date += *AUTH_TOKEN_LONG_DURATION;
+        token_expiration_date += Duration::days(1);
 
-        let refresh_token_expiration_date = Utc::now() + *REFRESH_TOKEN_DURATION;
+        let refresh_token_expiration_date = Utc::now() + Duration::days(90);
         let refresh_token_claims = Claims {
             sub: user.id,
-            exp: refresh_token_expiration_date.timestamp(),
-            iat: now.timestamp(),
+            exp: refresh_token_expiration_date.timestamp() as usize,
             class: user.class.clone(),
         };
         refresh_token = encode(
@@ -56,8 +45,7 @@ pub async fn exec<R: RedisPoolInterface + 'static>(
 
     let token_claims = Claims {
         sub: user.id,
-        exp: token_expiration_date.timestamp(),
-        iat: now.timestamp(),
+        exp: token_expiration_date.timestamp() as usize,
         class: user.class,
     };
 

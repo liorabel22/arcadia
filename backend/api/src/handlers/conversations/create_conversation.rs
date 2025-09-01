@@ -1,13 +1,7 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::conversation::{Conversation, UserCreatedConversation},
-    redis::RedisPoolInterface,
-};
+use arcadia_storage::models::conversation::{Conversation, UserCreatedConversation};
 
 #[utoipa::path(
     post,
@@ -21,9 +15,9 @@ use arcadia_storage::{
         (status = 200, description = "Successfully created the conversation and first message", body=Conversation),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    mut conversation: Json<UserCreatedConversation>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    mut conversation: web::Json<UserCreatedConversation>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     // creates a conversation and the first message, empty conversations should not be allowed

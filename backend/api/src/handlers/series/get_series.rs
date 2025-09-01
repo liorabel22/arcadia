@@ -1,12 +1,7 @@
 use crate::Arcadia;
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::series::SeriesAndTitleGroupHierarchyLite, redis::RedisPoolInterface,
-};
+use arcadia_storage::models::series::SeriesAndTitleGroupHierarchyLite;
 use serde::Deserialize;
 use utoipa::IntoParams;
 
@@ -25,9 +20,9 @@ pub struct GetSeriesQuery {
         (status = 200, description = "Successfully got the series", body=SeriesAndTitleGroupHierarchyLite),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: Data<Arcadia<R>>,
-    query: Query<GetSeriesQuery>,
+pub async fn exec(
+    arc: web::Data<Arcadia>,
+    query: web::Query<GetSeriesQuery>,
 ) -> Result<HttpResponse> {
     let series = arc.pool.find_series(&query.id).await?;
 

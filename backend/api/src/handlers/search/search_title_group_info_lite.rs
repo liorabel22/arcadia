@@ -1,11 +1,5 @@
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
-use arcadia_storage::{
-    models::title_group::{ContentType, TitleGroupLite},
-    redis::RedisPoolInterface,
-};
+use actix_web::{web, HttpResponse};
+use arcadia_storage::models::title_group::{ContentType, TitleGroupLite};
 use serde::Deserialize;
 use utoipa::IntoParams;
 
@@ -28,9 +22,9 @@ pub struct SearchTitleGroupLiteQuery {
         (status = 200, description = "Returns title groups with their name containing the provided string, only the 5 first matches", body=Vec<TitleGroupLite>),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: Data<Arcadia<R>>,
-    query: Query<SearchTitleGroupLiteQuery>,
+pub async fn exec(
+    arc: web::Data<Arcadia>,
+    query: web::Query<SearchTitleGroupLiteQuery>,
 ) -> Result<HttpResponse> {
     let title_groups = arc
         .pool

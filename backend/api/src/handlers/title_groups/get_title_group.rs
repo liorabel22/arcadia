@@ -1,10 +1,5 @@
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
-use arcadia_storage::{
-    models::title_group::TitleGroupAndAssociatedData, redis::RedisPoolInterface,
-};
+use actix_web::{web, HttpResponse};
+use arcadia_storage::models::title_group::TitleGroupAndAssociatedData;
 use serde::Deserialize;
 use utoipa::IntoParams;
 
@@ -29,9 +24,9 @@ pub struct GetTitleGroupQuery {
         (status = 200, description = "Successfully got the title_group", body=TitleGroupAndAssociatedData),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    arc: Data<Arcadia<R>>,
-    query: Query<GetTitleGroupQuery>,
+pub async fn exec(
+    arc: web::Data<Arcadia>,
+    query: web::Query<GetTitleGroupQuery>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let title_group = arc

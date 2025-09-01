@@ -1,10 +1,7 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Query},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{models::conversation::ConversationHierarchy, redis::RedisPoolInterface};
+use arcadia_storage::models::conversation::ConversationHierarchy;
 use serde::Deserialize;
 use utoipa::IntoParams;
 
@@ -26,9 +23,9 @@ pub struct GetConversationQuery {
         (status = 200, description = "Found the conversation and its messages", body=ConversationHierarchy),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    query: Query<GetConversationQuery>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    query: web::Query<GetConversationQuery>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let conversation_with_messages = arc.pool.find_conversation(query.id, user.sub, true).await?;

@@ -2,11 +2,10 @@ use crate::Arcadia;
 use actix_web::{
     dev::{Payload, ServiceRequest},
     error::ErrorUnauthorized,
-    web::Data,
-    Error, FromRequest, HttpMessage as _, HttpRequest,
+    web, Error, FromRequest, HttpMessage as _, HttpRequest,
 };
 use actix_web_httpauth::extractors::bearer::BearerAuth;
-use arcadia_storage::{models::user::Claims, redis::RedisPoolInterface};
+use arcadia_storage::models::user::Claims;
 use futures_util::future::{err, ok, Ready};
 use jsonwebtoken::{decode, errors::ErrorKind, DecodingKey, Validation};
 
@@ -29,7 +28,7 @@ impl FromRequest for Authdata {
     }
 }
 
-pub async fn authenticate_user<R: RedisPoolInterface + 'static>(
+pub async fn authenticate_user(
     req: ServiceRequest,
     bearer: Option<BearerAuth>,
 ) -> std::result::Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
@@ -45,24 +44,33 @@ pub async fn authenticate_user<R: RedisPoolInterface + 'static>(
     }
 
     if let Some(bearer) = bearer {
-        validate_bearer_auth::<R>(req, bearer).await
+        validate_bearer_auth(req, bearer).await
     } else if let Some(api_key) = req.headers().get("api_key") {
         let api_key = api_key.to_str().expect("api_key malformed").to_owned();
-        validate_api_key::<R>(req, &api_key).await
+        validate_api_key(req, &api_key).await
     } else {
         Err((
-            ErrorUnauthorized("authentication error, missing jwt token or API key"),
+            actix_web::error::ErrorUnauthorized(
+                "authentication error, missing jwt token or API key",
+            ),
             req,
         ))
     }
 }
 
-async fn validate_bearer_auth<R: RedisPoolInterface + 'static>(
+async fn validate_bearer_auth(
     req: ServiceRequest,
     bearer: BearerAuth,
 ) -> std::result::Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    let arc = req.app_data::<Data<Arcadia<R>>>().expect("app data set");
+    let Some(arc) = req.app_data::<web::Data<Arcadia>>() else {
+        return Err((
+            actix_web::error::ErrorUnauthorized("authentication error"),
+            req,
+        ));
+    };
+
     let decoding_key = DecodingKey::from_secret(arc.jwt_secret.as_ref());
+
     let validation = Validation::default();
 
     let token_data = match decode::<Claims>(bearer.token(), &decoding_key, &validation) {
@@ -70,8 +78,10 @@ async fn validate_bearer_auth<R: RedisPoolInterface + 'static>(
         Err(err) => {
             return Err((
                 match err.kind() {
-                    ErrorKind::ExpiredSignature => ErrorUnauthorized("jwt token expired"),
-                    _ => ErrorUnauthorized("authentication error"),
+                    ErrorKind::ExpiredSignature => {
+                        actix_web::error::ErrorUnauthorized("jwt token expired")
+                    }
+                    _ => actix_web::error::ErrorUnauthorized("authentication error"),
                 },
                 req,
             ));
@@ -79,39 +89,41 @@ async fn validate_bearer_auth<R: RedisPoolInterface + 'static>(
     };
 
     let user_id = token_data.claims.sub;
-
-    match arc
-        .auth
-        .is_invalidated(user_id, token_data.claims.iat)
-        .await
-    {
-        Ok(is_invalidated) if is_invalidated => {
-            return Err((ErrorUnauthorized("token for user invalidated"), req))
-        }
-        Ok(_) => {
-            let _ = arc.pool.update_last_seen(user_id).await;
-            req.extensions_mut().insert(Authdata {
-                sub: user_id,
-                class: token_data.claims.class,
-            });
-        }
-        Err(e) => return Err((ErrorUnauthorized(e.to_string()), req)),
+    let Ok(banned) = arc.pool.is_user_banned(user_id).await else {
+        return Err((
+            actix_web::error::ErrorUnauthorized("account does not exist"),
+            req,
+        ));
     };
+
+    if banned {
+        return Err((actix_web::error::ErrorUnauthorized("account banned"), req));
+    }
+
+    let _ = arc.pool.update_last_seen(user_id).await;
+    req.extensions_mut().insert(Authdata {
+        sub: user_id,
+        class: token_data.claims.class,
+    });
 
     Ok(req)
 }
 
-async fn validate_api_key<R: RedisPoolInterface + 'static>(
+async fn validate_api_key(
     req: ServiceRequest,
     api_key: &str,
 ) -> std::result::Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    let arc = req.app_data::<Data<Arcadia<R>>>().expect("app data set");
+    let Some(arc) = req.app_data::<web::Data<Arcadia>>() else {
+        return Err((
+            actix_web::error::ErrorUnauthorized("authentication error"),
+            req,
+        ));
+    };
 
     let user = match arc.pool.find_user_with_api_key(api_key).await {
         Ok(user) => user,
         Err(e) => return Err((actix_web::error::ErrorUnauthorized(e.to_string()), req)),
     };
-
     req.extensions_mut().insert(Authdata {
         sub: user.id,
         class: user.class,

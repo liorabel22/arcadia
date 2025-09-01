@@ -1,13 +1,7 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::torrent_report::{TorrentReport, UserCreatedTorrentReport},
-    redis::RedisPoolInterface,
-};
+use arcadia_storage::models::torrent_report::{TorrentReport, UserCreatedTorrentReport};
 
 #[utoipa::path(
     post,
@@ -21,9 +15,9 @@ use arcadia_storage::{
         (status = 200, description = "Torrent successfully reported", body=TorrentReport),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    form: Json<UserCreatedTorrentReport>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    form: web::Json<UserCreatedTorrentReport>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let report = arc.pool.report_torrent(&form, user.sub).await?;

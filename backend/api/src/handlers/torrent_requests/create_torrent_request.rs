@@ -1,13 +1,7 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::torrent_request::{TorrentRequest, UserCreatedTorrentRequest},
-    redis::RedisPoolInterface,
-};
+use arcadia_storage::models::torrent_request::{TorrentRequest, UserCreatedTorrentRequest};
 
 #[utoipa::path(
     post,
@@ -21,9 +15,9 @@ use arcadia_storage::{
         (status = 200, description = "Successfully created the torrent_request", body=TorrentRequest),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    mut torrent_request: Json<UserCreatedTorrentRequest>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    mut torrent_request: web::Json<UserCreatedTorrentRequest>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let torrent_request = arc

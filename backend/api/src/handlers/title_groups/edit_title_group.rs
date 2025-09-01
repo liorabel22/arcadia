@@ -1,11 +1,5 @@
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
-use arcadia_storage::{
-    models::title_group::{EditedTitleGroup, TitleGroup},
-    redis::RedisPoolInterface,
-};
+use actix_web::{web, HttpResponse};
+use arcadia_storage::models::title_group::{EditedTitleGroup, TitleGroup};
 
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
 use arcadia_common::error::{Error, Result};
@@ -22,9 +16,9 @@ use arcadia_common::error::{Error, Result};
         (status = 200, description = "Successfully edited the title group", body=TitleGroup),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    form: Json<EditedTitleGroup>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    form: web::Json<EditedTitleGroup>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let title_group = arc.pool.find_title_group(form.id).await?;

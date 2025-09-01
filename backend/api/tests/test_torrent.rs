@@ -1,15 +1,8 @@
-pub mod common;
-pub mod mocks;
-
-use std::sync::Arc;
-
 use actix_web::{http::StatusCode, test};
-use arcadia_storage::connection_pool::ConnectionPool;
-use mocks::mock_redis::MockRedisPool;
 use serde::Deserialize;
 use sqlx::PgPool;
 
-use crate::common::auth_header;
+pub mod common;
 
 #[sqlx::test(
     fixtures(
@@ -21,13 +14,11 @@ use crate::common::auth_header;
     migrations = "../storage/migrations"
 )]
 async fn test_valid_torrent(pool: PgPool) {
-    let pool = Arc::new(ConnectionPool::with_pg_pool(pool));
-    let (service, user) =
-        common::create_test_app_and_login(pool, MockRedisPool::default(), 1.0, 1.0).await;
+    let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
     let req = test::TestRequest::get()
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
-        .insert_header(auth_header(&user.token))
+        .insert_header(token)
         .uri("/api/torrents?id=1")
         .to_request();
 
@@ -107,13 +98,11 @@ async fn test_upload_torrent(pool: PgPool) {
         .await
         .unwrap();
 
-    let pool = Arc::new(ConnectionPool::with_pg_pool(pool));
-    let (service, user) =
-        common::create_test_app_and_login(pool, MockRedisPool::default(), 1.0, 1.0).await;
+    let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
     let req = test::TestRequest::post()
         .uri("/api/torrents")
-        .insert_header(auth_header(&user.token))
+        .insert_header(token)
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
         .insert_header(("Content-Type", content_type))
         .set_payload(payload)
@@ -159,9 +148,7 @@ struct TorrentSearchResults {
 async fn test_find_torrents_by_external_link(pool: PgPool) {
     let link = "https://en.wikipedia.org/wiki/RollerCoaster_Tycoon";
 
-    let pool = Arc::new(ConnectionPool::with_pg_pool(pool));
-    let (service, user) =
-        common::create_test_app_and_login(pool, MockRedisPool::default(), 1.0, 1.0).await;
+    let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
     let body = serde_json::json!({
         "title_group": { "name": link, "include_empty_groups": true },
@@ -175,7 +162,7 @@ async fn test_find_torrents_by_external_link(pool: PgPool) {
     let req = test::TestRequest::post()
         .uri("/api/search/torrents/lite")
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
-        .insert_header(auth_header(&user.token))
+        .insert_header(token)
         .set_json(body)
         .to_request();
 
@@ -201,9 +188,7 @@ async fn test_find_torrents_by_external_link(pool: PgPool) {
     migrations = "../storage/migrations"
 )]
 async fn test_find_torrents_by_name(pool: PgPool) {
-    let pool = Arc::new(ConnectionPool::with_pg_pool(pool));
-    let (service, user) =
-        common::create_test_app_and_login(pool, MockRedisPool::default(), 1.0, 1.0).await;
+    let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
     let body = serde_json::json!({
         "title_group": { "name": "Love Me Do", "include_empty_groups": true },
@@ -217,7 +202,7 @@ async fn test_find_torrents_by_name(pool: PgPool) {
     let req = test::TestRequest::post()
         .uri("/api/search/torrents/lite")
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
-        .insert_header(auth_header(&user.token))
+        .insert_header(token)
         .set_json(body)
         .to_request();
 
@@ -243,9 +228,7 @@ async fn test_find_torrents_by_name(pool: PgPool) {
     migrations = "../storage/migrations"
 )]
 async fn test_find_torrents_no_link_or_name_provided(pool: PgPool) {
-    let pool = Arc::new(ConnectionPool::with_pg_pool(pool));
-    let (service, user) =
-        common::create_test_app_and_login(pool, MockRedisPool::default(), 1.0, 1.0).await;
+    let (service, token) = common::create_test_app_and_login(pool, 1.0, 1.0).await;
 
     let body = serde_json::json!({
         "title_group": { "name": "", "include_empty_groups": true },
@@ -259,7 +242,7 @@ async fn test_find_torrents_no_link_or_name_provided(pool: PgPool) {
     let req = test::TestRequest::post()
         .uri("/api/search/torrents/lite")
         .insert_header(("X-Forwarded-For", "10.10.4.88"))
-        .insert_header(auth_header(&user.token))
+        .insert_header(token)
         .set_json(body)
         .to_request();
 

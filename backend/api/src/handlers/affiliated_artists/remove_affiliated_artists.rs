@@ -1,8 +1,6 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{web::Data, HttpResponse};
-use actix_web_lab::extract::Query;
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::redis::RedisPoolInterface;
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
@@ -24,9 +22,9 @@ pub struct RemoveAffiliatedArtistsQuery {
         (status = 200, description = "Successfully removed the artist affiliations"),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    query: Query<RemoveAffiliatedArtistsQuery>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    query: actix_web_lab::extract::Query<RemoveAffiliatedArtistsQuery>,
+    arc: web::Data<Arcadia>,
     _: Authdata,
 ) -> Result<HttpResponse> {
     // TODO: add protection based on user class

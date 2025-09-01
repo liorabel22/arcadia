@@ -1,13 +1,7 @@
 use crate::{middlewares::jwt_middleware::Authdata, Arcadia};
-use actix_web::{
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{web, HttpResponse};
 use arcadia_common::error::Result;
-use arcadia_storage::{
-    models::edition_group::{EditionGroup, UserCreatedEditionGroup},
-    redis::RedisPoolInterface,
-};
+use arcadia_storage::models::edition_group::{EditionGroup, UserCreatedEditionGroup};
 
 #[utoipa::path(
     post,
@@ -21,9 +15,9 @@ use arcadia_storage::{
         (status = 200, description = "Successfully created the edition_group", body=EditionGroup),
     )
 )]
-pub async fn exec<R: RedisPoolInterface + 'static>(
-    form: Json<UserCreatedEditionGroup>,
-    arc: Data<Arcadia<R>>,
+pub async fn exec(
+    form: web::Json<UserCreatedEditionGroup>,
+    arc: web::Data<Arcadia>,
     user: Authdata,
 ) -> Result<HttpResponse> {
     let edition_group = arc.pool.create_edition_group(&form, user.sub).await?;

@@ -1,6 +1,5 @@
 use crate::Arcadia;
 use arcadia_common::error::{Error, Result};
-use arcadia_storage::redis::RedisPoolInterface;
 use lettre::message::header::ContentType;
 use lettre::message::Mailbox;
 use lettre::transport::smtp::authentication::Credentials;
@@ -15,7 +14,7 @@ pub struct EmailService {
 }
 
 impl EmailService {
-    pub fn new<R: RedisPoolInterface>(config: &Arcadia<R>) -> Result<Self> {
+    pub fn new(config: &Arcadia) -> Result<Self> {
         // Check if all required SMTP configuration is present
         let smtp_host = config.smtp.host.as_ref().ok_or_else(|| {
             Error::EmailConfigurationError("SMTP_HOST not configured".to_string())
