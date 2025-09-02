@@ -1,6 +1,7 @@
 CREATE TYPE user_class AS ENUM (
     'newbie',
-    'staff'
+    'staff',
+    'tracker',
 );
 
 CREATE TABLE users (

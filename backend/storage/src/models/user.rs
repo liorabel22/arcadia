@@ -83,11 +83,12 @@ pub struct User {
     pub passkey_lower: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::Type, ToSchema, PartialEq, Eq)]
 #[sqlx(type_name = "user_class", rename_all = "lowercase")]
 pub enum UserClass {
     Newbie,
     Staff,
+    Tracker,
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
@@ -116,7 +117,7 @@ pub struct Claims {
     pub sub: i64,
     pub exp: i64,
     pub iat: i64,
-    pub class: String,
+    pub class: UserClass,
 }
 
 #[derive(Serialize, Deserialize, Debug, ToSchema)]
