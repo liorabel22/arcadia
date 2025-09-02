@@ -72,7 +72,8 @@
             "kind": {
               "Enum": [
                 "newbie",
-                "staff"
+                "staff",
+                "tracker"
               ]
             }
           }
