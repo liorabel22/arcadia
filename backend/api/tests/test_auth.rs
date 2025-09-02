@@ -7,7 +7,9 @@ use actix_web::{
 };
 use arcadia_api::{services::auth::InvalidationEntry, OpenSignups};
 use arcadia_storage::{
-    connection_pool::ConnectionPool, models::user::RefreshToken, redis::RedisInterface,
+    connection_pool::ConnectionPool,
+    models::user::{RefreshToken, UserClass},
+    redis::RedisInterface,
 };
 use mocks::mock_redis::MockRedisPool;
 use serde::{Deserialize, Serialize};
