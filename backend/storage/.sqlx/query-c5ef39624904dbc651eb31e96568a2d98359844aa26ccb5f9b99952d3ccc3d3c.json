@@ -83,7 +83,7 @@
         "name": "class",
         "type_info": {
           "Custom": {
-            "name": "user_class",
+            "name": "user_class_enum",
             "kind": {
               "Enum": [
                 "newbie",
