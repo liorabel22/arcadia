@@ -1,7 +1,8 @@
--- CREATE TYPE user_class_enum AS ENUM (
---     'newbie',
---     'staff'
--- );
+CREATE TYPE user_class AS ENUM (
+    'newbie',
+    'staff'
+);
+
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(20) UNIQUE NOT NULL,
@@ -19,7 +20,7 @@ CREATE TABLE users (
     ratio FLOAT NOT NULL DEFAULT 0.0,
     required_ratio FLOAT NOT NULL DEFAULT 0.0,
     last_seen TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    class VARCHAR(50) NOT NULL DEFAULT 'newbie',
+    class user_class NOT NULL DEFAULT 'newbie',
     forum_posts INTEGER NOT NULL DEFAULT 0,
     forum_threads INTEGER NOT NULL DEFAULT 0,
     torrent_comments INTEGER NOT NULL DEFAULT 0,

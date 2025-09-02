@@ -83,6 +83,12 @@ pub struct User {
     pub passkey_lower: i64,
 }
 
+#[derive(Debug, Serialize, Deserialize, FromRow, ToSchema)]
+pub enum UserClass {
+    Newbie,
+    Staff,
+}
+
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct Register {
     pub username: String,
