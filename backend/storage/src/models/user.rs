@@ -57,7 +57,7 @@ pub struct User {
     pub required_ratio: f64,
     #[schema(value_type = String, format = DateTime)]
     pub last_seen: DateTime<Utc>,
-    pub class: String,
+    pub class: UserClass,
     pub forum_posts: i32,
     pub forum_threads: i32,
     pub torrent_comments: i32,
@@ -83,7 +83,8 @@ pub struct User {
     pub passkey_lower: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize, FromRow, ToSchema)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, ToSchema)]
+#[sqlx(type_name = "user_class", rename_all = "lowercase")]
 pub enum UserClass {
     Newbie,
     Staff,
