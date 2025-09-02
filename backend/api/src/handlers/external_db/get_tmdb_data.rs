@@ -48,7 +48,7 @@ async fn get_tmdb_movie_data(client: &Client<ReqwestClient>, id: u64) -> Result<
             .collect(),
         description: tmdb_movie.inner.overview,
         original_language: Some(
-            Language::from_str(&tmdb_movie.inner.original_language.name).unwrap_or(Language::Other),
+            Language::from_str(&tmdb_movie.inner.original_language).unwrap_or(Language::Other),
         ),
         original_release_date: tmdb_movie
             .inner
