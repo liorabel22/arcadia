@@ -41,7 +41,7 @@ const user = useUserStore()
 }
 
 .left .logo {
-  height: 25px;
+  height: 45px;
   margin-top: 5px;
   margin-right: 10px;
 }
