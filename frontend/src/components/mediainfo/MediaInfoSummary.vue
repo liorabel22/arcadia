@@ -102,21 +102,4 @@ const summary = computed<Summary>(() => normalizeMediaInfo(props.source))
 .mi-audio__line + .mi-audio__line {
   margin-top: 0.25rem;
 }
-
-/* Arrow bottom-right of Audio card */
-.mi-arrow {
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0.5rem;
-  background: transparent;
-  border: 0;
-  color: inherit;
-  cursor: pointer;
-  padding: 0.25rem;
-  line-height: 1;
-  opacity: 0.7;
-}
-.mi-arrow:hover {
-  opacity: 1;
-}
 </style>

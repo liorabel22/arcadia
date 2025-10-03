@@ -111,7 +111,7 @@
           </AccordionContent>
         </AccordionPanel>
         <AccordionPanel value="1" v-if="slotProps.data.mediainfo !== null">
-          <AccordionHeader @click="toggleMediaInfo"
+          <AccordionHeader class="aa" @click="toggleMediaInfo"
             ><MediaInfoPreview :showPreview="showMediaInfoPreview" :mediainfo="slotProps.data.mediainfo"
           /></AccordionHeader>
           <AccordionContent>
@@ -389,6 +389,9 @@ const groupBy = computed(() => {
   }
   .actions {
     min-width: 97px;
+  }
+  .p-accordionheader.aa{
+    align-items: baseline;
   }
 }
 </style>
