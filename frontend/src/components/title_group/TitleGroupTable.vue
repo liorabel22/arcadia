@@ -390,7 +390,7 @@ const groupBy = computed(() => {
   .actions {
     min-width: 97px;
   }
-  .p-accordionheader.aa{
+  .p-accordionheader.aa {
     align-items: baseline;
   }
 }

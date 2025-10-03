@@ -21,7 +21,7 @@ const parsed = computed<MediaInfoParsed>(() => parseMediaInfo(props.mediainfo))
 </template>
 <style scoped>
 .media-info-preview {
-    max-width: 98%;
+  max-width: 98%;
 }
 .media-info-preview .header-text {
   font-weight: bold;
