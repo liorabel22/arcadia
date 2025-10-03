@@ -1,5 +1,3 @@
-// utils/parseMediaInfo.ts
-
 /**
  * Represents a single section in MediaInfo Text output
  * Example: "Video", "Audio", "Text #1", etc.
