@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import { normalizeMediaInfo, type Summary } from '@/services/fileinfo/mediainfo/normalizeMediaInfo'
-
-const props = defineProps<{ source: unknown }>()
-const summary = computed<Summary>(() => normalizeMediaInfo(props.source))
-</script>
-
 <template>
   <!-- Row layout: 3 sections on one line -->
   <div class="mi-row">
@@ -43,6 +33,16 @@ const summary = computed<Summary>(() => normalizeMediaInfo(props.source))
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import { normalizeMediaInfo, type Summary } from '@/services/fileinfo/mediainfo/normalizeMediaInfo'
+
+const props = defineProps<{ source: unknown }>()
+const summary = computed<Summary>(() => normalizeMediaInfo(props.source))
+</script>
 
 <style scoped>
 /* Row layout */

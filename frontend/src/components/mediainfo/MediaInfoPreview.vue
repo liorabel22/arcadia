@@ -1,6 +1,13 @@
+<template>
+  <div class="media-info-preview">
+    <div class="header-text">{{ t('torrent.mediainfo') }}</div>
+    <MediaInfoSummary v-if="showPreview" :source="parsed" />
+  </div>
+</template>
+
 <script setup lang="ts">
 import { defineProps, computed } from 'vue'
-import { parseMediaInfo, type MediaInfoParsed } from '@/services/fileinfo/mediainfo/parseMediInfo'
+import { parseMediaInfo, type MediaInfoParsed } from '@/services/fileinfo/mediainfo/parseMediaInfo'
 import MediaInfoSummary from './MediaInfoSummary.vue'
 
 const props = defineProps<{
@@ -13,12 +20,7 @@ const { t } = useI18n()
 
 const parsed = computed<MediaInfoParsed>(() => parseMediaInfo(props.mediainfo))
 </script>
-<template>
-  <div class="media-info-preview">
-    <div class="header-text">{{ t('torrent.mediainfo') }}</div>
-    <MediaInfoSummary v-if="showPreview" :source="parsed" />
-  </div>
-</template>
+
 <style scoped>
 .media-info-preview {
   max-width: 98%;

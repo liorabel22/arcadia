@@ -1,5 +1,5 @@
 <template>
-  <pre class="mediainfo">{{ purifyHtml(props.mediainfo) }}</pre>
+  <pre class="mediainfo" v-html="purifyHtml(props.mediainfo)"></pre>
 </template>
 
 <script setup lang="ts">
@@ -14,6 +14,7 @@ const purifyHtml = (html: string) => {
   return DOMPurify.sanitize(html)
 }
 </script>
+
 <style scoped>
 .mediainfo {
   white-space: pre-wrap;

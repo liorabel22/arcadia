@@ -25,6 +25,7 @@ export function normalizeMediaInfo(input: unknown): Summary {
   if (isMediaInfoJson(input)) {
     return fromJson(input)
   }
+  // Validate or document: assumes input is MediaInfoParsed
   return fromParsedText(input as MediaInfoParsed)
 }
 
@@ -92,17 +93,17 @@ function fromParsedText(parsed: MediaInfoParsed): Summary {
 
   const vidRows: KV[] = [
     { label: 'Codec', value: String(v['Format'] ?? v['Codec ID'] ?? '') },
-    { label: 'Resolution', value: v['Width'] && v['Height'] ? `${digits(v['Width'])}x${digits(v['Height'])}` : '' },
+    { label: 'Resolution', value: typeof v['Width'] === 'string' && typeof v['Height'] === 'string' ? `${digits(v['Width'])}x${digits(v['Height'])}` : '' },
     { label: 'Aspect ratio', value: String(v['Display aspect ratio'] ?? '') },
-    { label: 'Frame rate', value: frameRate(v['Frame rate']) },
-    { label: 'Bit rate', value: bitratePretty(v['Bit rate']) },
+    { label: 'Frame rate', value: Array.isArray(v['Frame rate']) ? frameRate(v['Frame rate'][0]) : frameRate(v['Frame rate']) },
+    { label: 'Bit rate', value: bitratePretty(Array.isArray(v['Bit rate']) ? v['Bit rate'][0] : v['Bit rate']) },
   ].filter((r) => r.value)
 
-  const audioLines = audioSections.map((s: { data: Record<string, string> }, i: number) => buildAudioLineFromText(s.data, i + 1))
+  const audioLines = audioSections.map((s: { data: Record<string, string | string[]> }, i: number) => buildAudioLineFromText(s.data, i + 1))
   const a0 = audioSections[0]?.data ?? {}
   const audioRows: KV[] = [
     { label: 'Language', value: String(a0['Language'] ?? '') },
-    { label: 'Channels', value: channelPretty(a0['Channel(s)']) },
+    { label: 'Channels', value: channelPretty(Array.isArray(a0['Channel(s)']) ? a0['Channel(s)'].join(', ') : a0['Channel(s)']) },
     { label: 'Codec', value: String(a0['Format'] ?? a0['Codec ID'] ?? '') },
     { label: 'Bit rate', value: String(a0['Bit rate'] ?? '') },
   ].filter((r) => r.value)
@@ -157,12 +158,12 @@ function buildAudioLineFromJson(a: Record<string, string>, idx: number): string 
   const tail = [br && `@ ${br}`, note && `(${note})`].filter(Boolean).join(' ')
   return `#${idx}: ${[lang, ch, cdc].filter(Boolean).join(' ')}${tail ? ' ' + tail : ''}`
 }
-function buildAudioLineFromText(a: Record<string, string>, idx: number): string {
-  const lang = a['Language'] ?? 'Unknown'
-  const ch = channelPretty(a['Channel(s)'])
-  const cdc = a['Format'] ?? a['Codec ID'] ?? ''
-  const br = a['Bit rate'] ?? ''
-  const note = a['Title'] ?? ''
+function buildAudioLineFromText(a: Record<string, string | string[]>, idx: number): string {
+  const lang = Array.isArray(a['Language']) ? a['Language'].join(', ') : a['Language'] ?? 'Unknown'
+  const ch = channelPretty(Array.isArray(a['Channel(s)']) ? a['Channel(s)'].join(', ') : a['Channel(s)'])
+  const cdc = Array.isArray(a['Format']) ? a['Format'].join(', ') : a['Format'] ?? a['Codec ID'] ?? ''
+  const br = Array.isArray(a['Bit rate']) ? a['Bit rate'].join(', ') : a['Bit rate'] ?? ''
+  const note = Array.isArray(a['Title']) ? a['Title'].join(', ') : a['Title'] ?? ''
   const tail = [br && `@ ${br}`, note && `(${note})`].filter(Boolean).join(' ')
   return `#${idx}: ${[lang, ch, cdc].filter(Boolean).join(' ')}${tail ? ' ' + tail : ''}`
 }

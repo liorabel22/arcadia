@@ -262,8 +262,7 @@ const getEditionGroupSlugById = (editionGroupId: number): string => {
 }
 
 const showMediaInfoPreview = ref(true)
-const toggleMediaInfo = (event: Event) => {
-  event.stopPropagation()
+const toggleMediaInfo = () => {
   showMediaInfoPreview.value = !showMediaInfoPreview.value
 }
 
