@@ -159,11 +159,11 @@ function buildAudioLineFromJson(a: Record<string, string>, idx: number): string 
   return `#${idx}: ${[lang, ch, cdc].filter(Boolean).join(' ')}${tail ? ' ' + tail : ''}`
 }
 function buildAudioLineFromText(a: Record<string, string | string[]>, idx: number): string {
-  const lang = Array.isArray(a['Language']) ? a['Language'].join(', ') : a['Language'] ?? 'Unknown'
+  const lang = Array.isArray(a['Language']) ? a['Language'].join(', ') : (a['Language'] ?? 'Unknown')
   const ch = channelPretty(Array.isArray(a['Channel(s)']) ? a['Channel(s)'].join(', ') : a['Channel(s)'])
-  const cdc = Array.isArray(a['Format']) ? a['Format'].join(', ') : a['Format'] ?? a['Codec ID'] ?? ''
-  const br = Array.isArray(a['Bit rate']) ? a['Bit rate'].join(', ') : a['Bit rate'] ?? ''
-  const note = Array.isArray(a['Title']) ? a['Title'].join(', ') : a['Title'] ?? ''
+  const cdc = Array.isArray(a['Format']) ? a['Format'].join(', ') : (a['Format'] ?? a['Codec ID'] ?? '')
+  const br = Array.isArray(a['Bit rate']) ? a['Bit rate'].join(', ') : (a['Bit rate'] ?? '')
+  const note = Array.isArray(a['Title']) ? a['Title'].join(', ') : (a['Title'] ?? '')
   const tail = [br && `@ ${br}`, note && `(${note})`].filter(Boolean).join(' ')
   return `#${idx}: ${[lang, ch, cdc].filter(Boolean).join(' ')}${tail ? ' ' + tail : ''}`
 }
